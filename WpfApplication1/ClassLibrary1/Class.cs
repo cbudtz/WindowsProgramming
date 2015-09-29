@@ -11,6 +11,14 @@ namespace ClassLibrary1
         private String name;
         private String stereotype;
         private Boolean isAbstract;
+        
+        public Class(String name, String stereotype, Boolean isAbstract)
+        {
+            this.name = name;
+            this.stereotype = stereotype;
+            this.isAbstract = isAbstract;
+
+        }
 
         public string Name  { get { return name; } set { name = value; } }
 
