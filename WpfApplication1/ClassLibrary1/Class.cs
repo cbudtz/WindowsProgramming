@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace ClassLibrary1
+namespace ModelLibrary
 {
     public class Class
     {
@@ -25,6 +25,7 @@ namespace ClassLibrary1
         public String StereoType { get { return stereotype; } set { stereotype = value; } }
         public Boolean IsAbstract { get { return isAbstract; } set { isAbstract = value; } }
         public Point AnchorPoint { get { return anchorPoint; } set { anchorPoint = value; } }
+        public Visibility Visibility { get { return visibility; } set { visibility = value; } }
 
 
     }

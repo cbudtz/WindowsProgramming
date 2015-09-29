@@ -1,4 +1,5 @@
-﻿namespace ClassLibrary1
+﻿namespace ModelLibrary
+
 {
     public enum Visibility
     { 
