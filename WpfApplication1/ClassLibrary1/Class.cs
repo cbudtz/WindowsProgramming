@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClassLibrary1
 {
@@ -20,12 +16,10 @@ namespace ClassLibrary1
 
         }
 
-        public string Name  { get { return name; } set { name = value; } }
+        public String Name  { get { return name; } set { name = value; } }
 
-        public string StereoType { get { return stereotype; } set { stereotype = value; } }
+        public String StereoType { get { return stereotype; } set { stereotype = value; } }
 
-        public bool IsAbstract { get { return isAbstract; } set { isAbstract = value;
-            }
-        }
+        public Boolean IsAbstract { get { return isAbstract; } set { isAbstract = value; } }
     }
 }
