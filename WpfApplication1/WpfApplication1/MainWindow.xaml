@@ -6,7 +6,11 @@
         xmlns:local="clr-namespace:WpfApplication1"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+    <Grid HorizontalAlignment="Center">
+        <Viewbox HorizontalAlignment="Center" Height="72" VerticalAlignment="Top" Width="517">
+            <Label x:Name="label" Content="Class" Width="186" HorizontalContentAlignment="Center"  HorizontalAlignment="Center"/>
+        </Viewbox>
+        <Viewbox HorizontalAlignment="Left" Height="121" Margin="0,77,0,0" VerticalAlignment="Top" Width="517"/>
+        <Viewbox HorizontalAlignment="Left" Height="121" Margin="0,198,0,0" VerticalAlignment="Top" Width="517"/>
     </Grid>
 </Window>
