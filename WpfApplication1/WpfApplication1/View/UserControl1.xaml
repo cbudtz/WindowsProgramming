@@ -7,6 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Viewbox HorizontalAlignment="Left" Height="87" VerticalAlignment="Top" Width="300"/>
+        <Viewbox HorizontalAlignment="Left" Height="108" Margin="0,92,0,0" VerticalAlignment="Top" Width="300"/>
+        <Viewbox HorizontalAlignment="Left" Height="100" Margin="0,200,0,0" VerticalAlignment="Top" Width="300"/>
+
     </Grid>
 </UserControl>
