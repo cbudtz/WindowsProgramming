@@ -44,6 +44,7 @@
     <Compile Include="Class.cs" />
     <Compile Include="CommandStack.cs" />
     <Compile Include="DummyCommand.cs" />
+    <Compile Include="Method.cs" />
     <Compile Include="Modifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Visibility.cs" />
