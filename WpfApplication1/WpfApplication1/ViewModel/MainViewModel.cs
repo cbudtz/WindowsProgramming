@@ -1,4 +1,6 @@
 using GalaSoft.MvvmLight;
+using ModelLibrary;
+using System.Collections.ObjectModel;
 
 namespace WpfApplication1.ViewModel
 {
@@ -19,6 +21,12 @@ namespace WpfApplication1.ViewModel
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
+        
+        //Dynamic 
+        ObservableCollection<Class> classes;
+        ObservableCollection<Connection> connections;
+        CommandTree commandController;
+
         public MainViewModel()
         {
             ////if (IsInDesignMode)
