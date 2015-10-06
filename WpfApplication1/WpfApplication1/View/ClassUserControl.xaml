@@ -9,7 +9,13 @@
     <StackPanel>
         <TextBox HorizontalContentAlignment="Center" FontSize="20" Text="{Binding Path=Name}"></TextBox>
         <ListView>
-            
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=atributes}" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Age}" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Mail}" />
+                </GridView>
+            </ListView.View>
         </ListView>
     </StackPanel>
 </UserControl>
