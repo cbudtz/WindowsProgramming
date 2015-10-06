@@ -18,7 +18,7 @@ namespace ModelLibrary
 
         public void setActive(ICommand command)
         {
-            //TODO: Implement recursice function to crawl up and down tree;
+            //TODO: Implement recursive function to crawl up and down tree;
         }
 
         public void save()

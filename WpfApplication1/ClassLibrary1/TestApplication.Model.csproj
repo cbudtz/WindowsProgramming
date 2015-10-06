@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Attribute.cs" />
     <Compile Include="Class.cs" />
-    <Compile Include="CommandStack.cs" />
+    <Compile Include="CommandTree.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionType.cs" />
     <Compile Include="DummyCommand.cs" />
