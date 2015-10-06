@@ -31,14 +31,7 @@ namespace WpfApplication1.ViewModel
 
         public MainViewModel()
         {
-            ////if (IsInDesignMode)
-            ////{
-            ////    // Code runs in Blend --> create design time data.
-            ////}
-            ////else
-            ////{
-            ////    // Code runs "for real"
-            ////}
+            
             TestClass = new Class("123", "", false, new Point(), ModelLibrary.Visibility.Default);
         }
         public string Text { get; set; }
