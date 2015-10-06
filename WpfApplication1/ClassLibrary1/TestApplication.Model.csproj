@@ -41,8 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attribute.cs" />
     <Compile Include="Class.cs" />
     <Compile Include="CommandStack.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="ConnectionType.cs" />
     <Compile Include="DummyCommand.cs" />
     <Compile Include="Method.cs" />
     <Compile Include="Modifier.cs" />
