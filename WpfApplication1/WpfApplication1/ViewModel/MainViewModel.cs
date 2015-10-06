@@ -1,5 +1,6 @@
 using GalaSoft.MvvmLight;
 using ModelLibrary;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace WpfApplication1.ViewModel
@@ -19,7 +20,14 @@ namespace WpfApplication1.ViewModel
     public class MainViewModel : ViewModelBase
     {
         public Class TestClass { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the MainViewModel class.
+        /// </summary>
         
+        //Dynamic 
+        ObservableCollection<Class> classes;
+        ObservableCollection<Connection> connections;
+        CommandTree commandController;
 
         public MainViewModel()
         {
