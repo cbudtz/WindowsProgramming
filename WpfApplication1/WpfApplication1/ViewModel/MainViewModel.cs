@@ -1,6 +1,7 @@
 using GalaSoft.MvvmLight;
 using ModelLibrary;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace WpfApplication1.ViewModel
 {
@@ -18,6 +19,7 @@ namespace WpfApplication1.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        public Class TestClass { get; set; }
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -37,6 +39,8 @@ namespace WpfApplication1.ViewModel
             ////{
             ////    // Code runs "for real"
             ////}
+            TestClass = new Class("123", "", false, new Point(), ModelLibrary.Visibility.Default);
         }
+        public string Text { get; set; }
     }
 }

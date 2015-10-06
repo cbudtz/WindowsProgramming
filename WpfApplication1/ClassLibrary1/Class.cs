@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows;
 
 namespace ModelLibrary
 {
     public class Class
     {
-        private String name;
-        private String stereotype;
-        private Boolean isAbstract;
+        private string name;
+        private string stereotype;
+        private bool isAbstract;
         private Point anchorPoint;
         private Visibility visibility;
         private List<Attribute> attributes;
