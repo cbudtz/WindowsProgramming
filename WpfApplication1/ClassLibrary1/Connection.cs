@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModelLibrary
 {
-    class Connection
+    public class Connection
     {
         Class start;
         String startMultiplicity;
