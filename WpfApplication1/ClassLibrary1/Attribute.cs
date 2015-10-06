@@ -8,9 +8,10 @@ namespace ModelLibrary
 {
     class Attribute
     {
-        String type;
-        String name;
-        Visibility visibility;
-        List<Modifier> modifiers;
+        private String type {get; set;}
+        private String name { get; set; }
+        private Visibility visibility { get; set; }
+        private List<Modifier> modifiers { get; set; }
+
     }
 }
