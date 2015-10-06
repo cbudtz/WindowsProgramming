@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace ModelLibrary
@@ -10,6 +11,8 @@ namespace ModelLibrary
         private Boolean isAbstract;
         private Point anchorPoint;
         private Visibility visibility;
+        private List<Attribute> attributes;
+        private List<Method> methods;
         
         public Class(String name, String stereotype, Boolean isAbstract, Point anchorPoint, Visibility visibility)
         {
