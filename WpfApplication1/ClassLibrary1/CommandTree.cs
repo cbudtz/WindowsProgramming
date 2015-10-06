@@ -28,6 +28,13 @@ namespace ModelLibrary
             using (StreamWriter writer = new StreamWriter(@"c:\temp\output.xml"))
                 serializer.Serialize(writer, commandTree);
         }
+        public static CommandTree load()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
+            using (StreamReader reader = new StreamReader(@"c:\temp\output.xml"))
+                return serializer.Deserialize(reader) as CommandTree;
+
+        }
         public void undo()
         {
             //TODO: Implemnt
