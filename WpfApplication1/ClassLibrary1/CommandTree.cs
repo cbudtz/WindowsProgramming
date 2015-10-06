@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace ModelLibrary
 {
-    public class CommandStack : INotifyPropertyChanged
+    public class CommandTree : INotifyPropertyChanged
     {
         ICommand root;
         ICommand active;
