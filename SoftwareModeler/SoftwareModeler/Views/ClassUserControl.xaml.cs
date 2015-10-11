@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfApplication1.View
+namespace Area51.SoftwareModeler.Views
 {
     /// <summary>
     /// Interaction logic for ClassUserControll.xaml

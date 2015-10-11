@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 
-namespace ModelLibrary
+namespace Area51.SoftwareModeler.ModelLibraryOld
 {
     public class Class
     {

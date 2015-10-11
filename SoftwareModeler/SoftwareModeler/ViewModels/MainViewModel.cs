@@ -1,9 +1,9 @@
 using GalaSoft.MvvmLight;
-using ModelLibrary;
+using Area51.SoftwareModeler.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 
-namespace WpfApplication1.ViewModel
+namespace Area51.SoftwareModeler.ViewModels
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.
@@ -32,7 +32,7 @@ namespace WpfApplication1.ViewModel
         public MainViewModel()
         {
             
-            TestClass = new Class("123", "", false, new Point(), ModelLibrary.Visibility.Default);
+            TestClass = new Class("123", "", false, new Point(), Models.Visibility.Default);
         }
         public string Text { get; set; }
     }

@@ -1,4 +1,4 @@
-﻿namespace ModelLibrary
+﻿namespace Area51.SoftwareModeler.ModelLibraryOld
 {
     public enum Modifier
     {

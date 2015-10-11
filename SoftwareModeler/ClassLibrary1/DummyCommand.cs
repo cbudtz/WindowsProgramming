@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ModelLibrary
+namespace Area51.SoftwareModeler.ModelLibraryOld
 {
     class DummyCommand : ICommand {
 

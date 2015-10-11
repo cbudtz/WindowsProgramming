@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModelLibrary
+namespace Area51.SoftwareModeler.ModelLibraryOld
 {
     class Attribute
     {

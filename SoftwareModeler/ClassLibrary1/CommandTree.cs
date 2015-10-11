@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
-namespace ModelLibrary
+namespace Area51.SoftwareModeler.ModelLibraryOld
 {
     public class CommandTree : INotifyPropertyChanged
     {

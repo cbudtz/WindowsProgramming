@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfApplication1.View
+namespace Area51.SoftwareModeler
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class MainWindow : Window
     {
-        public UserControl1()
+        public MainWindow()
         {
             InitializeComponent();
         }
