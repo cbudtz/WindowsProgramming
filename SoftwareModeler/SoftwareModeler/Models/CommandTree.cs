@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Xml.Serialization;
 namespace Area51.SoftwareModeler.Models
 {
     public class CommandTree : INotifyPropertyChanged
     {
-        ICommand root;
-        ICommand active;
-        LinkedList<ICommand> undone;
+        ICommandExt root;
+        ICommandExt active;
+        LinkedList<ICommandExt> undone;
         //TODO implement
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void setActive(ICommand command)
+        public void setActive(ICommandExt command)
         {
             //TODO: Implement recursive function to crawl up and down tree;
         }

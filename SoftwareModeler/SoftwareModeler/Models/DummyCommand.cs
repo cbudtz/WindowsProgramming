@@ -7,22 +7,22 @@ using System.Windows.Input;
 
 namespace Area51.SoftwareModeler.Models
 {
-    class DummyCommand : ICommand {
+    class DummyCommand : ICommandExt
+    {
+        public event EventHandler CanExecuteChanged;
 
-        event EventHandler ICommand.CanExecuteChanged {
-            add {
-                throw new NotImplementedException();
-            }
-            remove {
-                throw new NotImplementedException();
-            }
-        }
-
-        bool ICommand.CanExecute(object parameter){
+        public bool CanExecute(object parameter)
+        {
             throw new NotImplementedException();
         }
 
-        void ICommand.Execute(object parameter) {
+        public void Execute(object parameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void unExecute()
+        {
             throw new NotImplementedException();
         }
     }

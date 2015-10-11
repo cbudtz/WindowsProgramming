@@ -96,6 +96,7 @@
     <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\ConnectionType.cs" />
     <Compile Include="Models\DummyCommand.cs" />
+    <Compile Include="Models\ICommandExt.cs" />
     <Compile Include="Models\Method.cs" />
     <Compile Include="Models\Modifier.cs" />
     <Compile Include="Models\Visibility.cs" />
