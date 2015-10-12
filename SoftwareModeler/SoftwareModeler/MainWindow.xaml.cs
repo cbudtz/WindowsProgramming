@@ -24,5 +24,6 @@ namespace Area51.SoftwareModeler
         {
             InitializeComponent();
         }
+
     }
 }

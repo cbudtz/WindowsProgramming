@@ -11,7 +11,23 @@
     </Window.DataContext>
 
     <StackPanel Orientation="Horizontal">
-
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="80">
+            <Button Padding="5" Margin="3" ToolTip="Add class" Height="50" Width="70" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Click="add_class_Click">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                    Add <LineBreak/>Class
+                </TextBlock>
+            </Button>
+            <Button Padding="5" Margin="3" ToolTip="Add comment" Height="50" Width="70" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                    Add <LineBreak/>Comment
+                </TextBlock>
+            </Button>
+            <Button Padding="5" Margin="3" ToolTip="Add connector" Height="50" Width="70" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                    Add <LineBreak/>Connector
+                </TextBlock>
+            </Button>            
+        </StackPanel>
         <Grid>
             <ItemsControl ItemsSource="{Binding classes}"/>
         </Grid>
