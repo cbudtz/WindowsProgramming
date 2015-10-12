@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Area51.SoftwareModeler.Models
 {
-    enum ConnectionType
+    public enum ConnectionType
     {
         Aggregation,Composition,Association
     }

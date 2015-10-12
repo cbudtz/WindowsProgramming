@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace Area51.SoftwareModeler.Models
 {
-    public abstract class Shape : NotifyBase
+    public class Shape : NotifyBase
     {
         // For a description of the Getter/Setter Property syntax ("{ get { ... } set { ... } }") see the Line class.
         // The static integer counter field is used to set the integer Number property to a unique number for each Shape object.

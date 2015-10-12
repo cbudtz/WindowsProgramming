@@ -8,10 +8,24 @@ namespace Area51.SoftwareModeler.Models
 {
     public class Connection
     {
-        Class start;
-        String startMultiplicity;
-        String endMultiplicity;
-        Class end;
-        ConnectionType type;
+        private Shape start;
+        private string startMultiplicity;
+        private string endMultiplicity;
+        private Shape end;
+        private ConnectionType type;
+
+        public Shape Start { get { return start; } set { start = value; } }
+        public string StartMultiplicity { get { return startMultiplicity; } set { startMultiplicity = value; } }
+        public Shape End { get { return end; } set { end = value; } }
+        public string EndMultiplicity { get { return endMultiplicity; } set { endMultiplicity = value; } }
+
+        public Connection(Shape _start, string _startMultiplicity, Shape _end, string _endMultiplicity, ConnectionType _type)
+        {
+            start = _start;
+            startMultiplicity = _startMultiplicity;
+            end = _end;
+            endMultiplicity = _endMultiplicity;
+            type = _type;
+        }
     }
 }
