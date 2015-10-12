@@ -1,12 +1,12 @@
-﻿using Area51.SoftwareModeler.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Area51.SoftwareModeler.Models;
 
-namespace Area51.SoftwareModeler.Commands
+namespace Area51.SoftwareModeler.Models.Commands
 {
     class AddUMLClassCommand
     {

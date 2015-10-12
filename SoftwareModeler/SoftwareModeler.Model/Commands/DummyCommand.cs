@@ -8,7 +8,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Area51.SoftwareModeler.Models
+namespace Area51.SoftwareModeler.Models.Commands
 {
    public class DummyCommand : BaseCommand
     {

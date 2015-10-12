@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
-namespace Area51.SoftwareModeler.Models
+namespace Area51.SoftwareModeler.Models.Commands
 {
     public class CommandTree : INotifyPropertyChanged
     {
@@ -53,27 +53,25 @@ namespace Area51.SoftwareModeler.Models
         }
 
         private static BaseCommand findActive(BaseCommand node, int id)
-        {if (node.id == id)
+        {
+            BaseCommand activeNode = null;
+         
+            if(node.id == id)
             {
-                return node;
-            } else
-            {
-                if (node.Children.Equals(null) || node.Children.Count == 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    foreach (BaseCommand child in node.Children)
-                    {
-                        BaseCommand recNode = CommandTree.findActive(child, id);
-                        if (recNode != null) return recNode;
-                        
-                    }
-                    return null;
-                }
-                
+                activeNode = node;
             }
+            if(!node.Children.Equals(null) && node.Children.Count > 0)
+            {
+               
+                foreach (BaseCommand child in node.Children)
+                {
+                    child.Parent = node;
+                    BaseCommand recNode = CommandTree.findActive(child, id);
+                    if (recNode != null) activeNode = recNode;
+
+                }
+            }
+            return activeNode;
             
         }
 

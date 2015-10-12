@@ -1,3 +1,4 @@
+using Area51.SoftwareModeler.Models.Commands;
 using Area51.SoftwareModeler.Models;
 using System.Collections.ObjectModel;
 using System.Windows;

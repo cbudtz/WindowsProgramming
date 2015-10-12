@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
 
-namespace Area51.SoftwareModeler.Models
+namespace Area51.SoftwareModeler.Models.Commands
 {
     public class MoveShapeCommand : BaseCommand
     {

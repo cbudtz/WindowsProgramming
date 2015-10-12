@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Area51.SoftwareModeler.Models;
-using Area51.SoftwareModeler.Model.Commands;
+using Area51.SoftwareModeler.Models.Commands;
 
 namespace TestApp
 {
@@ -31,6 +31,9 @@ namespace TestApp
             CommandTree commandTreeCopy = CommandTree.load();
             Console.WriteLine(commandTreeCopy.active.id);
             Console.WriteLine(commandTreeCopy.root.id);
+            Console.WriteLine(commandTreeCopy.root.Children.ElementAt(0).id);
+            Console.WriteLine(commandTreeCopy.active.Parent.id);
+            Console.WriteLine(commandTreeCopy.active.Parent.Parent.id);
 
             Console.ReadKey();
 
