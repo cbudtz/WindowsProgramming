@@ -29,6 +29,8 @@ namespace Area51.SoftwareModeler.Models
         public Boolean IsAbstract { get { return isAbstract; } set { isAbstract = value; } }
         public Point AnchorPoint { get { return anchorPoint; } set { anchorPoint = value; } }
         public Visibility Visibility { get { return visibility; } set { visibility = value; } }
+        public List<Attribute> Attributes { get { return attributes; } set { attributes = value; } }
+        public List<Method> Methods { get { return methods; } set { methods = value; }
 
 
     }
