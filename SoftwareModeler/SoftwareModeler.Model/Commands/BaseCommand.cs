@@ -24,6 +24,10 @@ namespace Area51.SoftwareModeler.Models
         public abstract void ReadXml(XmlReader reader);
         public abstract void WriteXml(XmlWriter writer);
 
+        public BaseCommand()
+        {
+
+        }
         protected BaseCommand(BaseCommand _parent)
         {
             this.parent = _parent;
