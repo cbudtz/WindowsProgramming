@@ -20,7 +20,17 @@ namespace Area51.SoftwareModeler.Commands
             repClass = _class;
         }
 
+        // For doing and redoing the command.
+        public void Execute()
+        {
+            classes.Add(repClass);
+        }
 
+        // For undoing the command.
+        public void UnExecute()
+        {
+            classes.Remove(repClass);
+        }
 
     }
 }
