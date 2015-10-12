@@ -45,12 +45,14 @@
   <ItemGroup>
     <Compile Include="Attribute.cs" />
     <Compile Include="Class.cs" />
+    <Compile Include="Commands\AddShapeCommand.cs" />
+    <Compile Include="Commands\MoveShapeCommand.cs" />
     <Compile Include="NotifyBase.cs" />
     <Compile Include="CommandTree.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionType.cs" />
     <Compile Include="DummyCommand.cs" />
-    <Compile Include="ICommandExt.cs" />
+    <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Method.cs" />
     <Compile Include="Modifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
