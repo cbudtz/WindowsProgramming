@@ -33,7 +33,13 @@ namespace Area51.SoftwareModeler.ViewModels
         public MainViewModel()
         {
             classes = new ObservableCollection<Class>() { new Class("321", "", false, new Point(), Models.Visibility.Default)};
-            TestClass = new Class("123", "", false, new Point(), Models.Visibility.Default);
+            TestClass = new Class("A Class", "", false, new Point(), Models.Visibility.Default);
+            TestClass.addAttribute("int", "something");
+            TestClass.addAttribute("String", "someAttribute");
+            classes.Add(TestClass);
+            TestClass = new Class("Another Class", "", false, new Point(), Models.Visibility.Default);
+            TestClass.addAttribute("int", "nothing");
+            TestClass.addAttribute("bool", "True");
             classes.Add(TestClass);
         }
         public string Text { get; set; }
