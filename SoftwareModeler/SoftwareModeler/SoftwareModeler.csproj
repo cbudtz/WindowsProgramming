@@ -90,16 +90,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\Attribute.cs" />
-    <Compile Include="Models\Class.cs" />
-    <Compile Include="Models\CommandTree.cs" />
-    <Compile Include="Models\Connection.cs" />
-    <Compile Include="Models\ConnectionType.cs" />
-    <Compile Include="Models\DummyCommand.cs" />
-    <Compile Include="Models\ICommandExt.cs" />
-    <Compile Include="Models\Method.cs" />
-    <Compile Include="Models\Modifier.cs" />
-    <Compile Include="Models\Visibility.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\ClassUserControl.xaml.cs">
@@ -168,6 +158,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SoftwareModeler.Model\SoftwareModeler.Model.csproj">
+      <Project>{5ede6715-bb5c-4dbc-83a2-ea3742dbd50d}</Project>
+      <Name>SoftwareModeler.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
