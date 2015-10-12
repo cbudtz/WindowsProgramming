@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Attribute.cs" />
     <Compile Include="Class.cs" />
+    <Compile Include="Commands\MoveShapeCommand.cs" />
     <Compile Include="NotifyBase.cs" />
     <Compile Include="CommandTree.cs" />
     <Compile Include="Connection.cs" />
