@@ -4,41 +4,91 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml;
+using System.Xml.Schema;
 
 namespace Area51.SoftwareModeler.Models
 {
-   public class DummyCommand : ICommandExt
+   public class DummyCommand : BaseCommand
     {
         public event EventHandler CanExecuteChanged;
 
-        public void addChild(ICommandExt child)
+        public DummyCommand()
+        {
+
+        }
+
+        public void addChild(BaseCommand child)
         {
             throw new NotImplementedException();
         }
 
-        public bool canExecute()
+        public override bool canExecute()
         {
             throw new NotImplementedException();
         }
 
-        public void execute()
+        public override void execute()
         {
             throw new NotImplementedException();
         }
 
-        public List<ICommandExt> getChildren()
+        public List<BaseCommand> getChildren()
         {
             throw new NotImplementedException();
         }
 
-        public ICommandExt getParent()
+        public BaseCommand getParent()
+        {
+            throw new NotImplementedException();
+        }
+        public override void unExecute()
         {
             throw new NotImplementedException();
         }
 
-        public void unExecute()
+
+
+        void BaseCommand.addChild(BaseCommand child)
         {
             throw new NotImplementedException();
         }
+
+        bool BaseCommand.canExecute()
+        {
+            throw new NotImplementedException();
+        }
+
+        void BaseCommand.execute()
+        {
+            throw new NotImplementedException();
+        }
+
+        List<BaseCommand> BaseCommand.getChildren()
+        {
+            throw new NotImplementedException();
+        }
+
+        BaseCommand BaseCommand.getParent()
+        {
+            throw new NotImplementedException();
+        }
+
+        void BaseCommand.unExecute()
+        {
+            reader.ReadStartElement(this.GetType().Name);
+            //TODO: Fill in attributes
+            reader.ReadEndElement();
+            
+        }
+
+        public override void WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartElement(this.GetType().Name);
+            //TODO: Fill in attributes
+            writer.WriteEndElement();
+        }
+
+      
     }
 }

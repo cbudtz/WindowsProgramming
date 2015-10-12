@@ -14,7 +14,7 @@ namespace TestApp
             Console.Write("Test");
             Console.ReadKey();
             CommandTree cTree = new CommandTree();
-            ICommandExt command = new DummyCommand();
+            DummyCommand command = new DummyCommand();
             cTree.addCommand(command);
             cTree.Name = "Fancy Name";
             CommandTree.save(cTree);
