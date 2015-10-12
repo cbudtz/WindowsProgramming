@@ -14,21 +14,21 @@ namespace Area51.SoftwareModeler.Models
         private double xOffset;
         private double yOffset;
 
+        public MoveShapeCommand()
+        {
+
+        }
 
         public MoveShapeCommand(BaseCommand _parent, Shape _shape, double _xOffset, double _yOffset)
             : base(_parent)
         {
             
             this.parent = _parent;
-            this.children = new List<BaseCommand>();
             shape = _shape;
             xOffset = _xOffset;
             yOffset = _yOffset;
         }
-        public override void addChild(BaseCommand child)
-        {
-            children.Add(child);
-        }
+
 
         public override void execute()
         {
@@ -42,20 +42,6 @@ namespace Area51.SoftwareModeler.Models
             shape.CanvasCenterY -= yOffset;
         }
 
-        public override XmlSchema GetSchema()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ReadXml(XmlReader reader)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void WriteXml(XmlWriter writer)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 

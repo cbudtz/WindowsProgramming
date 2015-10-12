@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models
 {
@@ -18,11 +19,13 @@ namespace Area51.SoftwareModeler.Models
         {
 
         }
-
-        public override void addChild(BaseCommand child)
+        public DummyCommand(BaseCommand parent)
+            :base(parent)
         {
-            throw new NotImplementedException();
+
         }
+
+
 
         public override void execute()
         {
@@ -38,29 +41,11 @@ namespace Area51.SoftwareModeler.Models
         {
             throw new NotImplementedException();
         }
+
         public override void unExecute()
         {
             throw new NotImplementedException();
         }
 
-        public override void ReadXml(XmlReader reader)
-        {
-            reader.ReadStartElement(this.GetType().Name);
-            //TODO: Fill in attributes
-            reader.ReadEndElement();
-            
-        }
-
-        public override void WriteXml(XmlWriter writer)
-        {
-            writer.WriteStartElement(this.GetType().Name);
-            //TODO: Fill in attributes
-            writer.WriteEndElement();
-        }
-
-        public override XmlSchema GetSchema()
-        {
-            return null;
-        }
     }
 }

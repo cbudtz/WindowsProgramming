@@ -9,16 +9,16 @@ using Area51.SoftwareModeler.Models;
 
 namespace Area51.SoftwareModeler.Model.Commands
 {
-    class AddShapeCommand : BaseCommand
+    public class AddShapeCommand : BaseCommand
     {
+        public AddShapeCommand()
+        {
+
+        }
         public AddShapeCommand(BaseCommand _parent)
             : base(_parent)
         {
 
-        }
-        public override void addChild(BaseCommand child)
-        {
-            throw new NotImplementedException();
         }
 
         public override void execute()
@@ -26,24 +26,12 @@ namespace Area51.SoftwareModeler.Model.Commands
             throw new NotImplementedException();
         }
 
-        public override XmlSchema GetSchema()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ReadXml(XmlReader reader)
-        {
-            throw new NotImplementedException();
-        }
 
         public override void unExecute()
         {
             throw new NotImplementedException();
         }
 
-        public override void WriteXml(XmlWriter writer)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

@@ -20,7 +20,12 @@ namespace Area51.SoftwareModeler.Models
                 root = command;
                 active = root;
             }
-            else active.addChild(command);
+            else
+            {
+                command.Parent = active;
+                active.addChild(command);
+                active = command;
+            }
             
         }
 
@@ -38,7 +43,7 @@ namespace Area51.SoftwareModeler.Models
         public static CommandTree load()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
-            using (StreamReader reader = new StreamReader(@"c:\temp\output.xml"))
+            using (StreamReader reader = new StreamReader(@"output.xml"))
                 return serializer.Deserialize(reader) as CommandTree;
 
         }
