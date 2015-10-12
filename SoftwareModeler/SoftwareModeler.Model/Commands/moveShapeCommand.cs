@@ -42,11 +42,6 @@ namespace Area51.SoftwareModeler.Models
             shape.CanvasCenterY -= yOffset;
         }
 
-        public override bool canExecute()
-        {
-            throw new NotImplementedException();
-        }
-
         public override XmlSchema GetSchema()
         {
             throw new NotImplementedException();
