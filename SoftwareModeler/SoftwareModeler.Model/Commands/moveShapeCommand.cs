@@ -11,11 +11,12 @@ namespace Area51.SoftwareModeler.Models
         private Shape shape;
         private double xOffset;
         private double yOffset;
+
         private ICommandExt parent;
         private List<ICommandExt> children;
     
-        private ICommandExt Parent { get { return parent; } }
-        private List<ICommandExt> Children { get { return children; } }
+        public ICommandExt Parent { get { return parent; } }
+        public List<ICommandExt> Children { get { return children; } }
 
 
         public MoveShapeCommand(ICommandExt _parent, Shape _shape, double _xOffset, double _yOffset)
@@ -29,11 +30,6 @@ namespace Area51.SoftwareModeler.Models
         public void addChild(ICommandExt child)
         {
             children.Add(child);
-        }
-
-        public bool canExecute()
-        {
-            throw new NotImplementedException();
         }
 
         public void execute()
