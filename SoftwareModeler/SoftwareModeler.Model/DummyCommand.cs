@@ -23,12 +23,12 @@ namespace Area51.SoftwareModeler.Models
             throw new NotImplementedException();
         }
 
-        public bool canExecute()
+        public override bool canExecute()
         {
             throw new NotImplementedException();
         }
 
-        public void execute()
+        public override void execute()
         {
             throw new NotImplementedException();
         }
@@ -42,7 +42,7 @@ namespace Area51.SoftwareModeler.Models
         {
             throw new NotImplementedException();
         }
-        public void unExecute()
+        public override void unExecute()
         {
             throw new NotImplementedException();
         }
@@ -76,23 +76,13 @@ namespace Area51.SoftwareModeler.Models
 
         void BaseCommand.unExecute()
         {
-            throw new NotImplementedException();
-        }
-
-        public XmlSchema GetSchema()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
             reader.ReadStartElement(this.GetType().Name);
             //TODO: Fill in attributes
             reader.ReadEndElement();
             
         }
 
-        public void WriteXml(XmlWriter writer)
+        public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement(this.GetType().Name);
             //TODO: Fill in attributes
