@@ -7,9 +7,9 @@ namespace Area51.SoftwareModeler.Models
     public class CommandTree : INotifyPropertyChanged
     {
         public string Name;
-        ICommandExt root;
-        ICommandExt active;
-        LinkedList<ICommandExt> undone;
+        public ICommandExt root;
+        public ICommandExt active;
+        public LinkedList<ICommandExt> undone;
         //TODO implement
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -18,6 +18,7 @@ namespace Area51.SoftwareModeler.Models
             if (root == null)
             {
                 root = command;
+                active = root;
             }
             else active.addChild(command);
             
