@@ -13,6 +13,10 @@ namespace Area51.SoftwareModeler.Models
     {
         public event EventHandler CanExecuteChanged;
 
+        public DummyCommand()
+        {
+
+        }
 
         public void addChild(ICommandExt child)
         {
@@ -38,24 +42,6 @@ namespace Area51.SoftwareModeler.Models
         {
             throw new NotImplementedException();
         }
-
-        public XmlSchema GetSchema()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReadXml(XmlReader reader)
-        {
-            
-        }
-
-        public void WriteXml(XmlWriter writer)
-        {
-            writer.WriteStartElement(this.GetType().Name);
-            //TODO: Fill in attributes
-            writer.WriteEndElement();
-        }
-
         public void unExecute()
         {
             throw new NotImplementedException();
@@ -92,5 +78,27 @@ namespace Area51.SoftwareModeler.Models
         {
             throw new NotImplementedException();
         }
+
+        public XmlSchema GetSchema()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            reader.ReadStartElement(this.GetType().Name);
+            //TODO: Fill in attributes
+            reader.ReadEndElement();
+            
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartElement(this.GetType().Name);
+            //TODO: Fill in attributes
+            writer.WriteEndElement();
+        }
+
+      
     }
 }
