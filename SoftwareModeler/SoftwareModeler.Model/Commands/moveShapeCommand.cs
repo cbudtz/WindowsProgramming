@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Schema;
 
 namespace Area51.SoftwareModeler.Models
 {
@@ -15,8 +17,8 @@ namespace Area51.SoftwareModeler.Models
         private ICommandExt parent;
         private List<ICommandExt> children;
     
-        public ICommandExt Parent { get { return parent; } }
-        public List<ICommandExt> Children { get { return children; } }
+        public override ICommandExt Parent { get { return parent; } }
+        public override List<ICommandExt> Children { get { return children; } }
 
 
         public MoveShapeCommand(ICommandExt _parent, Shape _shape, double _xOffset, double _yOffset)
@@ -27,21 +29,41 @@ namespace Area51.SoftwareModeler.Models
             xOffset = _xOffset;
             yOffset = _yOffset;
         }
-        public void addChild(ICommandExt child)
+        public override void addChild(ICommandExt child)
         {
             children.Add(child);
         }
 
-        public void execute()
+        public override void execute()
         {
             shape.CanvasCenterX += xOffset;
             shape.CanvasCenterY += yOffset;
         }
 
-        public void unExecute()
+        public override void unExecute()
         {
             shape.CanvasCenterX -= xOffset;
             shape.CanvasCenterY -= yOffset;
+        }
+
+        public override bool canExecute()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override XmlSchema GetSchema()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void WriteXml(XmlWriter writer)
+        {
+            throw new NotImplementedException();
         }
     }
 }
