@@ -9,6 +9,11 @@
     <Window.DataContext>
         <ViewModel:MainViewModel />
     </Window.DataContext>
-    
-    <ContentPresenter Content="{Binding Path=TestClass}"/>
+
+    <StackPanel Orientation="Horizontal">
+
+        <Grid>
+            <ItemsControl ItemsSource="{Binding classes}"/>
+        </Grid>
+    </StackPanel>
 </Window>
