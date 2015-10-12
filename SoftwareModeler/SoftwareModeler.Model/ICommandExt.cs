@@ -7,9 +7,11 @@ using System.Windows.Input;
 
 namespace Area51.SoftwareModeler.Models
 {
-    public interface ICommandExt : ICommand
+    public interface ICommandExt
     {
+        void execute();
         void unExecute();
+        bool canExecute();
         ICommandExt getParent();
         List<ICommandExt> getChildren();
         void addChild(ICommandExt child);
