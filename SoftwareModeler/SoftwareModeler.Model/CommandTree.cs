@@ -9,7 +9,7 @@ namespace Area51.SoftwareModeler.Models
         public string Name;
         public BaseCommand root;
         public BaseCommand active;
-        public LinkedList<BaseCommand> undone;
+        public List<BaseCommand> undone;
         //TODO implement
         public event PropertyChangedEventHandler PropertyChanged;
 
