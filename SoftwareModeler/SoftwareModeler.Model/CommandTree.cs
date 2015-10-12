@@ -7,13 +7,13 @@ namespace Area51.SoftwareModeler.Models
     public class CommandTree : INotifyPropertyChanged
     {
         public string Name;
-        public ICommandExt root;
-        public ICommandExt active;
-        public LinkedList<ICommandExt> undone;
+        public BaseCommand root;
+        public BaseCommand active;
+        public LinkedList<BaseCommand> undone;
         //TODO implement
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void addCommand(ICommandExt command)
+        public void addCommand(BaseCommand command)
         {
             if (root == null)
             {
@@ -24,7 +24,7 @@ namespace Area51.SoftwareModeler.Models
             
         }
 
-        public void setActive(ICommandExt command)
+        public void setActive(BaseCommand command)
         {
             //TODO: Implement recursive function to crawl up and down tree;
         }

@@ -9,29 +9,19 @@ using Area51.SoftwareModeler.Models;
 
 namespace Area51.SoftwareModeler.Model.Commands
 {
-    class AddShapeCommand : ICommandExt
+    class AddShapeCommand : BaseCommand
     {
-        public override void addChild(ICommandExt child)
+        public AddShapeCommand(BaseCommand _parent)
+            : base(_parent)
         {
-            throw new NotImplementedException();
-        }
 
-        public override bool canExecute()
+        }
+        public override void addChild(BaseCommand child)
         {
             throw new NotImplementedException();
         }
 
         public override void execute()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override List<ICommandExt> getChildren()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ICommandExt getParent()
         {
             throw new NotImplementedException();
         }

@@ -9,7 +9,7 @@ using System.Xml.Schema;
 
 namespace Area51.SoftwareModeler.Models
 {
-   public class DummyCommand : ICommandExt
+   public class DummyCommand : BaseCommand
     {
         public event EventHandler CanExecuteChanged;
 
@@ -18,7 +18,7 @@ namespace Area51.SoftwareModeler.Models
 
         }
 
-        public void addChild(ICommandExt child)
+        public void addChild(BaseCommand child)
         {
             throw new NotImplementedException();
         }
@@ -33,12 +33,12 @@ namespace Area51.SoftwareModeler.Models
             throw new NotImplementedException();
         }
 
-        public List<ICommandExt> getChildren()
+        public List<BaseCommand> getChildren()
         {
             throw new NotImplementedException();
         }
 
-        public ICommandExt getParent()
+        public BaseCommand getParent()
         {
             throw new NotImplementedException();
         }
@@ -49,32 +49,32 @@ namespace Area51.SoftwareModeler.Models
 
 
 
-        void ICommandExt.addChild(ICommandExt child)
+        void BaseCommand.addChild(BaseCommand child)
         {
             throw new NotImplementedException();
         }
 
-        bool ICommandExt.canExecute()
+        bool BaseCommand.canExecute()
         {
             throw new NotImplementedException();
         }
 
-        void ICommandExt.execute()
+        void BaseCommand.execute()
         {
             throw new NotImplementedException();
         }
 
-        List<ICommandExt> ICommandExt.getChildren()
+        List<BaseCommand> BaseCommand.getChildren()
         {
             throw new NotImplementedException();
         }
 
-        ICommandExt ICommandExt.getParent()
+        BaseCommand BaseCommand.getParent()
         {
             throw new NotImplementedException();
         }
 
-        void ICommandExt.unExecute()
+        void BaseCommand.unExecute()
         {
             throw new NotImplementedException();
         }

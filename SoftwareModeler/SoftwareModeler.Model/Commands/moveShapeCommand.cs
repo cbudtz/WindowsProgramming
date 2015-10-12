@@ -8,28 +8,24 @@ using System.Xml.Schema;
 
 namespace Area51.SoftwareModeler.Models
 {
-    public class MoveShapeCommand : ICommandExt
+    public class MoveShapeCommand : BaseCommand
     {
         private Shape shape;
         private double xOffset;
         private double yOffset;
 
-        private ICommandExt parent;
-        private List<ICommandExt> children;
-    
-        public override ICommandExt Parent { get { return parent; } }
-        public override List<ICommandExt> Children { get { return children; } }
 
-
-        public MoveShapeCommand(ICommandExt _parent, Shape _shape, double _xOffset, double _yOffset)
+        public MoveShapeCommand(BaseCommand _parent, Shape _shape, double _xOffset, double _yOffset)
+            : base(_parent)
         {
-            parent = _parent;
-            children = new List<ICommandExt>();
+            
+            this.parent = _parent;
+            this.children = new List<BaseCommand>();
             shape = _shape;
             xOffset = _xOffset;
             yOffset = _yOffset;
         }
-        public override void addChild(ICommandExt child)
+        public override void addChild(BaseCommand child)
         {
             children.Add(child);
         }

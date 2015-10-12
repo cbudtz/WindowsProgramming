@@ -10,16 +10,23 @@ using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models
 {
-    public abstract class ICommandExt : IXmlSerializable
+    public abstract class BaseCommand : IXmlSerializable
     {
+
+        protected BaseCommand parent;
+        protected List<BaseCommand> children = new List<BaseCommand>();
         public abstract void execute();
         public abstract void unExecute();
-        public abstract bool canExecute();
-        public abstract ICommandExt getParent();
-        public abstract List<ICommandExt> getChildren();
-        public abstract void addChild(ICommandExt child);
+        public BaseCommand Parent { get { return parent; } }
+        public List<BaseCommand> Children { get { return children; } }
+        public abstract void addChild(BaseCommand child);
         public abstract XmlSchema GetSchema();
         public abstract void ReadXml(XmlReader reader);
         public abstract void WriteXml(XmlWriter writer);
+
+        protected BaseCommand(BaseCommand _parent)
+        {
+            this.parent = _parent;
+        }
     }
 }
