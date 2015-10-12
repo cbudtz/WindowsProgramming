@@ -14,16 +14,12 @@ namespace Area51.SoftwareModeler.Models
         public event EventHandler CanExecuteChanged;
 
         public DummyCommand()
+            :base(null)
         {
 
         }
 
-        public void addChild(BaseCommand child)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool canExecute()
+        public override void addChild(BaseCommand child)
         {
             throw new NotImplementedException();
         }
@@ -47,34 +43,7 @@ namespace Area51.SoftwareModeler.Models
             throw new NotImplementedException();
         }
 
-
-
-        void BaseCommand.addChild(BaseCommand child)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool BaseCommand.canExecute()
-        {
-            throw new NotImplementedException();
-        }
-
-        void BaseCommand.execute()
-        {
-            throw new NotImplementedException();
-        }
-
-        List<BaseCommand> BaseCommand.getChildren()
-        {
-            throw new NotImplementedException();
-        }
-
-        BaseCommand BaseCommand.getParent()
-        {
-            throw new NotImplementedException();
-        }
-
-        void BaseCommand.unExecute()
+        public override void ReadXml(XmlReader reader)
         {
             reader.ReadStartElement(this.GetType().Name);
             //TODO: Fill in attributes
@@ -89,6 +58,9 @@ namespace Area51.SoftwareModeler.Models
             writer.WriteEndElement();
         }
 
-      
+        public override XmlSchema GetSchema()
+        {
+            return null;
+        }
     }
 }
