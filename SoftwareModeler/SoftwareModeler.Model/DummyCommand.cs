@@ -17,74 +17,44 @@ namespace Area51.SoftwareModeler.Models
         {
 
         }
-
-        public void addChild(ICommandExt child)
+        
+        public override void addChild(ICommandExt child)
         {
             throw new NotImplementedException();
         }
 
-        public bool canExecute()
+        public override bool canExecute()
         {
             throw new NotImplementedException();
         }
 
-        public void execute()
+        public override void execute()
         {
             throw new NotImplementedException();
         }
 
-        public List<ICommandExt> getChildren()
+        public override List<ICommandExt> getChildren()
         {
             throw new NotImplementedException();
         }
 
-        public ICommandExt getParent()
+        public override ICommandExt getParent()
         {
             throw new NotImplementedException();
         }
-        public void unExecute()
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-        void ICommandExt.addChild(ICommandExt child)
+        public override void unExecute()
         {
             throw new NotImplementedException();
         }
 
-        bool ICommandExt.canExecute()
+
+
+        public override XmlSchema GetSchema()
         {
             throw new NotImplementedException();
         }
 
-        void ICommandExt.execute()
-        {
-            throw new NotImplementedException();
-        }
-
-        List<ICommandExt> ICommandExt.getChildren()
-        {
-            throw new NotImplementedException();
-        }
-
-        ICommandExt ICommandExt.getParent()
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICommandExt.unExecute()
-        {
-            throw new NotImplementedException();
-        }
-
-        public XmlSchema GetSchema()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReadXml(XmlReader reader)
+        public override void ReadXml(XmlReader reader)
         {
             reader.ReadStartElement(this.GetType().Name);
             //TODO: Fill in attributes
@@ -92,7 +62,7 @@ namespace Area51.SoftwareModeler.Models
             
         }
 
-        public void WriteXml(XmlWriter writer)
+        public override void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement(this.GetType().Name);
             //TODO: Fill in attributes
