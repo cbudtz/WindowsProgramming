@@ -33,6 +33,8 @@ namespace WpfApplication1.ViewModel
         {
             
             TestClass = new Class("123", "", false, new Point(), ModelLibrary.Visibility.Default);
+            classes.Add(TestClass);
+            classes.
         }
         public string Text { get; set; }
     }
