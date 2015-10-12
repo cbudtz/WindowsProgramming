@@ -21,6 +21,7 @@ namespace Area51.SoftwareModeler.Models
             this.isAbstract = isAbstract;
             this.anchorPoint = anchorPoint;
             this.visibility = visibility;
+            this.attributes = new List<Attribute>();
 
         }
         //Getters and setters
@@ -32,6 +33,12 @@ namespace Area51.SoftwareModeler.Models
         public List<Attribute> Attributes { get { return attributes; } set { attributes = value; } }
         public List<Method> Methods { get { return methods; } set { methods = value; } }
 
+
+
+        public void addAttribute(string type, string name)
+        {
+            this.attributes.Add(new Attribute(type, name));
+        }
 
     }
 }
