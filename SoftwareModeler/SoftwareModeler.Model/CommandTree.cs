@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
@@ -43,10 +44,39 @@ namespace Area51.SoftwareModeler.Models
         public static CommandTree load()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
+            CommandTree restoredTree;
             using (StreamReader reader = new StreamReader(@"output.xml"))
-                return serializer.Deserialize(reader) as CommandTree;
+                restoredTree = serializer.Deserialize(reader) as CommandTree;
+            restoredTree.active = CommandTree.findActive(restoredTree.root, restoredTree.active.id);
+            return restoredTree;
 
         }
+
+        private static BaseCommand findActive(BaseCommand node, int id)
+        {if (node.id == id)
+            {
+                return node;
+            } else
+            {
+                if (node.Children.Equals(null) || node.Children.Count == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    foreach (BaseCommand child in node.Children)
+                    {
+                        BaseCommand recNode = CommandTree.findActive(child, id);
+                        if (recNode != null) return recNode;
+                        
+                    }
+                    return null;
+                }
+                
+            }
+            
+        }
+
         public void undo()
         {
             //TODO: Implemnt

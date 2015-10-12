@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Area51.SoftwareModeler.Models;
+using Area51.SoftwareModeler.Model.Commands;
 
 namespace TestApp
 {
@@ -11,11 +12,11 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            Console.Write("Test");
+            Console.WriteLine("Test");
             Console.ReadKey();
             CommandTree cTree = new CommandTree();
             BaseCommand command = new DummyCommand();
-            BaseCommand command2 = new DummyCommand();
+            BaseCommand command2 = new AddShapeCommand();
             BaseCommand command3 = new DummyCommand();
             //command2.Parent = command;
             //command2.addChild(command3);
@@ -26,8 +27,13 @@ namespace TestApp
             cTree.Name = "Fancy Name";
            // command.
             CommandTree.save(cTree);
+            Console.WriteLine(cTree.active.Parent.id);
             CommandTree commandTreeCopy = CommandTree.load();
-            //Console.Write(commandTreeCopy);
+            Console.WriteLine(commandTreeCopy.active.id);
+            Console.WriteLine(commandTreeCopy.root.id);
+
+            Console.ReadKey();
+
             
         }
     }
