@@ -32,12 +32,14 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public MainViewModel()
         {
-            classes = new ObservableCollection<Class>() { new Class("321", "", false, new Point(), Models.Visibility.Default)};
-            TestClass = new Class("A Class", "", false, new Point(), Models.Visibility.Default);
+            classes = new ObservableCollection<Class>();
+            TestClass = new Class("A Class", "", false, new Point(0,0), Models.Visibility.Default);
             TestClass.addAttribute("int", "something");
             TestClass.addAttribute("String", "someAttribute");
+            string[] parameters = { "string", "Int", "Bool" };
+            TestClass.addMethod(Models.Visibility.Public, "somemethod", parameters);
             classes.Add(TestClass);
-            TestClass = new Class("Another Class", "", false, new Point(), Models.Visibility.Default);
+            TestClass = new Class("Another Class", "", false, new Point(0,120), Models.Visibility.Default);
             TestClass.addAttribute("int", "nothing");
             TestClass.addAttribute("bool", "True");
             classes.Add(TestClass);
