@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Area51.SoftwareModeler.Models
 {
-    class DummyCommand : ICommandExt
+   public class DummyCommand : ICommandExt
     {
         public event EventHandler CanExecuteChanged;
 
