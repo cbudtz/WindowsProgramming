@@ -26,14 +26,15 @@ namespace Area51.SoftwareModeler.ViewModels
         /// </summary>
         
         //Dynamic 
-        ObservableCollection<Class> classes;
+        public ObservableCollection<Class> classes { get;  set;}
         ObservableCollection<Connection> connections;
         CommandTree commandController;
 
         public MainViewModel()
         {
-            
+            classes = new ObservableCollection<Class>() { new Class("321", "", false, new Point(), Models.Visibility.Default)};
             TestClass = new Class("123", "", false, new Point(), Models.Visibility.Default);
+            classes.Add(TestClass);
         }
         public string Text { get; set; }
     }
