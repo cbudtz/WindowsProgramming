@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Area51.SoftwareModeler.Models
 {
-    class DummyCommand : ICommandExt
+   public class DummyCommand : ICommandExt
     {
         public event EventHandler CanExecuteChanged;
 
@@ -16,12 +16,12 @@ namespace Area51.SoftwareModeler.Models
             throw new NotImplementedException();
         }
 
-        public bool CanExecute(object parameter)
+        public bool canExecute()
         {
             throw new NotImplementedException();
         }
 
-        public void Execute(object parameter)
+        public void execute()
         {
             throw new NotImplementedException();
         }

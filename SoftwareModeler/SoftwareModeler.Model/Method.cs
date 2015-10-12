@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Area51.SoftwareModeler.Models
 {
-    class Method
+    public class Method
     {
         private String name { get; set; }
         private List<String> parameters { get; set; }

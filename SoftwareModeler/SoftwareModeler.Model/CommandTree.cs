@@ -6,11 +6,22 @@ namespace Area51.SoftwareModeler.Models
 {
     public class CommandTree : INotifyPropertyChanged
     {
+        public string Name;
         ICommandExt root;
         ICommandExt active;
         LinkedList<ICommandExt> undone;
         //TODO implement
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void addCommand(ICommandExt command)
+        {
+            if (root == null)
+            {
+                root = command;
+            }
+            else active.addChild(command);
+            
+        }
 
         public void setActive(ICommandExt command)
         {
@@ -20,7 +31,7 @@ namespace Area51.SoftwareModeler.Models
         public static void save(CommandTree commandTree)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
-            using (StreamWriter writer = new StreamWriter(@"c:\temp\output.xml"))
+            using (StreamWriter writer = new StreamWriter(@"output.xml"))
                 serializer.Serialize(writer, commandTree);
         }
         public static CommandTree load()
