@@ -1,7 +1,8 @@
-using GalaSoft.MvvmLight;
 using Area51.SoftwareModeler.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
+using GalaSoft.MvvmLight;
+
 
 namespace Area51.SoftwareModeler.ViewModels
 {
