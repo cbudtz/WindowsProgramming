@@ -10,12 +10,18 @@
     
     <StackPanel>
         <TextBox HorizontalContentAlignment="Center" FontSize="20" Text="{Binding Name}"></TextBox>
-        <DataGrid Name="attributes" Width="300" ItemsSource="{Binding Attributes}" AutoGenerateColumns="False">
+        <DataGrid Name="attributes" ItemsSource="{Binding Attributes}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Type}"/>
                 <DataGridTextColumn Binding="{Binding Name}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <TextBox HorizontalContentAlignment="Center" FontSize="20" Text="{Binding Visibility}"></TextBox>
+        <DataGrid Name="Methods" ItemsSource="{Binding Methods}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Visibility}"/>
+                <DataGridTextColumn Binding="{Binding Name}"/>
+                <DataGridTextColumn Binding="{Binding ParameterString}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </StackPanel>
 </UserControl>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace Area51.SoftwareModeler.Models
@@ -13,6 +14,9 @@ namespace Area51.SoftwareModeler.Models
         private Visibility visibility;
         private List<Attribute> attributes;
         private List<Method> methods;
+
+        private int width = 600; //default
+        private int height = 600; //default
         
         public Class(String name, String stereotype, Boolean isAbstract, Point anchorPoint, Visibility visibility)
         {
@@ -22,6 +26,7 @@ namespace Area51.SoftwareModeler.Models
             this.anchorPoint = anchorPoint;
             this.visibility = visibility;
             this.attributes = new List<Attribute>();
+            this.methods = new List<Method>();
 
         }
         //Getters and setters
@@ -40,5 +45,16 @@ namespace Area51.SoftwareModeler.Models
             this.attributes.Add(new Attribute(type, name));
         }
 
+        public void addMethod(Visibility visibility, string name, string[] parameters)
+        {
+            Method m = new Method(visibility, name);
+            for (int i = 0; i < parameters.Length; i++)
+                m.addParameter(parameters[i]);
+            
+            this.methods.Add(m);
+        }
+
+        public double X { get { return anchorPoint.X; } set { anchorPoint.X = value; } }
+        public double Y { get { return anchorPoint.Y; } set { anchorPoint.Y = value; } }
     }
 }
