@@ -3,6 +3,7 @@ using Area51.SoftwareModeler.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 using GalaSoft.MvvmLight;
+using System;
 
 
 namespace Area51.SoftwareModeler.ViewModels
@@ -28,22 +29,27 @@ namespace Area51.SoftwareModeler.ViewModels
         
         //Dynamic 
         public ObservableCollection<Class> classes { get;  set;}
-        ObservableCollection<Connection> connections;
+        public ObservableCollection<Connection> connections { get; set; }
         CommandTree commandController;
 
         public MainViewModel()
         {
             classes = new ObservableCollection<Class>();
-            TestClass = new Class("A Class", "", false, new Point(0,0), Models.Visibility.Default);
-            TestClass.addAttribute("int", "something");
-            TestClass.addAttribute("String", "someAttribute");
+            Class TestClass1 = new Class("A Class", "", false, new Point(0,0), Models.Visibility.Default);
+            TestClass1.addAttribute("int", "something");
+            TestClass1.addAttribute("String", "someAttribute");
             string[] parameters = { "string", "Int", "Bool" };
-            TestClass.addMethod(Models.Visibility.Public, "somemethod", parameters);
-            classes.Add(TestClass);
-            TestClass = new Class("Another Class", "", false, new Point(0,120), Models.Visibility.Default);
-            TestClass.addAttribute("int", "nothing");
-            TestClass.addAttribute("bool", "True");
-            classes.Add(TestClass);
+            TestClass1.addMethod(Models.Visibility.Public, "somemethod", parameters);
+            classes.Add(TestClass1);
+            Class TestClass2 = new Class("Another Class", "", false, new Point(300,320), Models.Visibility.Default);
+            TestClass2.addAttribute("int", "nothing");
+            TestClass2.addAttribute("bool", "True");
+            classes.Add(TestClass2);
+            connections = new ObservableCollection<Connection>();
+            Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Aggregation);
+            connections.Add(conn);
+            Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
+            Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
         }
         public string Text { get; set; }
     }
