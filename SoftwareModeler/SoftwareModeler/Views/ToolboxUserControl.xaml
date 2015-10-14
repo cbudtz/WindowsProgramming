@@ -14,8 +14,8 @@
                 <GradientStop Color="LightGray" Offset="0.7"/>
             </LinearGradientBrush>
         </StackPanel.Background>
-        <GroupBox Header="Connections" Foreground="Black" Margin="4">
-            <Grid>
+        <GroupBox Header="Connections" Foreground="Black" Margin="4" >
+            <Grid > 
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition/>
@@ -28,7 +28,7 @@
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Association</TextBlock>
                     </TextBlock>
-                  
+
                 </Button>
                 <Button Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding addAggregation}" Margin="0,1">
                     <TextBlock>
@@ -46,7 +46,8 @@
                         <TextBlock Margin="5,-2,0,0"> Composition</TextBlock>
                     </TextBlock>
                 </Button>
-            </Grid>
+                </Grid>
+
         </GroupBox>
         <GroupBox Header="Classes" Foreground="Black" Margin="4">
             <Grid>
@@ -80,6 +81,24 @@
                         <TextBlock Margin="5,-2,0,0"> Add Interface</TextBlock>
                     </TextBlock>
                 </Button>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Comments" Foreground="Black" Margin="4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Button HorizontalContentAlignment="Left" Command="{Binding addComment}" Margin="0,5,0,1">
+                    <TextBlock>
+                        <TextBlock Margin="2,2,0,0">
+                            <Image Source="/comment_icon.png" Width="15"/>
+                        </TextBlock>
+                        <TextBlock Margin="5,-2,0,0"> Add Comment</TextBlock>
+                    </TextBlock>
+
+                </Button>
+
             </Grid>
         </GroupBox>
 
