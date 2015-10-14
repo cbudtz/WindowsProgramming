@@ -23,8 +23,8 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <GroupBox Grid.Row ="0" Header="Menu" Foreground="Black" Margin="4" >
+                <!--LOAD MenuUserControl-->
                 <local:MenuUserControl/>
-
             </GroupBox>
             <GroupBox Grid.Row ="1" Header="Connections" Foreground="Black" Margin="4" >
             <Grid > 
