@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="300">
     
@@ -14,7 +15,18 @@
                 <GradientStop Color="LightGray" Offset="0.7"/>
             </LinearGradientBrush>
         </StackPanel.Background>
-        <GroupBox Header="Connections" Foreground="Black" Margin="4" >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Row ="0" Header="Menu" Foreground="Black" Margin="4" >
+                <local:MenuUserControl/>
+
+            </GroupBox>
+            <GroupBox Grid.Row ="1" Header="Connections" Foreground="Black" Margin="4" >
             <Grid > 
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -49,7 +61,7 @@
                 </Grid>
 
         </GroupBox>
-        <GroupBox Header="Classes" Foreground="Black" Margin="4">
+            <GroupBox Grid.Row ="2" Header="Classes" Foreground="Black" Margin="4">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -84,7 +96,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="Comments" Foreground="Black" Margin="4">
+            <GroupBox Grid.Row ="3" Header="Comments" Foreground="Black" Margin="4">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -101,7 +113,7 @@
 
             </Grid>
         </GroupBox>
-
+        </Grid>
     </StackPanel>
     
 </UserControl>
