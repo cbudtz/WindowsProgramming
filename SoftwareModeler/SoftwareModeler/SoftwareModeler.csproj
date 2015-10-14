@@ -182,6 +182,15 @@
     <Resource Include="association_icon.png" />
     <Resource Include="composition_icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="class_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="class_abstract_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="class_interface_icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

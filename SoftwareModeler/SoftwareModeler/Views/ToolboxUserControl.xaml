@@ -48,7 +48,41 @@
                 </Button>
             </Grid>
         </GroupBox>
-       
+        <GroupBox Header="Classes" Foreground="Black" Margin="4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button HorizontalContentAlignment="Left" Command="{Binding addClassNormal}" Margin="0,5,0,1">
+                    <TextBlock>
+                        <TextBlock Margin="2,2,0,0">
+                            <Image Source="/class_icon.png" Width="15"/>
+                        </TextBlock>
+                        <TextBlock Margin="5,-2,0,0"> Add Class</TextBlock>
+                    </TextBlock>
+
+                </Button>
+                <Button Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding addClassAbstract}" Margin="0,1">
+                    <TextBlock>
+                        <TextBlock Margin="2,2,0,0">
+                            <Image Source="/class_abstract_icon.png" Width="15"/>
+                        </TextBlock>
+                        <TextBlock Margin="5,-2,0,0"> Add Abstract Class</TextBlock>
+                    </TextBlock>
+                </Button>
+                <Button Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding addClassInterface}" Margin="0,1">
+                    <TextBlock>
+                        <TextBlock Margin="2,2,0,0">
+                            <Image Source="/class_interface_icon.png" Width="15"/>
+                        </TextBlock>
+                        <TextBlock Margin="5,-2,0,0"> Add Interface</TextBlock>
+                    </TextBlock>
+                </Button>
+            </Grid>
+        </GroupBox>
+
     </StackPanel>
     
 </UserControl>
