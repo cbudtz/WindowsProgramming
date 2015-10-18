@@ -12,6 +12,15 @@ namespace Area51.SoftwareModeler.Models
         private string startMultiplicity;
         private string endMultiplicity;
         private Shape end;
+        public double startX { get; set; }
+        public double startY { get; set; }
+        public double p1X { get; set; }
+        public double p1Y { get; set; }
+        public double p2X { get; set; }
+        public double p2Y { get; set; }
+        public double endX { get; set; }
+        public double endY { get; set; }
+        public string startStr { get; set; }
         private ConnectionType type;
 
         public Shape Start { get { return start; } set { start = value; } }
@@ -26,6 +35,47 @@ namespace Area51.SoftwareModeler.Models
             end = _end;
             endMultiplicity = _endMultiplicity;
             type = _type;
+
+            //double vec0X = 1;
+            //double vec0Y = 0;
+            //double vec1X = _end.CanvasCenterX - _start.CanvasCenterX;
+            //double vec1Y = _end.CanvasCenterY - _start.CanvasCenterY;
+            //double phi1 = Math.Acos((vec0X * vec1X) / (Math.Sqrt(Math.Pow(vec1X, 2) + Math.Pow(vec1Y, 2))));
+            //double phi2 = Math.Acos((vec0Y * vec1Y) / (Math.Sqrt(Math.Pow(vec1X, 2) + Math.Pow(vec1Y, 2))));
+
+            //if (Math.Abs(_start.CanvasCenterX - _end.CanvasCenterX) < _start.Width)
+            //{
+            //    startX = _start.CanvasCenterX;
+            //}
+            //else if(_start.CanvasCenterX > _end.CanvasCenterX)
+            //{
+            //    startX = _start.CanvasCenterX - _start.Width/2;
+            //}
+            //else
+            //{
+            //    startX = _start.CanvasCenterX + _start.Width/2;
+            //}
+            //if(Math.Abs(_start.CanvasCenterY - _end.CanvasCenterY) < _start.Height)
+            //{
+            //    startY = _start.CanvasCenterY;
+            //}else if(_start.CanvasCenterY > _end.CanvasCenterY)
+            //{
+            //    startY = _start.CanvasCenterY - _start.Height/2;
+            //}
+            //else
+            //{
+            //    startY = _start.CanvasCenterY + _start.Height/2;
+            //}
+
+            startX = _start.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? _start.Width / 2 : -_start.Width / 2);
+            startY = _start.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? _start.Height / 2 : -_start.Height / 2);
+            endX = _end.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? -_end.Width / 2 : _end.Width / 2);
+            endY = _end.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? -_end.Height / 2 : _end.Height / 2);
+            startStr = (startX + " " + startY);
+            p1X = _start.CanvasCenterX;
+            p1Y = (_start.CanvasCenterY + _end.CanvasCenterY) / 2.0;
+            p2Y = p1Y;
+            p2X = _end.CanvasCenterX;
         }
     }
 }

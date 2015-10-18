@@ -14,10 +14,45 @@
     <Path Stroke="Black" StrokeThickness="3">
         <Path.Data>
             <PathGeometry>
-                <PathFigure StartPoint="100 50">
-                    <LineSegment Point="150 50" />
-                    <LineSegment Point="150 150" />
-                    <LineSegment Point="200 150" />
+                <!--<PathFigure StartPoint="{Binding Start.CanvasCenterX Start.CanvasCenterY}">-->
+                <PathFigure>
+                    <!--<LineSegment Point="{Binding Start.CanvasCenterX Start.CanvasCenterY}" />-->
+                    <!--<LineSegment Point="300 150" />-->
+                    <LineSegment>
+                        <LineSegment.Point>
+                            <MultiBinding Converter="{StaticResource pointConverter}">
+                                <Binding Path='startX'/>
+                                <Binding Path='startY'/>
+                            </MultiBinding>
+                        </LineSegment.Point>
+                    </LineSegment>
+                    <LineSegment>
+                        <LineSegment.Point>
+                            <MultiBinding Converter="{StaticResource pointConverter}">
+                                <Binding Path='p1X'/>
+                                <Binding Path='p1Y'/>
+                            </MultiBinding>
+                        </LineSegment.Point>
+                    </LineSegment>
+                    <LineSegment>
+                        <LineSegment.Point>
+                            <MultiBinding Converter="{StaticResource pointConverter}">
+                                <Binding Path='p2X'/>
+                                <Binding Path='p2Y'/>
+                            </MultiBinding>
+                        </LineSegment.Point>
+                    </LineSegment>
+                    <LineSegment>
+                        <LineSegment.Point>
+                            <MultiBinding Converter="{StaticResource pointConverter}">
+                                <Binding Path='endX'/>
+                                <Binding Path='endY'/>
+                            </MultiBinding>
+                        </LineSegment.Point>
+                    </LineSegment>
+                    <!--<LineSegment Point="300 150" />-->
+                    <!--<LineSegment Point="300 300" />-->
+                    <!--<LineSegment Point="{Binding End.CanvasCenterX End.CanvasCenterY}" />-->
                 </PathFigure>
             </PathGeometry>
         </Path.Data>
