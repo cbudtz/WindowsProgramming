@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Area51.SoftwareModeler.Models.Commands;
+using Area51.SoftwareModeler.Models;
+using System.Collections.ObjectModel;
+
+namespace Area51.SoftwareModeler.Model.Commands
+{
+    class DeleteConnectionCommand : BaseCommand
+    {
+        private Connection connectionToDelete;
+        private ObservableCollection<Connection> connections;
+        public DeleteConnectionCommand(BaseCommand _parent, Connection _connectionToDelete, ObservableCollection<Connection> _connections) : base(_parent)
+        {
+            connectionToDelete = _connectionToDelete;
+            connections = _connections;
+        }
+        public override void execute()
+        {
+            connections.Remove(connectionToDelete);
+        }
+
+        public override void unExecute()
+        {
+            connections.Add(connectionToDelete);
+        }
+    }
+}

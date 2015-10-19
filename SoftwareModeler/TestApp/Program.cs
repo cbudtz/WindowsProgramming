@@ -22,10 +22,10 @@ namespace TestApp
             //command2.Parent = command;
             //command2.addChild(command3);
 
-            cTree.addCommand(command);
-            cTree.addCommand(command2);
-            cTree.addCommand(command3);
-            cTree.addCommand(command4);
+            cTree.addAndExecute(command);
+            cTree.addAndExecute(command2);
+            cTree.addAndExecute(command3);
+            cTree.addAndExecute(command4);
             cTree.Name = "Fancy Name";
            // command.
             CommandTree.save(cTree);

@@ -16,16 +16,15 @@
             <PathGeometry>
                 <!--<PathFigure StartPoint="{Binding Start.CanvasCenterX Start.CanvasCenterY}">-->
                 <PathFigure>
+                    <PathFigure.StartPoint>
+                        <MultiBinding Converter="{StaticResource pointConverter}">
+                            <Binding Path='StartX'/>
+                            <Binding Path='StartY'/>
+                        </MultiBinding>
+                    </PathFigure.StartPoint>
                     <!--<LineSegment Point="{Binding Start.CanvasCenterX Start.CanvasCenterY}" />-->
                     <!--<LineSegment Point="300 150" />-->
-                    <LineSegment>
-                        <LineSegment.Point>
-                            <MultiBinding Converter="{StaticResource pointConverter}">
-                                <Binding Path='startX'/>
-                                <Binding Path='startY'/>
-                            </MultiBinding>
-                        </LineSegment.Point>
-                    </LineSegment>
+                    
                     <LineSegment>
                         <LineSegment.Point>
                             <MultiBinding Converter="{StaticResource pointConverter}">
@@ -45,8 +44,8 @@
                     <LineSegment>
                         <LineSegment.Point>
                             <MultiBinding Converter="{StaticResource pointConverter}">
-                                <Binding Path='endX'/>
-                                <Binding Path='endY'/>
+                                <Binding Path='End.CanvasCenterX'/>
+                                <Binding Path='End.CanvasCenterY'/>
                             </MultiBinding>
                         </LineSegment.Point>
                     </LineSegment>

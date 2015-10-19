@@ -6,26 +6,30 @@ using System.Threading.Tasks;
 
 namespace Area51.SoftwareModeler.Models
 {
-    public class Connection
+    public class Connection : NotifyBase
     {
         private Shape start;
         private string startMultiplicity;
         private string endMultiplicity;
         private Shape end;
-        public double startX { get; set; }
-        public double startY { get; set; }
+        public double startX;// { get; set; }
+        public double StartX { get { return startX; } set { startX = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => Start); } }
+        public double startY;// { get; set; }
+        public double StartY { get { return startY; } set { startY = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => Start); } }
         public double p1X { get; set; }
         public double p1Y { get; set; }
         public double p2X { get; set; }
         public double p2Y { get; set; }
-        public double endX { get; set; }
-        public double endY { get; set; }
+        public double endX;// { get; set; }
+        public double EndX { get { return endX; } set { endX = value;  NotifyPropertyChanged(); NotifyPropertyChanged(() => End); } }
+        public double endY;// { get; set; }
+        public double EndY { get { return endY; } set { endY = value;  NotifyPropertyChanged(); NotifyPropertyChanged(() => End); } }
         public string startStr { get; set; }
         private ConnectionType type;
 
-        public Shape Start { get { return start; } set { start = value; } }
+        public Shape Start { get { return start; } set { start = value; StartX = value.CanvasCenterX; StartY = value.CanvasCenterY; NotifyPropertyChanged(); NotifyPropertyChanged(() => StartX); NotifyPropertyChanged(() => StartY); } }
         public string StartMultiplicity { get { return startMultiplicity; } set { startMultiplicity = value; } }
-        public Shape End { get { return end; } set { end = value; } }
+        public Shape End { get { return end; } set { end = value; EndX = value.CanvasCenterX; EndY = value.CanvasCenterY; NotifyPropertyChanged(); NotifyPropertyChanged(() => EndY); NotifyPropertyChanged(() => EndX); } }
         public string EndMultiplicity { get { return endMultiplicity; } set { endMultiplicity = value; } }
 
         public Connection(Shape _start, string _startMultiplicity, Shape _end, string _endMultiplicity, ConnectionType _type)

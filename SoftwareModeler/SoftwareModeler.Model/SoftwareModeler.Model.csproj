@@ -48,8 +48,11 @@
   <ItemGroup>
     <Compile Include="Attribute.cs" />
     <Compile Include="Class.cs" />
+    <Compile Include="Commands\AddCommentCommand.cs" />
     <Compile Include="Commands\AddShapeCommand.cs" />
     <Compile Include="Commands\AddUMLClass.cs" />
+    <Compile Include="Commands\DeleteConnectionCommand.cs" />
+    <Compile Include="Commands\DeleteShapeCommand.cs" />
     <Compile Include="Commands\DummyCommand.cs" />
     <Compile Include="Commands\MoveShapeCommand.cs" />
     <Compile Include="NotifyBase.cs" />

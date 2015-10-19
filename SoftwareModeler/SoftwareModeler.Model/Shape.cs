@@ -17,6 +17,7 @@ namespace Area51.SoftwareModeler.Models
         // The "{ get; }" syntax describes that a private field 
         //  and default getter method should be generated.
         public string name { get; set; }
+        public int id { get; } //TODO find alternative. probably not necessary - Rúni
 
         private double x = 200;
         // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
@@ -152,8 +153,9 @@ namespace Area51.SoftwareModeler.Models
         // The constructor is in this case used to set the default values for the properties.
         public Shape()
         {
-            // This just means that the integer field called counter is incremented before its value is used to set the Number integer property.
+            
             name = "Shape "  + ++counter;
+            id = ++counter;
         }
 
         // By overwriting the ToString() method, the default representation of the class is changed from the full namespace (Java: package) name, 

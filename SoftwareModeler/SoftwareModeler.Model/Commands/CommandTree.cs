@@ -14,7 +14,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         //TODO implement
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void addCommand(BaseCommand command)
+        public void addAndExecute(BaseCommand command)
         {
             if (root == null)
             {
@@ -27,6 +27,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 active.addChild(command);
                 active = command;
             }
+            active.execute();
             
         }
 
