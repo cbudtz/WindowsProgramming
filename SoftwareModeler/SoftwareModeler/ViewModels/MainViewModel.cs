@@ -4,6 +4,10 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -109,11 +113,32 @@ namespace Area51.SoftwareModeler.ViewModels
                 // The View (GUI) is then notified by the Shape, that its properties have changed.
                 shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
                 shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
+                ObservableCollection<Connection> test = new ObservableCollection<Connection>();
+                connections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
+                connections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
+
             }
         }
         public void MouseUpShape(MouseButtonEventArgs e)
         {
+            // The Shape is gotten from the mouse event.
+            var shape = TargetShape(e);
+            // The mouse position relative to the target of the mouse event.
+            var mousePosition = RelativeMousePosition(e);
 
+            // The Shape is moved back to its original position, so the offset given to the move command works.
+            //shape.X = initialShapePosition.X;
+            //shape.Y = initialShapePosition.Y;
+
+            // Now that the Move Shape operation is over, the Shape is moved to the final position, 
+            //  by using a MoveNodeCommand to move it.
+            // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
+            //  and with respect to the Undo/Redo functionality the Shape has only been moved once, with this Command.
+            //TODO fix command
+            //commandController.addAndExecute(new MoveShapeCommand(commandController.active, shape, mousePosition.X-initialMousePosition.X, mousePosition.Y-initialMousePosition.Y));
+                
+            // The mouse is released, as the move operation is done, so it can be used by other controls.
+            e.MouseDevice.Target.ReleaseMouseCapture();
         }
         // Gets the shape that was clicked.
         private Shape TargetShape(MouseEventArgs e)

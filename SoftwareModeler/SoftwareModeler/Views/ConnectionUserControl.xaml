@@ -28,16 +28,16 @@
                     <LineSegment>
                         <LineSegment.Point>
                             <MultiBinding Converter="{StaticResource pointConverter}">
-                                <Binding Path='p1X'/>
-                                <Binding Path='p1Y'/>
+                                <Binding Path='P1X'/>
+                                <Binding Path='P1Y'/>
                             </MultiBinding>
                         </LineSegment.Point>
                     </LineSegment>
                     <LineSegment>
                         <LineSegment.Point>
                             <MultiBinding Converter="{StaticResource pointConverter}">
-                                <Binding Path='p2X'/>
-                                <Binding Path='p2Y'/>
+                                <Binding Path='P2X'/>
+                                <Binding Path='P2Y'/>
                             </MultiBinding>
                         </LineSegment.Point>
                     </LineSegment>
