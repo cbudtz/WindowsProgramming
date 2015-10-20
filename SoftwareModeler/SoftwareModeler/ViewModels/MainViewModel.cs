@@ -35,9 +35,14 @@ namespace Area51.SoftwareModeler.ViewModels
         public string Text { get; set; }
 
         // Commands that the UI can be bound to.
+        // Shapes
         public ICommand MouseDownShapeCommand { get; }
         public ICommand MouseMoveShapeCommand { get; }
         public ICommand MouseUpShapeCommand { get; }
+        // connections
+        public ICommand MouseDownConnectionCommand { get; }
+        public ICommand MouseMoveConnectionCommand { get; }
+        public ICommand MouseUpConnectionCommand { get; }
         // Used for saving the shape that a line is drawn from, while it is being drawn.
         private Shape addingLineFrom;
         // Saves the initial point that the mouse has during a move operation.
@@ -51,7 +56,7 @@ namespace Area51.SoftwareModeler.ViewModels
         /// </summary>
 
         //Dynamic 
-        public ObservableCollection<Class> classes { get;  set;}
+        public ObservableCollection<Shape> classes { get;  set;}
         public ObservableCollection<Connection> connections { get; set; }
         private CommandTree commandController { get; set; }
 

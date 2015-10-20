@@ -13,27 +13,27 @@ namespace Area51.SoftwareModeler.Models
         private string endMultiplicity;
         private Shape end;
         public double startX;// { get; set; }
-        public double StartX { get { return startX; } set { startX = value; NotifyPropertyChanged();} }
+        public double StartX { get { return startX; } set { startX = value; } }
         public double startY;// { get; set; }
-        public double StartY { get { return startY; } set { startY = value; NotifyPropertyChanged();} }
+        public double StartY { get { return startY; } set { startY = value; } }
         private double point1X;
-        public double P1X { get { return point1X; } set {point1X = value; NotifyPropertyChanged(); } }
+        public double P1X { get { return point1X; } set {point1X = value;  } }
         private double point1Y;
-        public double P1Y { get { return point1Y; } set { point1Y = value; NotifyPropertyChanged(); } }
+        public double P1Y { get { return point1Y; } set { point1Y = value;  } }
         private double point2X;
-        public double P2X { get { return point2X; } set { point2X = value; NotifyPropertyChanged(); } }
+        public double P2X { get { return point2X; } set { point2X = value;  } }
         private double point2Y;
-        public double P2Y { get { return point2Y; } set { point2Y = value; NotifyPropertyChanged(); } }
+        public double P2Y { get { return point2Y; } set { point2Y = value;} }
         public double endX;// { get; set; }
-        public double EndX { get { return endX; } set { endX = value;  NotifyPropertyChanged();} }
+        public double EndX { get { return endX; } set { endX = value; } }
         public double endY;// { get; set; }
-        public double EndY { get { return endY; } set { endY = value;  NotifyPropertyChanged(); } }
+        public double EndY { get { return endY; } set { endY = value;  } }
         public string startStr { get; set; }
         private ConnectionType type;
 
-        public Shape Start { get { return start; } set { start = value; updatePoints(); } }
+        public Shape Start { get { return start; } set { start = value; updatePoints(); NotifyPropertyChanged(()=>StartX); NotifyPropertyChanged(() => StartY); } }
         public string StartMultiplicity { get { return startMultiplicity; } set { startMultiplicity = value; } }
-        public Shape End { get { return end; } set { end = value; updatePoints(); } }
+        public Shape End { get { return end; } set { end = value; updatePoints(); NotifyPropertyChanged(); } }
         public string EndMultiplicity { get { return endMultiplicity; } set { endMultiplicity = value; } }
 
         public Connection(Shape _start, string _startMultiplicity, Shape _end, string _endMultiplicity, ConnectionType _type)
