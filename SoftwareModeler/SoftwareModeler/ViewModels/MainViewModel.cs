@@ -79,7 +79,7 @@ namespace Area51.SoftwareModeler.ViewModels
             TestClass2.addAttribute("int", "nothing");
             TestClass2.addAttribute("bool", "True");
             classes.Add(TestClass2);
-            connections = new ObservableCollection<Connection>();
+            connections = ShapeCollector.getI().obsConnections;
             Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Aggregation);
             connections.Add(conn);
             Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
