@@ -11,6 +11,10 @@ namespace Area51.SoftwareModeler.Models
         private Visibility visibility { get; set; }
         private List<Modifier> modifiers { get; set; }
 
+        public Attribute()
+        {
+
+        }
         public Attribute(string type, string name)
         {
             this.type = type;

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
 using System.Linq;
-using Area51.SoftwareModeler.Model;
+using Area51.SoftwareModeler.Models;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
@@ -59,7 +59,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         private void reExecute()
         {
-            ShapeCollector.reset();
+            ShapeCollector.getI().reset();
             LinkedList<BaseCommand> reExecuteList = new LinkedList<BaseCommand>();
             BaseCommand curCommand = active;
             while (curCommand.Parent != null)

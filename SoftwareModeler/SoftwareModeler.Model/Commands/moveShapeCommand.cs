@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
     public class MoveShapeCommand : BaseCommand
     {
+        [XmlIgnore]
         private Shape shape;
+        public int ShapeId { get; set; }
         private double xOffset;
         private double yOffset;
 

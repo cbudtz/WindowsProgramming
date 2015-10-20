@@ -24,22 +24,12 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
-            throw new NotImplementedException();
-        }
-
-        public List<BaseCommand> getChildren()
-        {
-            throw new NotImplementedException();
-        }
-
-        public BaseCommand getParent()
-        {
-            throw new NotImplementedException();
+            Console.WriteLine("Executing DummyCommand!");
         }
 
         public override void unExecute()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Undoing DummyCommand");
         }
 
     }

@@ -4,20 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models
 {
-    public class Shape : NotifyBase
+    [XmlInclude(typeof(Class))]
+    [XmlInclude(typeof(Comment))]
+    public abstract class Shape : NotifyBase
     {
+
         // For a description of the Getter/Setter Property syntax ("{ get { ... } set { ... } }") see the Line class.
         // The static integer counter field is used to set the integer Number property to a unique number for each Shape object.
-        private static int counter = 0;
+        private static int nextId = 0;
 
         // The Number integer property holds a unique integer for each Shape object to identify them in the View (GUI) layer.
         // The "{ get; }" syntax describes that a private field 
         //  and default getter method should be generated.
         public string name { get; set; }
-        public int id { get; } //TODO find alternative. probably not necessary - Rúni
+        public int? id { get; set; } //TODO find alternative. probably not necessary - Rúni
 
         private double x = 200;
         // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
@@ -154,8 +158,15 @@ namespace Area51.SoftwareModeler.Models
         public Shape()
         {
             
-            name = "Shape "  + ++counter;
-            id = ++counter;
+            name = "Shape "  + ++nextId;
+            id = ++nextId;
+        }
+
+        public Shape(int? id)
+        {
+            name = "Shape " + id;
+            this.id = id;
+            if (id >= nextId) nextId = (int)id + 1;
         }
 
         // By overwriting the ToString() method, the default representation of the class is changed from the full namespace (Java: package) name, 
