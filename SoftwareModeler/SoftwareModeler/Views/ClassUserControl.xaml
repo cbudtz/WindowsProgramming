@@ -17,7 +17,18 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             
-            <TextBlock Grid.Row="0" Text="{Binding }"></TextBlock>
+            <TextBlock Grid.Row="0" Text="{Binding }">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsAbstract}" Value="True">
+                                <!--<Setter Property="Text"  Value="Hey, the text should not be empty!"/>-->
+                                <Setter Property="FontStyle" Value="Italic"/> 
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <ListView 
                 Grid.Row="1"
                 ItemsSource="{Binding Attributes}"/>
