@@ -8,36 +8,33 @@ using System.Xml.Schema;
 using Area51.SoftwareModeler.Models;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
+using Area51.SoftwareModeler.Model;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
-    public class AddShapeCommand : BaseCommand
+    public class AddClassCommand : BaseCommand
     {
         [XmlIgnore]
         public Shape shapeToAdd {get; set; }
         public int shapeID;
         [XmlIgnore]
         public ObservableCollection<Shape> shapes {get; set;}
-        public AddShapeCommand()
+        public AddClassCommand()
         {
 
-        }
-        public AddShapeCommand(Shape _shapeToAdd, ObservableCollection<Shape> _shapes)
-        {
-            shapeToAdd = _shapeToAdd;
-            shapeID = _shapeToAdd.id;
-            shapes = _shapes;
         }
 
         public override void execute()
         {
-            shapes.Add(shapeToAdd);
+            Class c = new Class();
+            ShapeCollector.getI().obsShapes.Add(c);
+            shapeToAdd = c;
         }
 
 
         public override void unExecute()
         {
-            shapes.Remove(shapeToAdd);
+            ShapeCollector.getI().obsShapes.Remove(shapeToAdd);
         }
 
 
