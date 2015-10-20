@@ -1,4 +1,5 @@
-﻿using System;
+﻿using helpers;
+using System;
 using System.Collections.Generic;
 
 namespace Area51.SoftwareModeler.Models
@@ -23,5 +24,11 @@ namespace Area51.SoftwareModeler.Models
 
         public string Name { get { return name; } set { name = value; } }
         public string Type { get { return type; } set { type = value; } }
+
+        public override string ToString()
+        {
+            return helper.GetDescription(visibility) + Name + ":" + Type;
+    
+        }
     }
 }

@@ -56,6 +56,9 @@ namespace Area51.SoftwareModeler.Models
                 return helper.GetDescription(visibility) + name  + generateParameterString() + ":" + returnType; }
         }
 
-
+        public override string ToString()
+        {
+            return MethodString;
+        }
     }
 }
