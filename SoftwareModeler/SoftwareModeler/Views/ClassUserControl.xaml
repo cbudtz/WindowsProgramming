@@ -8,22 +8,25 @@
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}">
+             Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="Auto" Height="Auto">
+             <!--Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}">-->
     <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2">
-        <Grid>
+        
+        <Grid Margin="5,5,5,5">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            
-            <TextBlock Grid.Row="0" Text="{Binding }">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Text="{Binding }" HorizontalAlignment="Center">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsAbstract}" Value="True">
-                                <!--<Setter Property="Text"  Value="Hey, the text should not be empty!"/>-->
-                                <Setter Property="FontStyle" Value="Italic"/> 
+                                   <Setter Property="FontStyle" Value="Italic"/> 
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
