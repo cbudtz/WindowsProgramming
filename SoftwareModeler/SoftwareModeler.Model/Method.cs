@@ -1,7 +1,10 @@
-﻿using System;
+﻿using helpers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,5 +50,11 @@ namespace Area51.SoftwareModeler.Models
             results += ")";
             return results;
         }
+
+        public string MethodString { get {
+                return helper.GetDescription(visibility) + name  + generateParameterString() + ":" + returnType; }
+        }
+
+
     }
 }
