@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
+using System.Linq;
+using Area51.SoftwareModeler.Model;
+
 namespace Area51.SoftwareModeler.Models.Commands
 {
     public class CommandTree : INotifyPropertyChanged
@@ -48,12 +51,31 @@ namespace Area51.SoftwareModeler.Models.Commands
             CommandTree restoredTree;
             using (StreamReader reader = new StreamReader(@"output.xml"))
                 restoredTree = serializer.Deserialize(reader) as CommandTree;
-            restoredTree.active = CommandTree.findActive(restoredTree.root, restoredTree.active.id);
+            restoredTree.active = CommandTree.reParseTree(restoredTree.root, restoredTree.active.id);
+            restoredTree.reExecute();
             return restoredTree;
 
         }
 
-        private static BaseCommand findActive(BaseCommand node, int id)
+        private void reExecute()
+        {
+            ShapeCollector.reset();
+            LinkedList<BaseCommand> reExecuteList = new LinkedList<BaseCommand>();
+            BaseCommand curCommand = active;
+            while (curCommand.Parent != null)
+            {
+                reExecuteList.AddFirst(curCommand);
+                curCommand = curCommand.Parent;
+            }
+            foreach (BaseCommand b in reExecuteList)
+            {
+                b.execute();
+            }
+
+
+        }
+
+        private static BaseCommand reParseTree(BaseCommand node, int id)
         {
             BaseCommand activeNode = null;
          
@@ -67,7 +89,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 foreach (BaseCommand child in node.Children)
                 {
                     child.Parent = node;
-                    BaseCommand recNode = CommandTree.findActive(child, id);
+                    BaseCommand recNode = CommandTree.reParseTree(child, id);
                     if (recNode != null) activeNode = recNode;
 
                 }
