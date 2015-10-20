@@ -12,7 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-
+using Area51.SoftwareModeler.Model;
 
 namespace Area51.SoftwareModeler.ViewModels
 {
@@ -68,7 +68,7 @@ namespace Area51.SoftwareModeler.ViewModels
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
 
-            classes = new ObservableCollection<Shape>();
+            classes = ShapeCollector.getI().obsShapes;
             Class TestClass1 = new Class("A Class", "", false, new Point(0,0), Models.Visibility.Default);
             TestClass1.addAttribute("int", "something");
             TestClass1.addAttribute("String", "someAttribute");
@@ -79,7 +79,7 @@ namespace Area51.SoftwareModeler.ViewModels
             TestClass2.addAttribute("int", "nothing");
             TestClass2.addAttribute("bool", "True");
             classes.Add(TestClass2);
-            connections = new ObservableCollection<Connection>();
+            connections = ShapeCollector.getI().obsConnections;
             Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Aggregation);
             connections.Add(conn);
             Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
