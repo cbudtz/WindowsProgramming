@@ -16,9 +16,7 @@ namespace Area51.SoftwareModeler.Models.Commands
     {
         [XmlIgnore]
         public Shape shapeToAdd {get; set; }
-        public int shapeID;
-        [XmlIgnore]
-        public ObservableCollection<Shape> shapes {get; set;}
+
         public AddClassCommand()
         {
 
