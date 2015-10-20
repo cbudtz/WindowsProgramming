@@ -20,9 +20,10 @@
         </DataGrid>
         <DataGrid Name="Methods" ItemsSource="{Binding Methods}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Visibility}"/>
+                <!--     <DataGridTextColumn Binding="{Binding Visibility}"/>
                 <DataGridTextColumn Binding="{Binding Name}"/>
-                <DataGridTextColumn Binding="{Binding ParameterString}"/>
+                <DataGridTextColumn Binding="{Binding ParameterString}"/>-->
+                <DataGridTextColumn Binding="{Binding MethodString}"/>
             </DataGrid.Columns>
         </DataGrid>
     </StackPanel>
