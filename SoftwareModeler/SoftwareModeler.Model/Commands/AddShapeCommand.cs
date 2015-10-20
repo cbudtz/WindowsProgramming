@@ -19,8 +19,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
 
         }
-        public AddShapeCommand(BaseCommand _parent, Shape _shapeToAdd, ObservableCollection<Shape> _shapes)
-            : base(_parent)
+        public AddShapeCommand(Shape _shapeToAdd, ObservableCollection<Shape> _shapes)
         {
             shapeToAdd = _shapeToAdd;
             shapes = _shapes;

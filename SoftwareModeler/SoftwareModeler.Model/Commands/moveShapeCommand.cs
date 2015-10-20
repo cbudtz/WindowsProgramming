@@ -19,8 +19,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         }
 
-        public MoveShapeCommand(BaseCommand _parent, Shape _shape, double _xOffset, double _yOffset)
-            : base(_parent)
+        public MoveShapeCommand(Shape _shape, double _xOffset, double _yOffset)
         {
             shape = _shape;
             xOffset = _xOffset;

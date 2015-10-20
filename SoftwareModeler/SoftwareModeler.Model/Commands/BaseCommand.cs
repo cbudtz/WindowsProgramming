@@ -41,11 +41,6 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             this.id = BaseCommand.getNextId();
         }
-        protected BaseCommand(BaseCommand _parent)
-        {
-            this.id = BaseCommand.getNextId();
-            this.parent = _parent;
-        }
 
         public static int getNextId()
         {

@@ -16,7 +16,7 @@ namespace Area51.SoftwareModeler.Model.Commands
         private Shape shapeToDelete;
         private List<Connection> connectionsToDelete = new List<Connection>();
 
-        public DeleteShapeCommand(BaseCommand _parent, ObservableCollection<Shape> _shapes, ObservableCollection<Connection> _connections, Shape _shapeToDelete) : base(_parent)
+        public DeleteShapeCommand(ObservableCollection<Shape> _shapes, ObservableCollection<Connection> _connections, Shape _shapeToDelete)
         {
             shapes = _shapes;
             connections = _connections;
