@@ -49,13 +49,28 @@ namespace Area51.SoftwareModeler.Models
             this.attributes.Add(new Attribute(type, name));
         }
 
+        public void addMethod(Visibility visibility, string name, string[] parameters, string returnType)
+        {
+            Method m = new Method(visibility, name);
+            for (int i = 0; i < parameters.Length; i++) { 
+                m.addParameter(parameters[i]);
+            }
+            m.ReturnType = returnType;
+                
+            this.methods.Add(m);
+
+        }
+        //overloaded method, void returntype
         public void addMethod(Visibility visibility, string name, string[] parameters)
         {
             Method m = new Method(visibility, name);
             for (int i = 0; i < parameters.Length; i++)
+            {
                 m.addParameter(parameters[i]);
-            
+            }
+            m.ReturnType = "void";
             this.methods.Add(m);
+
         }
     }
 }

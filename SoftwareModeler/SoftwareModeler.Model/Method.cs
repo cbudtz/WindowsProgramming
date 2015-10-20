@@ -12,7 +12,7 @@ namespace Area51.SoftwareModeler.Models
 {
     public class Method
     {
-        public string parameterString { get; }
+        //public string parameterString { get; }
         private String name { get; set; }
         private List<String> parameters { get; set; }
         private String returnType { get; set; }
@@ -30,6 +30,7 @@ namespace Area51.SoftwareModeler.Models
         public string Name { get { return name; } set { name = value; } }
         public Visibility Visibility { get { return visibility; } set { visibility = value; } }
         public List<string> Parameters { get { return parameters; } set { parameters = value; } }
+        public string ReturnType { get { return returnType; } set { returnType = value; } }
 
         public void addParameter(string type)
         {
