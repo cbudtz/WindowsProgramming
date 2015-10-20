@@ -7,14 +7,17 @@ using System.Xml;
 using System.Xml.Schema;
 using Area51.SoftwareModeler.Models;
 using System.Collections.ObjectModel;
+using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
     public class AddShapeCommand : BaseCommand
     {
-
-        private Shape shapeToAdd;
-        private ObservableCollection<Shape> shapes;
+        [XmlIgnore]
+        public Shape shapeToAdd {get; set; }
+        public int shapeID;
+        [XmlIgnore]
+        public ObservableCollection<Shape> shapes {get; set;}
         public AddShapeCommand()
         {
 
@@ -22,6 +25,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public AddShapeCommand(Shape _shapeToAdd, ObservableCollection<Shape> _shapes)
         {
             shapeToAdd = _shapeToAdd;
+            shapeID = _shapeToAdd.id;
             shapes = _shapes;
         }
 
