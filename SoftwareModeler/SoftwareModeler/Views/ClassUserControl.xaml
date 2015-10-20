@@ -9,24 +9,44 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}">
-    
-    <StackPanel>
-        <TextBox HorizontalContentAlignment="Center" FontSize="20" Text="{Binding Name}"></TextBox>
-        <DataGrid Name="attributes" ItemsSource="{Binding Attributes}" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Type}"/>
-                <DataGridTextColumn Binding="{Binding Name}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        <DataGrid Name="Methods" ItemsSource="{Binding Methods}" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <!--     <DataGridTextColumn Binding="{Binding Visibility}"/>
-                <DataGridTextColumn Binding="{Binding Name}"/>
-                <DataGridTextColumn Binding="{Binding ParameterString}"/>-->
-                <DataGridTextColumn Binding="{Binding MethodString}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </StackPanel>
+    <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0" Text="{Binding }"></TextBlock>
+            <ListView 
+                Grid.Row="1"
+                ItemsSource="{Binding Attributes}"/>
+            <ListView 
+                Grid.Row="2"
+                ItemsSource="{Binding Methods}"/>
+
+
+            <!--<TextBox HorizontalContentAlignment="Center" FontSize="20" Text="{Binding Name}"></TextBox>
+            <DataGrid ColumnHeaderHeight ="0" Name="attributes" ItemsSource="{Binding Attributes}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Type}"/>
+                    <DataGridTextColumn Binding="{Binding Name}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid ColumnHeaderHeight ="0"  Name="Methods" ItemsSource="{Binding Methods}" AutoGenerateColumns="False">
+                <DataGrid.Columns >
+                    --><!--     <DataGridTextColumn Binding="{Binding Visibility}"/>
+                    <DataGridTextColumn Binding="{Binding Name}"/>
+                    <DataGridTextColumn Binding="{Binding ParameterString}"/>--><!--
+                    <DataGridTextColumn Binding="{Binding MethodString}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Name="MethodGrid">
+
+            </Grid>-->
+        
+        </Grid>
+    </Border>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseDown">
             <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>

@@ -61,5 +61,10 @@ namespace Area51.SoftwareModeler.Models
             
             this.methods.Add(m);
         }
+
+        public override string ToString()
+        {
+            return name;
+        }
     }
 }
