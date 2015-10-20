@@ -53,10 +53,11 @@ namespace Area51.SoftwareModeler.ViewModels
         //Dynamic 
         public ObservableCollection<Class> classes { get;  set;}
         public ObservableCollection<Connection> connections { get; set; }
-        CommandTree commandController;
+        private CommandTree commandController { get; set; }
 
         public MainViewModel()
         {
+            commandController = new CommandTree();
             // The commands are given the methods they should use to execute, and find out if they can execute.
             MouseDownShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownShape);
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
@@ -113,7 +114,8 @@ namespace Area51.SoftwareModeler.ViewModels
                 // The View (GUI) is then notified by the Shape, that its properties have changed.
                 shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
                 shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
-                ObservableCollection<Connection> test = new ObservableCollection<Connection>();
+
+                // lambda expr. update all connections. first connections where end shape is the moving shape then where start shape is moving shape
                 connections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
                 connections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
 
@@ -127,16 +129,16 @@ namespace Area51.SoftwareModeler.ViewModels
             var mousePosition = RelativeMousePosition(e);
 
             // The Shape is moved back to its original position, so the offset given to the move command works.
-            //shape.X = initialShapePosition.X;
-            //shape.Y = initialShapePosition.Y;
+            shape.X = initialShapePosition.X; //TODO uncomment when command works
+            shape.Y = initialShapePosition.Y;
 
             // Now that the Move Shape operation is over, the Shape is moved to the final position, 
             //  by using a MoveNodeCommand to move it.
             // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
             //  and with respect to the Undo/Redo functionality the Shape has only been moved once, with this Command.
             //TODO fix command
-            //commandController.addAndExecute(new MoveShapeCommand(commandController.active, shape, mousePosition.X-initialMousePosition.X, mousePosition.Y-initialMousePosition.Y));
-                
+            commandController.addAndExecute(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
+
             // The mouse is released, as the move operation is done, so it can be used by other controls.
             e.MouseDevice.Target.ReleaseMouseCapture();
         }

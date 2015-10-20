@@ -13,7 +13,7 @@ namespace Area51.SoftwareModeler.Model.Commands
     {
         private Connection connectionToDelete;
         private ObservableCollection<Connection> connections;
-        public DeleteConnectionCommand(BaseCommand _parent, Connection _connectionToDelete, ObservableCollection<Connection> _connections) : base(_parent)
+        public DeleteConnectionCommand(Connection _connectionToDelete, ObservableCollection<Connection> _connections)
         {
             connectionToDelete = _connectionToDelete;
             connections = _connections;

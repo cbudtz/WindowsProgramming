@@ -15,15 +15,10 @@ namespace Area51.SoftwareModeler.Models.Commands
         public event EventHandler CanExecuteChanged;
 
         public DummyCommand()
-            :base(null)
         {
 
         }
-        public DummyCommand(BaseCommand parent)
-            :base(parent)
-        {
-
-        }
+    
 
 
 

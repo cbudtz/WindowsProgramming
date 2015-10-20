@@ -11,7 +11,7 @@ namespace Area51.SoftwareModeler.Model.Commands
 {
     class AddCommentCommand : BaseCommand
     {
-        protected AddCommentCommand(BaseCommand _parent) : base(_parent)
+        protected AddCommentCommand()
         {
         }
 
