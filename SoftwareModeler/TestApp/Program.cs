@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Area51.SoftwareModeler.Models;
 using Area51.SoftwareModeler.Models.Commands;
 
@@ -18,14 +15,14 @@ namespace TestApp
             BaseCommand command = new DummyCommand();
             BaseCommand command2 = new AddClassCommand();
             BaseCommand command3 = new DummyCommand();
-            BaseCommand command4 = new MoveShapeCommand();
+            //BaseCommand command4 = new MoveShapeCommand();
             //command2.Parent = command;
             //command2.addChild(command3);
-
+            ShapeCollector.getI();
             cTree.addAndExecute(command);
             cTree.addAndExecute(command2);
             cTree.addAndExecute(command3);
-            cTree.addAndExecute(command4);
+           // cTree.addAndExecute(command4);
             cTree.Name = "Fancy Name";
            // command.
             CommandTree.save(cTree);

@@ -12,7 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Area51.SoftwareModeler.Model;
+using Area51.SoftwareModeler.Models;
 
 namespace Area51.SoftwareModeler.ViewModels
 {
@@ -43,11 +43,11 @@ namespace Area51.SoftwareModeler.ViewModels
         public ICommand MouseDownConnectionCommand { get; }
         public ICommand MouseMoveConnectionCommand { get; }
         public ICommand MouseUpConnectionCommand { get; }
-        // Used for saving the shape that a line is drawn from, while it is being drawn.
+        // Used for saving the classRep that a line is drawn from, while it is being drawn.
         private Shape addingLineFrom;
         // Saves the initial point that the mouse has during a move operation.
         private Point initialMousePosition;
-        // Saves the initial point that the shape has during a move operation.
+        // Saves the initial point that the classRep has during a move operation.
         private Point initialShapePosition;
 
 
@@ -92,16 +92,16 @@ namespace Area51.SoftwareModeler.ViewModels
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
-            // When the shape is moved with the mouse, the MouseMoveShape method is called many times, 
+            // When the classRep is moved with the mouse, the MouseMoveShape method is called many times, 
             //  for each part of the movement.
             // Therefore to only have 1 Undo/Redo command saved for the whole movement, the initial position is saved, 
             //  during the start of the movement, so that it together with the final position, 
             //  from when the mouse is released, can become one Undo/Redo command.
-            // The initial shape position is saved to calculate the offset that the shape should be moved.
+            // The initial classRep position is saved to calculate the offset that the classRep should be moved.
             initialMousePosition = mousePosition;
             initialShapePosition = new Point(shape.X, shape.Y);
 
-            // The mouse is captured, so the current shape will always be the target of the mouse events, 
+            // The mouse is captured, so the current classRep will always be the target of the mouse events, 
             //  even if the mouse is outside the application window.
             e.MouseDevice.Target.CaptureMouse();
         }
@@ -120,7 +120,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
                 shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
 
-                // lambda expr. update all connections. first connections where end shape is the moving shape then where start shape is moving shape
+                // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
                 connections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
                 connections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
 
@@ -147,7 +147,7 @@ namespace Area51.SoftwareModeler.ViewModels
             // The mouse is released, as the move operation is done, so it can be used by other controls.
             e.MouseDevice.Target.ReleaseMouseCapture();
         }
-        // Gets the shape that was clicked.
+        // Gets the classRep that was clicked.
         private Shape TargetShape(MouseEventArgs e)
         {
             // Here the visual element that the mouse is captured by is retrieved.

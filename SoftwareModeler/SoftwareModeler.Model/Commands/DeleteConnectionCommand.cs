@@ -7,7 +7,7 @@ using Area51.SoftwareModeler.Models.Commands;
 using Area51.SoftwareModeler.Models;
 using System.Collections.ObjectModel;
 
-namespace Area51.SoftwareModeler.Model.Commands
+namespace Area51.SoftwareModeler.Models.Commands
 {
     class DeleteConnectionCommand : BaseCommand
     {
