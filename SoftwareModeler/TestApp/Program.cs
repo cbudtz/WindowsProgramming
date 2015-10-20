@@ -26,6 +26,8 @@ namespace TestApp
             cTree.Name = "Fancy Name";
            // command.
             CommandTree.save(cTree);
+            Console.WriteLine("Serialized CommandTree - now trying to restore");
+            Console.ReadKey();
             CommandTree commandTreeCopy = CommandTree.load();
             Console.WriteLine("no cmd: " + (cTree.active.id + 1));
             Console.WriteLine("active id: " + commandTreeCopy.active.id);
@@ -34,7 +36,7 @@ namespace TestApp
             Console.WriteLine("root child child id: " + commandTreeCopy.root.Children.ElementAt(0).Children.ElementAt(0).id);
             Console.WriteLine("active parent id: " + commandTreeCopy.active.Parent.id);
             Console.WriteLine("active parent parent id: " + commandTreeCopy.active.Parent.Parent.id);
-
+            Console.WriteLine("nextShapeID: " + Class.nextId);
             Console.ReadKey();
 
             
