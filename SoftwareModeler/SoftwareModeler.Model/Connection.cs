@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Area51.SoftwareModeler.Models
 {
@@ -12,28 +13,20 @@ namespace Area51.SoftwareModeler.Models
         private string startMultiplicity;
         private string endMultiplicity;
         private Shape end;
-        public double startX;// { get; set; }
-        public double StartX { get { return startX; } set { startX = value; } }
-        public double startY;// { get; set; }
-        public double StartY { get { return startY; } set { startY = value; } }
-        private double point1X;
-        public double P1X { get { return point1X; } set {point1X = value;  } }
-        private double point1Y;
-        public double P1Y { get { return point1Y; } set { point1Y = value;  } }
-        private double point2X;
-        public double P2X { get { return point2X; } set { point2X = value;  } }
-        private double point2Y;
-        public double P2Y { get { return point2Y; } set { point2Y = value;} }
-        public double endX;// { get; set; }
-        public double EndX { get { return endX; } set { endX = value; } }
-        public double endY;// { get; set; }
-        public double EndY { get { return endY; } set { endY = value;  } }
-        public string startStr { get; set; }
+        private Point startPoint;
+        public Point StartPoint { get { return startPoint; } set { startPoint = value; } }
+        private Point p1;
+        public Point P1 { get { return p1; } set { p1 = value; } }
+        private Point p2;
+        public Point P2 { get { return p2; } set { p2 = value; } }
+        private Point endPoint;
+        public Point EndPoint { get { return endPoint; } set { endPoint = value; } }
+       
         private ConnectionType type;
 
-        public Shape Start { get { return start; } set { start = value; updatePoints(); NotifyPropertyChanged(()=>StartX); NotifyPropertyChanged(() => StartY); } }
+        public Shape Start { get { return start; } set { start = value; updatePoints(); } }
         public string StartMultiplicity { get { return startMultiplicity; } set { startMultiplicity = value; } }
-        public Shape End { get { return end; } set { end = value; updatePoints(); NotifyPropertyChanged(); } }
+        public Shape End { get { return end; } set { end = value; updatePoints(); } }
         public string EndMultiplicity { get { return endMultiplicity; } set { endMultiplicity = value; } }
 
         public Connection(Shape _start, string _startMultiplicity, Shape _end, string _endMultiplicity, ConnectionType _type)
@@ -43,6 +36,7 @@ namespace Area51.SoftwareModeler.Models
             end = _end;
             endMultiplicity = _endMultiplicity;
             type = _type;
+            
 
             //double vec0X = 1;
             //double vec0Y = 0;
@@ -74,29 +68,40 @@ namespace Area51.SoftwareModeler.Models
             //{
             //    startY = _start.CanvasCenterY + _start.Height/2;
             //}
-
-            startX = _start.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? _start.Width / 2 : -_start.Width / 2);
-            startY = _start.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? _start.Height / 2 : -_start.Height / 2);
-            endX = _end.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? -_end.Width / 2 : _end.Width / 2);
-            endY = _end.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? -_end.Height / 2 : _end.Height / 2);
-            startStr = (startX + " " + startY);
-            P1X = _start.CanvasCenterX;
-            P1Y = (_start.CanvasCenterY + _end.CanvasCenterY) / 2.0;
-            P2Y = P1Y;
-            P2X = _end.CanvasCenterX;
+            startPoint = new Point();
+            p1 = new Point();
+            p2 = new Point();
+            endPoint = new Point();
+            startPoint.X = _start.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? _start.Width / 2 : -_start.Width / 2);
+            startPoint.Y = _start.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? _start.Height / 2 : -_start.Height / 2);
+            endPoint.X = _end.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? -_end.Width / 2 : _end.Width / 2);
+            endPoint.Y = _end.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? -_end.Height / 2 : _end.Height / 2);
+          
+            p1.X = _start.CanvasCenterX;
+            p1.Y = (_start.CanvasCenterY + _end.CanvasCenterY) / 2.0;
+            p2.Y = P1.Y;
+            p2.X = _end.CanvasCenterX;
         }
 
         private void updatePoints()
         {
-            StartX = start.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? _start.Width / 2 : -_start.Width / 2);
-            StartY = start.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? _start.Height / 2 : -_start.Height / 2);
-            EndX = end.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? -_end.Width / 2 : _end.Width / 2);
-            EndY = end.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? -_end.Height / 2 : _end.Height / 2);
-            startStr = (startX + " " + startY);
-            P1X = start.CanvasCenterX;
-            P1Y = (start.CanvasCenterY + end.CanvasCenterY) / 2.0;
-            P2Y = P1Y;
-            P2X = end.CanvasCenterX;
+            Point sp = new Point(start.CanvasCenterX, start.CanvasCenterY);
+            Point ep = new Point(end.CanvasCenterX, end.CanvasCenterY);
+            Vector spep = ep - sp;
+           
+            // Console.WriteLine(Math.Atan2(-1, 5));
+            startPoint.X = start.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? _start.Width / 2 : -_start.Width / 2);
+            startPoint.Y = start.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? _start.Height / 2 : -_start.Height / 2);
+            endPoint.X = end.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? -_end.Width / 2 : _end.Width / 2);
+            endPoint.Y = end.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? -_end.Height / 2 : _end.Height / 2);
+            p1.X = start.CanvasCenterX;
+            p1.Y = (start.CanvasCenterY + end.CanvasCenterY) / 2.0;
+            p2.Y = P1.Y;
+            p2.X = end.CanvasCenterX;
+            NotifyPropertyChanged(() => StartPoint);
+            NotifyPropertyChanged(() => P1);
+            NotifyPropertyChanged(() => P2);
+            NotifyPropertyChanged(() => EndPoint);
         }
     }
 }

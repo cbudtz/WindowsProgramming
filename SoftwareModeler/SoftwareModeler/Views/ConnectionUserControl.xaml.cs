@@ -23,6 +23,7 @@ namespace Area51.SoftwareModeler.Views
         public ConnectionUserControl()
         {
             InitializeComponent();
+            
         }
     }
 }

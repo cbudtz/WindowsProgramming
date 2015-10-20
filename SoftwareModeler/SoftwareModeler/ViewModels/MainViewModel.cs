@@ -68,7 +68,7 @@ namespace Area51.SoftwareModeler.ViewModels
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
 
-            classes = new ObservableCollection<Class>();
+            classes = new ObservableCollection<Shape>();
             Class TestClass1 = new Class("A Class", "", false, new Point(0,0), Models.Visibility.Default);
             TestClass1.addAttribute("int", "something");
             TestClass1.addAttribute("String", "someAttribute");
