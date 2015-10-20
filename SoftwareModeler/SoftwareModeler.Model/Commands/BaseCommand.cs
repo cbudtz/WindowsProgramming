@@ -13,7 +13,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     [XmlInclude(typeof(DummyCommand))]
     [XmlInclude(typeof(MoveShapeCommand))]
-    [XmlInclude(typeof(AddShapeCommand))]
+    [XmlInclude(typeof(AddClassCommand))]
     public abstract class BaseCommand
     {
         //Static

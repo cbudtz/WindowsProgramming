@@ -16,7 +16,7 @@ namespace TestApp
             Console.ReadKey();
             CommandTree cTree = new CommandTree();
             BaseCommand command = new DummyCommand();
-            BaseCommand command2 = new AddShapeCommand();
+            BaseCommand command2 = new AddClassCommand();
             BaseCommand command3 = new DummyCommand();
             BaseCommand command4 = new MoveShapeCommand();
             //command2.Parent = command;

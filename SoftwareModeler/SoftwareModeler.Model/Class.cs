@@ -29,6 +29,11 @@ namespace Area51.SoftwareModeler.Models
             this.methods = new List<Method>();
 
         }
+
+        public Class()
+        {
+        }
+
         //Getters and setters
         public String StereoType { get { return stereotype; } set { stereotype = value; } }
         public Boolean IsAbstract { get { return isAbstract; } set { isAbstract = value; } }
