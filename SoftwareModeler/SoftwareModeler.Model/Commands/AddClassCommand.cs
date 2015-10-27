@@ -48,7 +48,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 ShapeId = classRep.id;
             } else
             {
-                //ReExcecuting (either when deserialized or redoing)
+                //ReExecuting (either when deserialized or redoing)
                 classRep = new Class(ShapeId);
             }
             Console.WriteLine("Executing Add Shape Command, Shape with ID: " + classRep.id + "Added");
