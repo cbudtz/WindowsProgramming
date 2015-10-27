@@ -47,14 +47,7 @@ namespace Area51.SoftwareModeler.Models
 
         internal Shape getShapeByID(int? shapeId)
         {
-
-            foreach (Shape obsShape in obsShapes)
-            {
-                Console.WriteLine(obsShape);
-                if (obsShape.id == shapeId) return obsShape;
-
-            }
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

@@ -5,7 +5,6 @@ using System.Windows;
 
 namespace Area51.SoftwareModeler.Models
 {
-    
     public class Class : Shape
     {
         private string stereotype;
