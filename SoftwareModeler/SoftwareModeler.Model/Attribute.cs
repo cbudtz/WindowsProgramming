@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Area51.SoftwareModeler.Model
+namespace Area51.SoftwareModeler.Models
 {
     public class Attribute
     {

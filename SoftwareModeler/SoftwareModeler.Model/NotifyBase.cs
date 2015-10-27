@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Area51.SoftwareModeler.Model
+namespace Area51.SoftwareModeler.Models
 {
     public abstract class NotifyBase : INotifyPropertyChanged
     {

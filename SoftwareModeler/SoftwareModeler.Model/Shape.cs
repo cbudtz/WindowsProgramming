@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
-namespace Area51.SoftwareModeler.Model
+namespace Area51.SoftwareModeler.Models
 {
     [XmlInclude(typeof(Class))]
     [XmlInclude(typeof(Comment))]

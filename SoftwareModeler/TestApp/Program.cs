@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using Area51.SoftwareModeler.Model;
-using Area51.SoftwareModeler.Model.Commands;
+using Area51.SoftwareModeler.Models;
+using Area51.SoftwareModeler.Models.Commands;
 
 namespace TestApp
 {

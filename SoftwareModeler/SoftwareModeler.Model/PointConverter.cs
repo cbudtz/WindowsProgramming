@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace Area51.SoftwareModeler.Model
+namespace Area51.SoftwareModeler.Models
 {
     public class PointConverter : IMultiValueConverter
     {

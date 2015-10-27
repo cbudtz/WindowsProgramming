@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Area51.SoftwareModeler.Model
+namespace Area51.SoftwareModeler.Models
 
 {
     public enum Visibility

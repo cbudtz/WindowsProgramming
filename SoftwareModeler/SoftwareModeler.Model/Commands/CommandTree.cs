@@ -5,7 +5,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Linq;
 
-namespace Area51.SoftwareModeler.Model.Commands
+namespace Area51.SoftwareModeler.Models.Commands
 {
     public class CommandTree : INotifyPropertyChanged
     {
