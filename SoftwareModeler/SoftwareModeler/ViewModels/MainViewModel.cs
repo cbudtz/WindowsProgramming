@@ -165,6 +165,30 @@ namespace Area51.SoftwareModeler.ViewModels
             e.MouseDevice.Target.ReleaseMouseCapture();
         }
 
+        public void MouseUpResizeShape(MouseButtonEventArgs e)
+        {
+            // The Shape is gotten from the mouse event.
+            var shape = TargetShape(e);
+            // The mouse position relative to the target of the mouse event.
+            var mousePosition = RelativeMousePosition(e);
+
+            // The Shape is moved back to its original position, so the offset given to the move command works.
+
+            shape.X = initialShapePosition.X; //TODO uncomment when command works
+            shape.Y = initialShapePosition.Y;
+            // Now that the Move Shape operation is over, the Shape is moved to the final position, 
+            //  by using a MoveNodeCommand to move it.
+            // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
+            //  and with respect to the Undo/Redo functionality the Shape has only been moved once, with this Command.
+            //TODO fix command
+
+            isResizing = false;
+            //commandController.addAndExecute(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
+
+            // The mouse is released, as the move operation is done, so it can be used by other controls.
+            e.MouseDevice.Target.ReleaseMouseCapture();
+        }
+
         public void MouseClicked(MouseEventArgs e)
         {
             if (isAddingShape && newShape != null)
