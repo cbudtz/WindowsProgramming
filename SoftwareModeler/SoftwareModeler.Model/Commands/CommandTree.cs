@@ -14,7 +14,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public BaseCommand active;
         public List<BaseCommand> undone { get; set; }
         public int NextShapeId { get; set; }
-        //TODO implement
+        //TODO: implement
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void addAndExecute(BaseCommand command)
