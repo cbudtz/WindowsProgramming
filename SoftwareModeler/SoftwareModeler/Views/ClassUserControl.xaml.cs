@@ -25,4 +25,15 @@ namespace Area51.SoftwareModeler.Views
             InitializeComponent();
         }
     }
+    public class EventTriggerWithoutPropagation : System.Windows.Interactivity.EventTrigger
+    {
+        protected override void OnEvent(System.EventArgs eventArgs)
+        {
+            var routedEventArgs = eventArgs as RoutedEventArgs;
+            if (routedEventArgs != null)
+                routedEventArgs.Handled = true;
+
+            base.OnEvent(eventArgs);
+        }
+    }
 }
