@@ -43,7 +43,7 @@ namespace Area51.SoftwareModeler.ViewModels
         public ICommand MouseUpShapeCommand { get; }
         public ICommand MouseDownShapeResizeCommand{get;}
         public ICommand MouseUpShapeResizeCommand { get; }
-        public ICommand MouseMoveShapeResizeCommand { get; }
+        //public ICommand MouseMoveShapeResizeCommand { get; }
 
         // connections
         public ICommand MouseDownConnectionCommand { get; }
@@ -215,60 +215,6 @@ namespace Area51.SoftwareModeler.ViewModels
             e.MouseDevice.Target.ReleaseMouseCapture();
         }
 
-        public void MouseClicked(MouseEventArgs e)
-        {
-            if (isAddingShape && newShape != null)
-            {
-                if (e == null) return;
-                var mousePosition = RelativeMousePosition(e);
-                //Point mousePosition = Mouse.GetPosition(Application.Current.MainWindow);
-                newShape.X = mousePosition.X - newShape.Width / 2;
-                newShape.Y = mousePosition.Y - newShape.Height / 2;
-                commandController.addAndExecute(new AddClassCommand(newShape.name, newShape.StereoType, newShape.IsAbstract, new Point(newShape.X, newShape.Y), newShape.Visibility));
-                
-                //classes.Add(newShape); // TODO remove when commancontroller is fixed
-            }
-            isAddingShape = false;
-            newShape = null;
-        }
-
-        private void AddClass()
-        {
-            Class shape = new Class();
-            shape.IsAbstract = false;
-            shape.StereoType = "";
-            shape.Visibility = Models.Visibility.Public;
-            AddShape(shape);
-       
-        }
-
-
-        private void AddAbstract()
-        {
-            Class shape = new Class();
-            shape.IsAbstract = true;
-            shape.StereoType = "";
-            shape.Visibility = Models.Visibility.Public;
-            AddShape(shape);
-        }
-
-        private void AddInterface()
-        {
-            Class shape = new Class();
-            shape.IsAbstract = false;
-            shape.StereoType = "<<interface>>";
-            shape.Visibility = Models.Visibility.Public;
-            AddShape(shape);
-        }
-
-        private void AddShape(Class shape)
-        {
-            isAddingShape = true;
-            newShape = shape;
-        }
-
-
-
         public void MouseUpResizeShape(MouseButtonEventArgs e)
         {
             // The Shape is gotten from the mouse event.
@@ -277,20 +223,21 @@ namespace Area51.SoftwareModeler.ViewModels
             var mousePosition = RelativeMousePosition(e);
 
             // The Shape is moved back to its original position, so the offset given to the move command works.
-            //shape.X = initialShapePosition.X; //TODO uncomment when command works
-            //shape.Y = initialShapePosition.Y;
 
+            shape.X = initialShapePosition.X; //TODO uncomment when command works
+            shape.Y = initialShapePosition.Y;
             // Now that the Move Shape operation is over, the Shape is moved to the final position, 
             //  by using a MoveNodeCommand to move it.
             // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
             //  and with respect to the Undo/Redo functionality the Shape has only been moved once, with this Command.
             //TODO fix command
-            //commandController.addAndExecute(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
+
             isResizing = false;
+            //commandController.addAndExecute(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
+
             // The mouse is released, as the move operation is done, so it can be used by other controls.
             e.MouseDevice.Target.ReleaseMouseCapture();
         }
-
         // Gets the classRep that was clicked.
         private Shape TargetShape(MouseEventArgs e)
         {
