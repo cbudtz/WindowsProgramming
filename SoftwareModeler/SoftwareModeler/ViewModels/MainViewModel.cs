@@ -32,6 +32,8 @@ namespace Area51.SoftwareModeler.ViewModels
     {
         private bool moveShape = false;
         private bool isAddingShape = false;
+        private bool isResizing = false;
+        double initialWidth = 0;
 
         private Class newShape = null;
         public string Text { get; set; }
@@ -163,6 +165,31 @@ namespace Area51.SoftwareModeler.ViewModels
 
             // The mouse is released, as the move operation is done, so it can be used by other controls.
             e.MouseDevice.Target.ReleaseMouseCapture();
+        }
+        public void MouseDownResizeShape(MouseButtonEventArgs e)
+        {
+            var shape = TargetShape(e);
+            // The mouse position relative to the target of the mouse event.
+            var mousePosition = RelativeMousePosition(e);
+
+            var border = (Border)e.MouseDevice.Target;
+
+            // When the classRep is moved with the mouse, the MouseMoveShape method is called many times, 
+            //  for each part of the movement.
+            // Therefore to only have 1 Undo/Redo command saved for the whole movement, the initial position is saved, 
+            //  during the start of the movement, so that it together with the final position, 
+            //  from when the mouse is released, can become one Undo/Redo command.
+            // The initial classRep position is saved to calculate the offset that the classRep should be moved.
+            initialMousePosition = mousePosition;
+            initialShapePosition = new Point(shape.X, shape.Y);
+
+            initialWidth = border.ActualWidth;
+
+            isResizing = true;
+
+            // The mouse is captured, so the current classRep will always be the target of the mouse events, 
+            //  even if the mouse is outside the application window.
+            e.MouseDevice.Target.CaptureMouse();
         }
 
         public void MouseUpResizeShape(MouseButtonEventArgs e)
