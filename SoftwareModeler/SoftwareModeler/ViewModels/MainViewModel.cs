@@ -1,5 +1,5 @@
-using Area51.SoftwareModeler.Models.Commands;
-using Area51.SoftwareModeler.Models;
+using Area51.SoftwareModeler.Model.Commands;
+using Area51.SoftwareModeler.Model;
 using System.Collections.ObjectModel;
 using System.Windows;
 using GalaSoft.MvvmLight;
@@ -12,7 +12,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Area51.SoftwareModeler.Models;
 
 namespace Area51.SoftwareModeler.ViewModels
 {
@@ -69,13 +68,13 @@ namespace Area51.SoftwareModeler.ViewModels
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
 
             classes = ShapeCollector.getI().obsShapes;
-            Class TestClass1 = new Class("A Class", "", false, new Point(0,0), Models.Visibility.Default);
+            Class TestClass1 = new Class("A Class", "", false, new Point(0,0), Model.Visibility.Default);
             TestClass1.addAttribute("int", "something");
             TestClass1.addAttribute("String", "someAttribute");
             string[] parameters = { "string", "Int", "Bool" };
-            TestClass1.addMethod(Models.Visibility.Public, "somemethod", parameters);
+            TestClass1.addMethod(Model.Visibility.Public, "somemethod", parameters);
             classes.Add(TestClass1);
-            Class TestClass2 = new Class("Another Class", "", false, new Point(300,320), Models.Visibility.Default);
+            Class TestClass2 = new Class("Another Class", "", false, new Point(300,320), Model.Visibility.Default);
             TestClass2.addAttribute("int", "nothing");
             TestClass2.addAttribute("bool", "True");
             classes.Add(TestClass2);

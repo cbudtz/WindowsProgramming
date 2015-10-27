@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Area51.SoftwareModeler.Models
+namespace Area51.SoftwareModeler.Model
 {
     public class Method
     {

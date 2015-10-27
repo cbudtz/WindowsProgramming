@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
-namespace Area51.SoftwareModeler.Models
+namespace Area51.SoftwareModeler.Model
 {
     [XmlInclude(typeof(Class))]
     [XmlInclude(typeof(Comment))]
@@ -15,7 +15,7 @@ namespace Area51.SoftwareModeler.Models
 
         // For a description of the Getter/Setter Property syntax ("{ get { ... } set { ... } }") see the Line class.
         // The static integer counter field is used to set the integer Number property to a unique number for each Shape object.
-        private static int nextId = 0;
+        public static int nextId { get; set; } = 0;
 
         // The Number integer property holds a unique integer for each Shape object to identify them in the View (GUI) layer.
         // The "{ get; }" syntax describes that a private field 
@@ -159,7 +159,7 @@ namespace Area51.SoftwareModeler.Models
         {
             
             name = "Shape "  + ++nextId;
-            id = ++nextId;
+            id = nextId;
         }
 
         public Shape(int? id)

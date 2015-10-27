@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Area51.SoftwareModeler.Models.Commands;
-using Area51.SoftwareModeler.Models;
+using Area51.SoftwareModeler.Model.Commands;
+using Area51.SoftwareModeler.Model;
 using System.Collections.ObjectModel;
 
-namespace Area51.SoftwareModeler.Models.Commands
+namespace Area51.SoftwareModeler.Model.Commands
 {
     class DeleteConnectionCommand : BaseCommand
     {

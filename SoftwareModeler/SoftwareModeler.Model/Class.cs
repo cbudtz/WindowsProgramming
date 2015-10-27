@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
-namespace Area51.SoftwareModeler.Models
+namespace Area51.SoftwareModeler.Model
 {
+    
     public class Class : Shape
     {
         private string stereotype;

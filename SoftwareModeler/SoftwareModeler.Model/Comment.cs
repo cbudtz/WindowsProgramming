@@ -1,11 +1,11 @@
-﻿using Area51.SoftwareModeler.Models;
+﻿using Area51.SoftwareModeler.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Area51.SoftwareModeler.Models
+namespace Area51.SoftwareModeler.Model
 {
     class Comment : Shape
     {

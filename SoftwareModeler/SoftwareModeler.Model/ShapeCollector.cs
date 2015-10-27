@@ -1,4 +1,4 @@
-﻿using Area51.SoftwareModeler.Models;
+﻿using Area51.SoftwareModeler.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Area51.SoftwareModeler.Models
+namespace Area51.SoftwareModeler.Model
 {
     public class ShapeCollector
     {
@@ -47,7 +47,14 @@ namespace Area51.SoftwareModeler.Models
 
         internal Shape getShapeByID(int? shapeId)
         {
-            throw new NotImplementedException();
+
+            foreach (Shape obsShape in obsShapes)
+            {
+                Console.WriteLine(obsShape);
+                if (obsShape.id == shapeId) return obsShape;
+
+            }
+            return null;
         }
     }
 }

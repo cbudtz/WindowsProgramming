@@ -7,9 +7,9 @@ using System.Windows.Input;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Area51.SoftwareModeler.Models;
+using Area51.SoftwareModeler.Model;
 
-namespace Area51.SoftwareModeler.Models.Commands
+namespace Area51.SoftwareModeler.Model.Commands
 {
     [XmlInclude(typeof(DummyCommand))]
     [XmlInclude(typeof(MoveShapeCommand))]

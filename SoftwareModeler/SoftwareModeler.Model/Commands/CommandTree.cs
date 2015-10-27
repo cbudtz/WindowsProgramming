@@ -4,16 +4,16 @@ using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
 using System.Linq;
-using Area51.SoftwareModeler.Models;
 
-namespace Area51.SoftwareModeler.Models.Commands
+namespace Area51.SoftwareModeler.Model.Commands
 {
     public class CommandTree : INotifyPropertyChanged
     {
         public string Name;
         public BaseCommand root;
         public BaseCommand active;
-        public List<BaseCommand> undone;
+        public List<BaseCommand> undone { get; set; }
+        public int NextShapeId { get; set; }
         //TODO implement
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -21,15 +21,18 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             if (root == null)
             {
+                //Root node - serialization starts here...
                 root = command;
                 active = root;
             }
             else
             {
+                //Add child to tree
                 command.Parent = active;
                 active.addChild(command);
                 active = command;
             }
+            //excecute new command
             active.execute();
             
         }
@@ -41,35 +44,51 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public static void save(CommandTree commandTree)
         {
+            
+            //Making sure that new shapes will get a new ID when deSerializing
+            commandTree.NextShapeId = Shape.nextId;
+            //Serialize CommandTree TODO: Add FileSelectBox
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
             using (StreamWriter writer = new StreamWriter(@"output.xml"))
                 serializer.Serialize(writer, commandTree);
         }
         public static CommandTree load()
         {
+            //Empty ShapeCollector Singleton
+            ShapeCollector.getI().reset();
+            //restore Tree
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
             CommandTree restoredTree;
             using (StreamReader reader = new StreamReader(@"output.xml"))
                 restoredTree = serializer.Deserialize(reader) as CommandTree;
+            //Make sure that newly Added Shapes get a new ID
+            Shape.nextId = restoredTree.NextShapeId;
+            //Reestablishing parents and finding active node
             restoredTree.active = CommandTree.reParseTree(restoredTree.root, restoredTree.active.id);
+            //Moving diagram to active state
             restoredTree.reExecute();
+
             return restoredTree;
 
         }
 
-        private void reExecute()
+        public void reExecute()
         {
+            //Remove all objects from canvas
             ShapeCollector.getI().reset();
+            //Execute all commands on branch to active node.
             LinkedList<BaseCommand> reExecuteList = new LinkedList<BaseCommand>();
             BaseCommand curCommand = active;
-            while (curCommand.Parent != null)
+            while (curCommand != null)
             {
                 reExecuteList.AddFirst(curCommand);
                 curCommand = curCommand.Parent;
             }
+            Console.WriteLine("ReExecuting " + reExecuteList.Count + " Commands");
             foreach (BaseCommand b in reExecuteList)
             {
                 b.execute();
+                Console.WriteLine("reExecuted " + b.id);
             }
 
 
@@ -100,12 +119,18 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public void undo()
         {
-            //TODO: Implemnt
+            active.unExecute();
+            active = active.Parent;
+            undone.Add(active);
         }
 
         public void redo()
         {
-            //TODO:Implement - uses undone list
+            if (undone == null || undone.Count == 0) return;
+            BaseCommand reDoCommand = undone.Last();
+            reDoCommand.execute();
+            undone.Remove(reDoCommand);
+            active = reDoCommand;
         }
 
     }
