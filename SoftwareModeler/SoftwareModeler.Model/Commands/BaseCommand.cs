@@ -11,9 +11,10 @@ using Area51.SoftwareModeler.Models;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
+    [XmlInclude(typeof(AddClassCommand))]
     [XmlInclude(typeof(DummyCommand))]
     [XmlInclude(typeof(MoveShapeCommand))]
-    [XmlInclude(typeof(AddClassCommand))]
+    [XmlInclude(typeof(ResizeShapeCommand))]
     public abstract class BaseCommand
     {
         //Static

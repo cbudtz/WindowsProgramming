@@ -54,6 +54,7 @@
     <Compile Include="Commands\DeleteConnectionCommand.cs" />
     <Compile Include="Commands\DeleteShapeCommand.cs" />
     <Compile Include="Commands\DummyCommand.cs" />
+    <Compile Include="Commands\ResizeShapeCommand.cs" />
     <Compile Include="Commands\MoveShapeCommand.cs" />
     <Compile Include="Comment.cs" />
     <Compile Include="NotifyBase.cs" />
