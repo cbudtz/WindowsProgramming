@@ -12,7 +12,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Area51.SoftwareModeler.Models;
 
 namespace Area51.SoftwareModeler.ViewModels
 {
