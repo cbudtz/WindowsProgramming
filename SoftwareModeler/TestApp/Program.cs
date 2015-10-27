@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows;
 using Area51.SoftwareModeler.Models;
 using Area51.SoftwareModeler.Models.Commands;
 
