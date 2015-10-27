@@ -6,8 +6,9 @@
       xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="300">
-    
+   
     <StackPanel Width="240">
+        
         <StackPanel.Background>
             <LinearGradientBrush StartPoint="0.5,0">
                 <GradientStop Color="White" Offset="0.9"/>
@@ -68,8 +69,9 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button HorizontalContentAlignment="Left" Command="{Binding addClassNormal}" Margin="0,5,0,1">
-                    <TextBlock>
+                    <Button Style="{StaticResource highlightButton}" HorizontalContentAlignment="Left" Command="{Binding addClassNormal}" Margin="0,5,0,1">
+
+                        <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/class_icon.png" Width="15"/>
                         </TextBlock>

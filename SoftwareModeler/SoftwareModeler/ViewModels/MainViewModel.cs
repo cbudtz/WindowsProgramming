@@ -42,17 +42,20 @@ namespace Area51.SoftwareModeler.ViewModels
         public ICommand MouseDownShapeCommand { get; }
         public ICommand MouseMoveShapeCommand { get; }
         public ICommand MouseUpShapeCommand { get; }
+
+        public ICommand MouseDownShapeResizeCommand { get; }
+        public ICommand MouseUpShapeResizeCommand { get; }
         // connections
         public ICommand MouseDownConnectionCommand { get; }
         public ICommand MouseMoveConnectionCommand { get; }
         public ICommand MouseUpConnectionCommand { get; }
 
+        // toolbox
         public ICommand NewClassCommand { get; }
         public ICommand NewAbstractCommand { get; }
         public ICommand NewInterfaceCommand { get; }
-        public ICommand MouseDownShapeResizeCommand { get; }
-        public ICommand MouseUpShapeResizeCommand { get; }
-
+        public ICommand NewCommentCommand { get; }
+ 
         public ICommand MouseClickCommand { get; }
 
         // Used for saving the classRep that a line is drawn from, while it is being drawn.
