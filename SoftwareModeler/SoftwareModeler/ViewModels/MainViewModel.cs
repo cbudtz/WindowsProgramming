@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Area51.SoftwareModeler.Models;
 
 namespace Area51.SoftwareModeler.ViewModels
 {
@@ -29,8 +30,10 @@ namespace Area51.SoftwareModeler.ViewModels
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public bool moveShape = false;
-        public Class TestClass { get; set; }
+        private bool moveShape = false;
+        private bool isAddingShape = false;
+
+        private Class newShape = null;
         public string Text { get; set; }
 
         // Commands that the UI can be bound to.
@@ -42,6 +45,13 @@ namespace Area51.SoftwareModeler.ViewModels
         public ICommand MouseDownConnectionCommand { get; }
         public ICommand MouseMoveConnectionCommand { get; }
         public ICommand MouseUpConnectionCommand { get; }
+
+        public ICommand NewClassCommand { get; }
+        public ICommand NewAbstractCommand { get; }
+        public ICommand NewInterfaceCommand { get; }
+
+        public ICommand MouseClickCommand { get; }
+
         // Used for saving the classRep that a line is drawn from, while it is being drawn.
         private Shape addingLineFrom;
         // Saves the initial point that the mouse has during a move operation.
@@ -50,15 +60,18 @@ namespace Area51.SoftwareModeler.ViewModels
         private Point initialShapePosition;
 
 
+
+        //view access to observables
+        public ObservableCollection<Shape> classes { get { return ShapeCollector.getI().obsShapes; } }
+        public ObservableCollection<Connection> connections { get { return ShapeCollector.getI().obsConnections; } }
+
+        //Dynamic 
+        private CommandTree commandController { get; set; }
+        private ShapeCollector observables = ShapeCollector.getI();
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-
-        //Dynamic 
-        public ObservableCollection<Shape> classes { get;  set;}
-        public ObservableCollection<Connection> connections { get; set; }
-        private CommandTree commandController { get; set; }
-
         public MainViewModel()
         {
             commandController = new CommandTree();
@@ -67,20 +80,25 @@ namespace Area51.SoftwareModeler.ViewModels
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
 
-            classes = ShapeCollector.getI().obsShapes;
-            Class TestClass1 = new Class("A Class", "", false, new Point(0,0), Models.Visibility.Default);
+            MouseClickCommand = new RelayCommand<MouseEventArgs>(MouseClicked);
+
+            NewClassCommand = new RelayCommand(AddClass);
+            NewInterfaceCommand = new RelayCommand(AddInterface);
+            NewAbstractCommand = new RelayCommand(AddAbstract);
+
+            Class TestClass1 = new Class("A Class", "", false, new Point(0, 0), Models.Visibility.Default);
             TestClass1.addAttribute("int", "something");
             TestClass1.addAttribute("String", "someAttribute");
             string[] parameters = { "string", "Int", "Bool" };
             TestClass1.addMethod(Models.Visibility.Public, "somemethod", parameters);
-            classes.Add(TestClass1);
-            Class TestClass2 = new Class("Another Class", "", false, new Point(300,320), Models.Visibility.Default);
+            observables.obsShapes.Add(TestClass1);
+            Class TestClass2 = new Class("Another Class", "", false, new Point(300, 320), Models.Visibility.Default);
             TestClass2.addAttribute("int", "nothing");
             TestClass2.addAttribute("bool", "True");
-            classes.Add(TestClass2);
-            connections = ShapeCollector.getI().obsConnections;
+            observables.obsShapes.Add(TestClass2);
+
             Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Aggregation);
-            connections.Add(conn);
+            observables.obsConnections.Add(conn);
             Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
             Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
         }
@@ -120,8 +138,8 @@ namespace Area51.SoftwareModeler.ViewModels
                 shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
 
                 // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
-                connections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
-                connections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
+                observables.obsConnections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
+                observables.obsConnections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
 
             }
         }
@@ -146,6 +164,60 @@ namespace Area51.SoftwareModeler.ViewModels
             // The mouse is released, as the move operation is done, so it can be used by other controls.
             e.MouseDevice.Target.ReleaseMouseCapture();
         }
+
+        public void MouseClicked(MouseEventArgs e)
+        {
+            if (isAddingShape && newShape != null)
+            {
+                if (e == null) return;
+                var mousePosition = RelativeMousePosition(e);
+                //Point mousePosition = Mouse.GetPosition(Application.Current.MainWindow);
+                newShape.X = mousePosition.X - newShape.Width / 2;
+                newShape.Y = mousePosition.Y - newShape.Height / 2;
+                commandController.addAndExecute(new AddClassCommand(newShape.name, newShape.StereoType, newShape.IsAbstract, new Point(newShape.X, newShape.Y), newShape.Visibility));
+
+                //classes.Add(newShape); // TODO remove when commancontroller is fixed
+            }
+            isAddingShape = false;
+            newShape = null;
+        }
+
+        private void AddClass()
+        {
+            Class shape = new Class();
+            shape.IsAbstract = false;
+            shape.StereoType = "";
+            shape.Visibility = Models.Visibility.Public;
+            AddShape(shape);
+
+        }
+
+
+        private void AddAbstract()
+        {
+            Class shape = new Class();
+            shape.IsAbstract = true;
+            shape.StereoType = "";
+            shape.Visibility = Models.Visibility.Public;
+            AddShape(shape);
+        }
+
+        private void AddInterface()
+        {
+            Class shape = new Class();
+            shape.IsAbstract = false;
+            shape.StereoType = "<<interface>>";
+            shape.Visibility = Models.Visibility.Public;
+            AddShape(shape);
+        }
+
+        private void AddShape(Class shape)
+        {
+            isAddingShape = true;
+            newShape = shape;
+        }
+
+
         // Gets the classRep that was clicked.
         private Shape TargetShape(MouseEventArgs e)
         {
@@ -161,9 +233,18 @@ namespace Area51.SoftwareModeler.ViewModels
             // Here the visual element that the mouse is captured by is retrieved.
             var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
             // The canvas holding the shapes visual element, is found by searching up the tree of visual elements.
-            var canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            if (shapeVisualElement is Canvas)
+            {
+                return Mouse.GetPosition(shapeVisualElement);
+
+            }
+            else
+            {
+                var canvas = FindParentOfType<Canvas>(shapeVisualElement);
+                return Mouse.GetPosition(canvas);
+            }
             // The mouse position relative to the canvas is gotten here.
-            return Mouse.GetPosition(canvas);
+
         }
         private static T FindParentOfType<T>(DependencyObject o)
         {
