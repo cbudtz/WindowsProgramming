@@ -41,6 +41,10 @@ namespace Area51.SoftwareModeler.ViewModels
         public ICommand MouseDownShapeCommand { get; }
         public ICommand MouseMoveShapeCommand { get; }
         public ICommand MouseUpShapeCommand { get; }
+        public ICommand MouseDownShapeResizeCommand{get;}
+        public ICommand MouseUpShapeResizeCommand { get; }
+        //public ICommand MouseMoveShapeResizeCommand { get; }
+
         // connections
         public ICommand MouseDownConnectionCommand { get; }
         public ICommand MouseMoveConnectionCommand { get; }
@@ -59,12 +63,19 @@ namespace Area51.SoftwareModeler.ViewModels
         // Saves the initial point that the classRep has during a move operation.
         private Point initialShapePosition;
 
+        private Double initialWidth;
 
+        private Boolean isResizing;
+
+
+        /// <summary>
+        /// Initializes a new instance of the MainViewModel class.
+        /// </summary>
 
         //view access to observables
         public ObservableCollection<Shape> classes { get { return ShapeCollector.getI().obsShapes; } }
         public ObservableCollection<Connection> connections { get { return ShapeCollector.getI().obsConnections; } }
-       
+
         //Dynamic 
         private CommandTree commandController { get; set; }
         private ShapeCollector observables = ShapeCollector.getI();
@@ -79,6 +90,9 @@ namespace Area51.SoftwareModeler.ViewModels
             MouseDownShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownShape);
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
+            MouseDownShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownResizeShape);
+            MouseUpShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpResizeShape);
+            //MouseMoveShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseMoveResizeShape);
 
             MouseClickCommand = new RelayCommand<MouseEventArgs>(MouseClicked);
 
@@ -123,6 +137,34 @@ namespace Area51.SoftwareModeler.ViewModels
             e.MouseDevice.Target.CaptureMouse();
         }
 
+        public void MouseDownResizeShape(MouseButtonEventArgs e)
+        {
+            var shape = TargetShape(e);
+            // The mouse position relative to the target of the mouse event.
+            var mousePosition = RelativeMousePosition(e);
+
+            var border = (Border)e.MouseDevice.Target;
+
+            // When the classRep is moved with the mouse, the MouseMoveShape method is called many times, 
+            //  for each part of the movement.
+            // Therefore to only have 1 Undo/Redo command saved for the whole movement, the initial position is saved, 
+            //  during the start of the movement, so that it together with the final position, 
+            //  from when the mouse is released, can become one Undo/Redo command.
+            // The initial classRep position is saved to calculate the offset that the classRep should be moved.
+            initialMousePosition = mousePosition;
+            initialShapePosition = new Point(shape.X, shape.Y);
+
+            initialWidth = border.ActualWidth;
+
+            isResizing = true;
+
+            // The mouse is captured, so the current classRep will always be the target of the mouse events, 
+            //  even if the mouse is outside the application window.
+            e.MouseDevice.Target.CaptureMouse();
+        }
+
+
+
         public void MouseMoveShape(MouseEventArgs e)
         {
             if (Mouse.Captured != null)
@@ -134,15 +176,23 @@ namespace Area51.SoftwareModeler.ViewModels
 
                 // The Shape is moved by the offset between the original and current mouse position.
                 // The View (GUI) is then notified by the Shape, that its properties have changed.
+
+                if (isResizing)
+                {
+                    shape.Width = initialWidth + (mousePosition.X - initialMousePosition.X);
+                }
+                else
+                {
                 shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
                 shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
-
+                }
                 // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
                 observables.obsConnections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
                 observables.obsConnections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
 
             }
         }
+
         public void MouseUpShape(MouseButtonEventArgs e)
         {
             // The Shape is gotten from the mouse event.
@@ -151,9 +201,9 @@ namespace Area51.SoftwareModeler.ViewModels
             var mousePosition = RelativeMousePosition(e);
 
             // The Shape is moved back to its original position, so the offset given to the move command works.
+
             shape.X = initialShapePosition.X; //TODO uncomment when command works
             shape.Y = initialShapePosition.Y;
-
             // Now that the Move Shape operation is over, the Shape is moved to the final position, 
             //  by using a MoveNodeCommand to move it.
             // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
@@ -165,58 +215,29 @@ namespace Area51.SoftwareModeler.ViewModels
             e.MouseDevice.Target.ReleaseMouseCapture();
         }
 
-        public void MouseClicked(MouseEventArgs e)
+        public void MouseUpResizeShape(MouseButtonEventArgs e)
         {
-            if (isAddingShape && newShape != null)
-            {
-                if (e == null) return;
-                var mousePosition = RelativeMousePosition(e);
-                //Point mousePosition = Mouse.GetPosition(Application.Current.MainWindow);
-                newShape.X = mousePosition.X - newShape.Width / 2;
-                newShape.Y = mousePosition.Y - newShape.Height / 2;
-                commandController.addAndExecute(new AddClassCommand(newShape.name, newShape.StereoType, newShape.IsAbstract, new Point(newShape.X, newShape.Y), newShape.Visibility));
-                classes.Add(newShape); // TODO remove when commancontroller is fixed
-            }
-            isAddingShape = false;
-            newShape = null;
+            // The Shape is gotten from the mouse event.
+            var shape = TargetShape(e);
+            // The mouse position relative to the target of the mouse event.
+            var mousePosition = RelativeMousePosition(e);
+
+            // The Shape is moved back to its original position, so the offset given to the move command works.
+
+            shape.X = initialShapePosition.X; //TODO uncomment when command works
+            shape.Y = initialShapePosition.Y;
+            // Now that the Move Shape operation is over, the Shape is moved to the final position, 
+            //  by using a MoveNodeCommand to move it.
+            // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
+            //  and with respect to the Undo/Redo functionality the Shape has only been moved once, with this Command.
+            //TODO fix command
+
+            isResizing = false;
+            //commandController.addAndExecute(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
+
+            // The mouse is released, as the move operation is done, so it can be used by other controls.
+            e.MouseDevice.Target.ReleaseMouseCapture();
         }
-
-        private void AddClass()
-        {
-            Class shape = new Class();
-            shape.IsAbstract = false;
-            shape.StereoType = "";
-            shape.Visibility = Models.Visibility.Public;
-            AddShape(shape);
-       
-        }
-
-
-        private void AddAbstract()
-        {
-            Class shape = new Class();
-            shape.IsAbstract = true;
-            shape.StereoType = "";
-            shape.Visibility = Models.Visibility.Public;
-            AddShape(shape);
-        }
-
-        private void AddInterface()
-        {
-            Class shape = new Class();
-            shape.IsAbstract = false;
-            shape.StereoType = "<<interface>>";
-            shape.Visibility = Models.Visibility.Public;
-            AddShape(shape);
-        }
-
-        private void AddShape(Class shape)
-        {
-            isAddingShape = true;
-            newShape = shape;
-        }
-
-
         // Gets the classRep that was clicked.
         private Shape TargetShape(MouseEventArgs e)
         {
@@ -251,4 +272,5 @@ namespace Area51.SoftwareModeler.ViewModels
             return parent.GetType().IsAssignableFrom(typeof(T)) ? parent : FindParentOfType<T>(parent);
         }
     }
+
 }
