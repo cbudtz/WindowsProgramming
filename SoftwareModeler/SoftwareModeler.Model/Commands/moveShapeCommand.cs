@@ -35,7 +35,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
-            if (shape == null)
+            if (shape == null) //If deserialized
             {
                 shape = ShapeCollector.getI().getShapeByID(ShapeId);
             }
