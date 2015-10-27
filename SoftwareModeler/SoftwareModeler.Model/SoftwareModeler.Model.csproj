@@ -50,12 +50,14 @@
     <Compile Include="Class.cs" />
     <Compile Include="Commands\AddCommentCommand.cs" />
     <Compile Include="Commands\AddClassCommand.cs" />
+    <Compile Include="Commands\AddConnectionCommand.cs" />
     <Compile Include="Commands\AddUMLClass.cs" />
     <Compile Include="Commands\DeleteConnectionCommand.cs" />
     <Compile Include="Commands\DeleteShapeCommand.cs" />
     <Compile Include="Commands\DummyCommand.cs" />
     <Compile Include="Commands\ResizeShapeCommand.cs" />
     <Compile Include="Commands\MoveShapeCommand.cs" />
+    <Compile Include="Commands\UpdateClassInfoCommand.cs" />
     <Compile Include="Comment.cs" />
     <Compile Include="NotifyBase.cs" />
     <Compile Include="Commands\CommandTree.cs" />
