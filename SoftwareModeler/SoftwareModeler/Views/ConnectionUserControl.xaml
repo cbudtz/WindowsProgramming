@@ -15,9 +15,7 @@
         <Path.Data>
             <PathGeometry>
                 <PathFigure StartPoint="{Binding StartPoint }">
-                <LineSegment Point="{Binding P1}"/>
-                <LineSegment Point="{Binding P2}"/>
-                <LineSegment Point="{Binding EndPoint}"/>
+                    <PolyLineSegment Points="{Binding PointCollection}"/>
                 </PathFigure>
             </PathGeometry>
         </Path.Data>

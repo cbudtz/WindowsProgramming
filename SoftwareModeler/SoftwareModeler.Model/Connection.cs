@@ -4,15 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Area51.SoftwareModeler.Models
 {
     public class Connection : NotifyBase
     {
-        private Shape start;
+        private Shape startShape;
+        public Shape Start { get { return startShape; } set { startShape = value; updatePoints(); } }
         private string startMultiplicity;
+        public string StartMultiplicity { get { return startMultiplicity; } set { startMultiplicity = value; } }
         private string endMultiplicity;
-        private Shape end;
+        public string EndMultiplicity { get { return endMultiplicity; } set { endMultiplicity = value; } }
+        private Shape endShape;
+        public Shape End { get { return endShape; } set { endShape = value; updatePoints(); } }
         private Point startPoint;
         public Point StartPoint { get { return startPoint; } set { startPoint = value; } }
         private Point p1;
@@ -21,87 +26,125 @@ namespace Area51.SoftwareModeler.Models
         public Point P2 { get { return p2; } set { p2 = value; } }
         private Point endPoint;
         public Point EndPoint { get { return endPoint; } set { endPoint = value; } }
-       
-        private ConnectionType type;
+        private PointCollection pointCollection;
+        public PointCollection PointCollection { get { return pointCollection; } set { pointCollection = value; } }
 
-        public Shape Start { get { return start; } set { start = value; updatePoints(); } }
-        public string StartMultiplicity { get { return startMultiplicity; } set { startMultiplicity = value; } }
-        public Shape End { get { return end; } set { end = value; updatePoints(); } }
-        public string EndMultiplicity { get { return endMultiplicity; } set { endMultiplicity = value; } }
+        private ConnectionType type;
 
         public Connection(Shape _start, string _startMultiplicity, Shape _end, string _endMultiplicity, ConnectionType _type)
         {
-            start = _start;
+            startShape = _start;
             startMultiplicity = _startMultiplicity;
-            end = _end;
+            endShape = _end;
             endMultiplicity = _endMultiplicity;
             type = _type;
-            
 
-            //double vec0X = 1;
-            //double vec0Y = 0;
-            //double vec1X = _end.CanvasCenterX - _start.CanvasCenterX;
-            //double vec1Y = _end.CanvasCenterY - _start.CanvasCenterY;
-            //double phi1 = Math.Acos((vec0X * vec1X) / (Math.Sqrt(Math.Pow(vec1X, 2) + Math.Pow(vec1Y, 2))));
-            //double phi2 = Math.Acos((vec0Y * vec1Y) / (Math.Sqrt(Math.Pow(vec1X, 2) + Math.Pow(vec1Y, 2))));
-
-            //if (Math.Abs(_start.CanvasCenterX - _end.CanvasCenterX) < _start.Width)
-            //{
-            //    startX = _start.CanvasCenterX;
-            //}
-            //else if(_start.CanvasCenterX > _end.CanvasCenterX)
-            //{
-            //    startX = _start.CanvasCenterX - _start.Width/2;
-            //}
-            //else
-            //{
-            //    startX = _start.CanvasCenterX + _start.Width/2;
-            //}
-            //if(Math.Abs(_start.CanvasCenterY - _end.CanvasCenterY) < _start.Height)
-            //{
-            //    startY = _start.CanvasCenterY;
-            //}else if(_start.CanvasCenterY > _end.CanvasCenterY)
-            //{
-            //    startY = _start.CanvasCenterY - _start.Height/2;
-            //}
-            //else
-            //{
-            //    startY = _start.CanvasCenterY + _start.Height/2;
-            //}
             startPoint = new Point();
             p1 = new Point();
             p2 = new Point();
             endPoint = new Point();
-            startPoint.X = _start.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? _start.Width / 2 : -_start.Width / 2);
-            startPoint.Y = _start.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? _start.Height / 2 : -_start.Height / 2);
-            endPoint.X = _end.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? -_end.Width / 2 : _end.Width / 2);
-            endPoint.Y = _end.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? -_end.Height / 2 : _end.Height / 2);
-          
-            p1.X = _start.CanvasCenterX;
-            p1.Y = (_start.CanvasCenterY + _end.CanvasCenterY) / 2.0;
-            p2.Y = P1.Y;
-            p2.X = _end.CanvasCenterX;
+
+            updatePoints();
         }
 
         private void updatePoints()
         {
-            Point sp = new Point(start.CanvasCenterX, start.CanvasCenterY);
-            Point ep = new Point(end.CanvasCenterX, end.CanvasCenterY);
-            Vector spep = ep - sp;
-           
-            // Console.WriteLine(Math.Atan2(-1, 5));
-            startPoint.X = start.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? _start.Width / 2 : -_start.Width / 2);
-            startPoint.Y = start.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? _start.Height / 2 : -_start.Height / 2);
-            endPoint.X = end.CanvasCenterX;// + (_start.CanvasCenterX < _end.CanvasCenterX ? -_end.Width / 2 : _end.Width / 2);
-            endPoint.Y = end.CanvasCenterY;// + (_start.CanvasCenterY < _end.CanvasCenterY ? -_end.Height / 2 : _end.Height / 2);
-            p1.X = start.CanvasCenterX;
-            p1.Y = (start.CanvasCenterY + end.CanvasCenterY) / 2.0;
+            pointCollection = new PointCollection();
+
+            //direktional modifier to turn the arrows the correct way.
+            double dm = (endShape.CanvasCenterY - startShape.CanvasCenterY) > 0 ? -1 : 1;
+
+            //horisontalt center
+            startPoint.X = startShape.CanvasCenterX;
+            endPoint.X = endShape.CanvasCenterX;
+
+            //vertikalt center, minus halvdelen af shapens højde.
+            startPoint.Y = startShape.CanvasCenterY - (dm * (startShape.Height / 2 - 2));
+            endPoint.Y = endShape.CanvasCenterY - ((endShape.Height / 2.0));
+
+            p1.X = startShape.CanvasCenterX;
+            p1.Y = (startShape.CanvasCenterY + endShape.CanvasCenterY) / 2.0;
             p2.Y = P1.Y;
-            p2.X = end.CanvasCenterX;
+            p2.X = endShape.CanvasCenterX;
+
+
+
+            pointCollection.Add(p1);
+            pointCollection.Add(p2);
+            pointCollection.Add(endPoint);
+
+            switch (type)
+            {
+                case ConnectionType.Aggregation:
+                    drawRhombus(dm);
+                    break;
+                case ConnectionType.Composition:
+                    drawFilledRhombus(dm);
+                    break;
+                case ConnectionType.Association:
+                    drawArrow(dm);
+                    break;
+                default:
+                    //whats wrong with you? this is off limits!
+                    throw new ArgumentOutOfRangeException("whats wrong with you!? Thats not part of the enum");
+            }
+
             NotifyPropertyChanged(() => StartPoint);
-            NotifyPropertyChanged(() => P1);
-            NotifyPropertyChanged(() => P2);
-            NotifyPropertyChanged(() => EndPoint);
+            NotifyPropertyChanged(() => PointCollection);
+        }
+
+        //association
+        private void drawArrow(double dm)
+        {
+            //Point p = new Point();
+            //p.X = endShape.CanvasCenterX - (2);
+            //p.Y = dm * (endShape.CanvasCenterY - (endShape.Height / 2) - 4);
+            //pointCollection.Add(p);
+            //pointCollection.Add(endPoint);
+            //p.X = endShape.CanvasCenterX + (2);
+            //p.Y = dm * (endShape.CanvasCenterY - (endShape.Height / 2) - 4);
+            //pointCollection.Add(p);
+            //pointCollection.Add(endPoint);
+        }
+
+        //agregation
+        private void drawRhombus(double dm)
+        {
+            pointCollection.RemoveAt(pointCollection.Count - 1);
+            Point p = new Point();
+            p.X = endPoint.X;
+            p.Y = dm * (endPoint.Y - 30);
+            PointCollection.Add(p);
+            p.X = endPoint.X - 5;
+            p.Y = endPoint.Y - 15;
+            PointCollection.Add(p);
+            PointCollection.Add(endPoint);
+            p.X = endPoint.X + 5;
+            p.Y = dm * (endPoint.Y - 15);
+            PointCollection.Add(p);
+            p.X = endPoint.X;
+            p.Y = dm * (endPoint.Y - 30);
+            PointCollection.Add(p);
+        }
+
+        //composition
+        private void drawFilledRhombus(double dm)
+        {
+            pointCollection.RemoveAt(pointCollection.Count - 1);
+            Point p = new Point();
+            p.X = endPoint.X;
+            p.Y = endPoint.Y - 30;
+            PointCollection.Add(p);
+            p.X = endPoint.X - 5;
+            p.Y = endPoint.Y - 15;
+            PointCollection.Add(p);
+            PointCollection.Add(endPoint);
+            p.X = endPoint.X + 5;
+            p.Y = endPoint.Y - 15;
+            PointCollection.Add(p);
+            p.X = endPoint.X;
+            p.Y = endPoint.Y - 30;
+            PointCollection.Add(p);
         }
     }
 }
