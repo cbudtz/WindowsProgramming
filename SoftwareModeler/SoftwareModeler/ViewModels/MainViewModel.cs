@@ -175,7 +175,8 @@ namespace Area51.SoftwareModeler.ViewModels
                 newShape.X = mousePosition.X - newShape.Width / 2;
                 newShape.Y = mousePosition.Y - newShape.Height / 2;
                 commandController.addAndExecute(new AddClassCommand(newShape.name, newShape.StereoType, newShape.IsAbstract, new Point(newShape.X, newShape.Y), newShape.Visibility));
-                classes.Add(newShape); // TODO remove when commancontroller is fixed
+                
+                //classes.Add(newShape); // TODO remove when commancontroller is fixed
             }
             isAddingShape = false;
             newShape = null;
