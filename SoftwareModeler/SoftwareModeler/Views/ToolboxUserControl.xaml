@@ -69,7 +69,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                    <Button Style="{StaticResource highlightButton}" HorizontalContentAlignment="Left" Command="{Binding addClassNormal}" Margin="0,5,0,1">
+                    <Button Style="{StaticResource highlightButton}" HorizontalContentAlignment="Left" Command="{Binding Path=NewClassCommand}" Margin="0,5,0,1">
 
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
@@ -79,7 +79,7 @@
                     </TextBlock>
 
                 </Button>
-                <Button Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding addClassAbstract}" Margin="0,1">
+                <Button Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=NewAbstractCommand}" Margin="0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/class_abstract_icon.png" Width="15"/>
@@ -87,7 +87,7 @@
                         <TextBlock Margin="5,-2,0,0"> Add Abstract Class</TextBlock>
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding addClassInterface}" Margin="0,1">
+                <Button Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=NewInterfaceCommand}" Margin="0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/class_interface_icon.png" Width="15"/>
