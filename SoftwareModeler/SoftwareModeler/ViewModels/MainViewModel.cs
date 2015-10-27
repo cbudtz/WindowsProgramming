@@ -51,6 +51,8 @@ namespace Area51.SoftwareModeler.ViewModels
         public ICommand NewClassCommand { get; }
         public ICommand NewAbstractCommand { get; }
         public ICommand NewInterfaceCommand { get; }
+        public ICommand MouseDownShapeResizeCommand { get; }
+        public ICommand MouseUpShapeResizeCommand { get; }
 
         public ICommand MouseClickCommand { get; }
 
@@ -82,6 +84,9 @@ namespace Area51.SoftwareModeler.ViewModels
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
 
+            MouseDownShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownResizeShape);
+            MouseUpShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpResizeShape);
+
             MouseClickCommand = new RelayCommand<MouseEventArgs>(MouseClicked);
 
             NewClassCommand = new RelayCommand(AddClass);
@@ -100,7 +105,7 @@ namespace Area51.SoftwareModeler.ViewModels
             observables.obsShapes.Add(TestClass2);
 
             Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Aggregation);
-            observables.obsConnections.Add(conn);
+            //observables.obsConnections.Add(conn);
             Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
             Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
         }
@@ -134,15 +139,23 @@ namespace Area51.SoftwareModeler.ViewModels
                 // The mouse position relative to the target of the mouse event.
                 var mousePosition = RelativeMousePosition(e);
 
-                // The Shape is moved by the offset between the original and current mouse position.
-                // The View (GUI) is then notified by the Shape, that its properties have changed.
-                shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
-                shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
+                if (isResizing)
+                {
+                    Console.WriteLine("resizing...");
+                    shape.Width =  mousePosition.X- shape.X;                    
+                }
+                else
+                {
+                    
+                    // The Shape is moved by the offset between the original and current mouse position.
+                    // The View (GUI) is then notified by the Shape, that its properties have changed.
+                    shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
+                    shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
 
-                // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
-                observables.obsConnections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
-                observables.obsConnections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
-
+                    // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
+                    observables.obsConnections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
+                    observables.obsConnections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
+                }
             }
         }
         public void MouseUpShape(MouseButtonEventArgs e)
@@ -186,6 +199,7 @@ namespace Area51.SoftwareModeler.ViewModels
             initialWidth = border.ActualWidth;
 
             isResizing = true;
+            Console.WriteLine("start resize");
 
             // The mouse is captured, so the current classRep will always be the target of the mouse events, 
             //  even if the mouse is outside the application window.
@@ -194,6 +208,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MouseUpResizeShape(MouseButtonEventArgs e)
         {
+            Console.WriteLine("resized done");
             // The Shape is gotten from the mouse event.
             var shape = TargetShape(e);
             // The mouse position relative to the target of the mouse event.
@@ -201,8 +216,9 @@ namespace Area51.SoftwareModeler.ViewModels
 
             // The Shape is moved back to its original position, so the offset given to the move command works.
 
-            shape.X = initialShapePosition.X; //TODO uncomment when command works
-            shape.Y = initialShapePosition.Y;
+            //shape.Width = initialMousePosition.X - mousePosition.X;
+            //shape.X = initialShapePosition.X; //TODO uncomment when command works
+            //shape.Y = initialShapePosition.Y;
             // Now that the Move Shape operation is over, the Shape is moved to the final position, 
             //  by using a MoveNodeCommand to move it.
             // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
