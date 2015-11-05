@@ -95,6 +95,12 @@ namespace Area51.SoftwareModeler.ViewModels
             NewInterfaceCommand = new RelayCommand(AddInterface);
             NewAbstractCommand = new RelayCommand(AddAbstract);
 
+            // TODO remove
+            test();
+        }
+
+        public void test()
+        {
             Class TestClass1 = new Class("A Class", "", false, new Point(0, 0), Models.Visibility.Default);
             TestClass1.addAttribute("int", "something");
             TestClass1.addAttribute("String", "someAttribute");
@@ -118,17 +124,9 @@ namespace Area51.SoftwareModeler.ViewModels
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
-            // When the classRep is moved with the mouse, the MouseMoveShape method is called many times, 
-            //  for each part of the movement.
-            // Therefore to only have 1 Undo/Redo command saved for the whole movement, the initial position is saved, 
-            //  during the start of the movement, so that it together with the final position, 
-            //  from when the mouse is released, can become one Undo/Redo command.
-            // The initial classRep position is saved to calculate the offset that the classRep should be moved.
             initialMousePosition = mousePosition;
             initialShapePosition = new Point(shape.X, shape.Y);
 
-            // The mouse is captured, so the current classRep will always be the target of the mouse events, 
-            //  even if the mouse is outside the application window.
             e.MouseDevice.Target.CaptureMouse();
         }
 
@@ -144,13 +142,11 @@ namespace Area51.SoftwareModeler.ViewModels
                 if (isResizing)
                 {
                     Console.WriteLine("resizing...");
-                    shape.Width =  mousePosition.X- shape.X;                    
+                    shape.Width =  mousePosition.X- shape.X;
+                    shape.Height = mousePosition.Y - shape.Y;                    
                 }
                 else
                 {
-                    
-                    // The Shape is moved by the offset between the original and current mouse position.
-                    // The View (GUI) is then notified by the Shape, that its properties have changed.
                     shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
                     shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
 
@@ -170,12 +166,6 @@ namespace Area51.SoftwareModeler.ViewModels
             // The Shape is moved back to its original position, so the offset given to the move command works.
             shape.X = initialShapePosition.X; //TODO uncomment when command works
             shape.Y = initialShapePosition.Y;
-
-            // Now that the Move Shape operation is over, the Shape is moved to the final position, 
-            //  by using a MoveNodeCommand to move it.
-            // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
-            //  and with respect to the Undo/Redo functionality the Shape has only been moved once, with this Command.
-            //TODO fix command
             commandController.addAndExecute(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
 
             // The mouse is released, as the move operation is done, so it can be used by other controls.
@@ -189,22 +179,13 @@ namespace Area51.SoftwareModeler.ViewModels
 
             var border = (Border)e.MouseDevice.Target;
 
-            // When the classRep is moved with the mouse, the MouseMoveShape method is called many times, 
-            //  for each part of the movement.
-            // Therefore to only have 1 Undo/Redo command saved for the whole movement, the initial position is saved, 
-            //  during the start of the movement, so that it together with the final position, 
-            //  from when the mouse is released, can become one Undo/Redo command.
-            // The initial classRep position is saved to calculate the offset that the classRep should be moved.
             initialMousePosition = mousePosition;
             initialShapePosition = new Point(shape.X, shape.Y);
 
             initialWidth = border.ActualWidth;
 
             isResizing = true;
-            Console.WriteLine("start resize");
-
-            // The mouse is captured, so the current classRep will always be the target of the mouse events, 
-            //  even if the mouse is outside the application window.
+    
             e.MouseDevice.Target.CaptureMouse();
         }
 
@@ -218,7 +199,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
             // The Shape is moved back to its original position, so the offset given to the move command works.
 
-            //shape.Width = initialMousePosition.X - mousePosition.X;
+            shape.Width = initialMousePosition.X - shape.X;
+            shape.Height = initialMousePosition.Y - shape.Y;
             //shape.X = initialShapePosition.X; //TODO uncomment when command works
             //shape.Y = initialShapePosition.Y;
             // Now that the Move Shape operation is over, the Shape is moved to the final position, 
@@ -226,6 +208,10 @@ namespace Area51.SoftwareModeler.ViewModels
             // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
             //  and with respect to the Undo/Redo functionality the Shape has only been moved once, with this Command.
             //TODO fix command
+            double xOffset = mousePosition.X - initialMousePosition.X;
+            double yOffset = mousePosition.Y - initialMousePosition.Y;
+     
+            commandController.addAndExecute(new ResizeShapeCommand(shape,xOffset, yOffset ));
 
             isResizing = false;
             //commandController.addAndExecute(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
