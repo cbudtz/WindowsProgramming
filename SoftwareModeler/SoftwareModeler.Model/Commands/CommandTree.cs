@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
@@ -14,6 +15,8 @@ namespace Area51.SoftwareModeler.Models.Commands
         public BaseCommand active;
         public List<BaseCommand> undone { get; set; }
         public int NextShapeId { get; set; }
+        public ObservableCollection<BaseCommand> commands { get; set; }
+
         //TODO: implement
         public event PropertyChangedEventHandler PropertyChanged;
 

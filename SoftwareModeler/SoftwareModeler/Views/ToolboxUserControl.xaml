@@ -34,7 +34,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button HorizontalContentAlignment="Left" Command="{Binding addAssociation}" Margin="0,5,0,1">
+                <Button HorizontalContentAlignment="Left" Command="{Binding Path=addAssociationCommand}" Margin="0,5,0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/association_icon.png" Width="15"/>
@@ -43,7 +43,7 @@
                     </TextBlock>
 
                 </Button>
-                <Button Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding addAggregation}" Margin="0,1">
+                <Button Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=AddAggregationCommand}" Margin="0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/aggregation_icon.png" Width="15"/>
@@ -51,7 +51,7 @@
                         <TextBlock Margin="5,-2,0,0"> Aggregation</TextBlock>
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding addComposition}" Margin="0,1">
+                <Button Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=AddCompositionCommand}" Margin="0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/composition_icon.png" Width="15"/>
