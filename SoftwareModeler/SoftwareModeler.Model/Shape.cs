@@ -161,12 +161,12 @@ namespace Area51.SoftwareModeler.Models
             name = "Shape "  + ++nextId;
             id = nextId;
         }
-
+        //Constructor for deserialized commands
         public Shape(int? id)
         {
             name = "Shape " + id;
             this.id = id;
-            if (id >= nextId) nextId = (int)id + 1;
+            if (id > nextId) nextId = (int)id++;
         }
 
         // By overwriting the ToString() method, the default representation of the class is changed from the full namespace (Java: package) name, 
