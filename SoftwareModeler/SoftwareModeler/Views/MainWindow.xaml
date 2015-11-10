@@ -25,5 +25,6 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Canvas>
+        <Views:CommandTreeView DockPanel.Dock="Right"/>
     </DockPanel>
 </Window>
