@@ -35,12 +35,14 @@ namespace Area51.SoftwareModeler.ViewModels
         private bool isAddingAssociation = false;
         private bool isAddingAggregation = false;
         private bool isAddingComposition = false;
+        private bool isAddingClass = false;
+        private bool isAddingAbstract = false;
+        private bool isAddingInterface = false;
 
         double initialWidth = 0;
-        private double minShapeWidth = 300;
-        private double minShapeHeight = 200;
-
-        private Class newShape = null;
+        private double minShapeWidth = 150;
+        private double minShapeHeight = 100;
+        
         private Connection newConnection = null;
 
         public string Text { get; set; }
@@ -138,10 +140,11 @@ namespace Area51.SoftwareModeler.ViewModels
                 }
                 else if (isResizing)
                 {
-                    
+                    Console.WriteLine("is resizing");
                     shape.Width =  mousePosition.X- shape.X;
                     shape.Height = mousePosition.Y - shape.Y;
-                    CheckShapeForMinimumSize(shape, mousePosition);               
+                    if (Math.Abs(shape.Width) < minShapeWidth) shape.Width = minShapeWidth;
+                    if (Math.Abs(shape.Height) < minShapeHeight) shape.Height = minShapeHeight;
                 }
                 else
                 {
@@ -241,10 +244,13 @@ namespace Area51.SoftwareModeler.ViewModels
             // The Shape is moved back to its original position, so the offset given to the move command works.
             shape.Width = initialMousePosition.X - shape.X;
             shape.Height = initialMousePosition.Y - shape.Y;
-
+            
             double xOffset = mousePosition.X - initialMousePosition.X;
             double yOffset = mousePosition.Y - initialMousePosition.Y;
-     
+
+            if (Math.Abs(shape.Width + xOffset) < minShapeWidth) xOffset = minShapeWidth - shape.Width;
+            if (Math.Abs(shape.Height + yOffset) < minShapeHeight) yOffset = minShapeHeight - shape.Height;
+
             commandController.addAndExecute(new ResizeShapeCommand(shape,xOffset, yOffset ));
 
             isResizing = false;
@@ -255,18 +261,33 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MouseClicked(MouseEventArgs e)
         {
-            if (isAddingShape && newShape != null)
+            if (isAddingClass || isAddingAbstract || isAddingInterface)
             {
                 if (e == null) return;
                 var mousePosition = RelativeMousePosition(e);
 
-                newShape.X = mousePosition.X - newShape.Width / 2;
-                newShape.Y = mousePosition.Y - newShape.Height / 2;
-                commandController.addAndExecute(new AddClassCommand(newShape.name, newShape.StereoType, newShape.IsAbstract, new Point(newShape.X, newShape.Y), newShape.Visibility));
+                Point anchorpoint = new Point(mousePosition.X - minShapeWidth / 2, mousePosition.Y - minShapeHeight / 2);
+
+                // default is normal class
+                string stereoType = "";
+                bool isAbstract = false;
+                Models.Visibility visibility = Models.Visibility.Public;
+                
+                
+                if (isAddingAbstract) { 
+                    isAbstract = true; 
+                }else if (isAddingInterface)
+                {
+                    stereoType = "<<interface>>";
+                }
+
+                commandController.addAndExecute(new AddClassCommand(null, stereoType, isAbstract, anchorpoint, visibility));
+                Console.WriteLine("new class");
 
             }
-            isAddingShape = false;
-            newShape = null;
+            isAddingInterface = false;
+            isAddingAbstract = false;
+            isAddingClass = false;
         }
 
         private void loadFile()
@@ -327,44 +348,21 @@ namespace Area51.SoftwareModeler.ViewModels
 
         private void AddClass()
         {
-            Class shape = new Class();
-            shape.IsAbstract = false;
-            shape.StereoType = "";
-            shape.Visibility = Models.Visibility.Public;
-            AddShape(shape);
-
+            isAddingClass = true;
         }
 
 
         private void AddAbstract()
         {
-            Class shape = new Class();
-            shape.IsAbstract = true;
-            shape.StereoType = "";
-            shape.Visibility = Models.Visibility.Public;
-            AddShape(shape);
+            isAddingAbstract = true;
         }
 
         private void AddInterface()
         {
-            Class shape = new Class();
-            shape.IsAbstract = false;
-            shape.StereoType = "<<interface>>";
-            shape.Visibility = Models.Visibility.Public;
-            AddShape(shape);
+            isAddingInterface = true;
         }
 
-        private void AddShape(Class shape)
-        {
-            isAddingShape = true;
-            newShape = shape;
-        }
-
-        private void CheckShapeForMinimumSize(Shape shape, Point mousePoint)
-        {
-            if (Math.Abs(shape.Width-mousePoint.X) < minShapeWidth) shape.Width = minShapeWidth;
-            if (Math.Abs(shape.Height-mousePoint.Y) < minShapeHeight) shape.Height = minShapeHeight;
-        }
+       
         private Shape TargetShape(MouseEventArgs e)
         {
             // Here the visual element that the mouse is captured by is retrieved.
