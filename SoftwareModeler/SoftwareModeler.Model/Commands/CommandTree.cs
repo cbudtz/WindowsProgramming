@@ -5,6 +5,9 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
@@ -15,7 +18,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public BaseCommand active;
         public List<BaseCommand> undone { get; set; }
         public int NextShapeId { get; set; }
-        public ObservableCollection<BaseCommand> commands { get; set; }
+        public ObservableCollection<BaseCommand> commands { get; set; } = new ObservableCollection<BaseCommand>();
 
         //TODO: implement
         public event PropertyChangedEventHandler PropertyChanged;
@@ -26,23 +29,39 @@ namespace Area51.SoftwareModeler.Models.Commands
             {
                 //Root node - serialization starts here...
                 root = command;
-                active = root;
+                setActive(root);
             }
             else
             {
+                
                 //Add child to tree
                 command.Parent = active;
                 active.addChild(command);
-                active = command;
+                setActive(command);
             }
-            //excecute new command
+            commands.Add(command);
+            foreach (BaseCommand baseCommand in commands)
+            {
+                Console.WriteLine(baseCommand.id + baseCommand.color.ToString() + baseCommand.BranchLayer);
+            }
+            //ececute new command
             active.execute();
             
         }
 
-        public void setActive(BaseCommand command)
+        private void setActive(BaseCommand root)
         {
-            //TODO: Implement recursive function to crawl up and down tree;
+            
+            if (active !=null)active.color = Colors.Transparent;
+            active = root;
+            active.color = Colors.Aquamarine;
+        }
+
+        public void setActiveCommand(BaseCommand command)
+        {
+            //Update activeCommand
+            setActive(command);
+            reExecute();
         }
 
         public static void save(CommandTree commandTree, StreamWriter saveWriter)
@@ -73,7 +92,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             //Make sure that newly Added Shapes get a new ID
             Shape.nextId = restoredTree.NextShapeId;
             //Reestablishing parents and finding active node
-            restoredTree.active = CommandTree.reParseTree(restoredTree.root, restoredTree.active.id);
+            restoredTree.setActive(CommandTree.reParseTree(restoredTree.root, restoredTree.active.id));
             //Moving diagram to active state
             restoredTree.reExecute();
 
@@ -89,6 +108,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public void reExecute()
         {
+            
             //Remove all objects from canvas
             ShapeCollector.getI().reset();
             //Execute all commands on branch to active node.
@@ -135,7 +155,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public void undo()
         {
             active.unExecute();
-            active = active.Parent;
+            setActive(active.Parent);
             undone.Add(active);
         }
 
@@ -145,7 +165,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             BaseCommand reDoCommand = undone.Last();
             reDoCommand.execute();
             undone.Remove(reDoCommand);
-            active = reDoCommand;
+            setActive(reDoCommand);
         }
 
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -19,6 +20,8 @@ namespace Area51.SoftwareModeler.Models.Commands
     {
         //Static
         public static int nextid = 0;
+        public int BranchLayer { get; set; }
+        public Color color = Colors.Transparent;
         //Fields
         protected string parentstr = "hey";
         protected BaseCommand parent = null;
@@ -36,6 +39,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         //Inherited methods
         public  void addChild(BaseCommand child)
         {
+            child.BranchLayer += children.Count+ this.BranchLayer;
             children.Add(child);
         }
         public BaseCommand()
