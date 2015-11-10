@@ -61,7 +61,7 @@ namespace Area51.SoftwareModeler.Models
         //  }
         public double Y { get { return y; } set { y = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => CanvasCenterY); } }
 
-        private double width = 100;
+        private double width = 150;
         // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
         //  it uses the compiler to get the name of the calling property, 
         //  which in this case is the name of the property that has changed.

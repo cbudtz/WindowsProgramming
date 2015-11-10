@@ -6,6 +6,7 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
+             xmlns:model="clr-namespace:Area51.SoftwareModeler.Models"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}">
@@ -62,9 +63,18 @@
             <DataGrid 
                 Grid.Row="1" 
                 ItemsSource="{Binding Attributes}" 
-                AutoGenerateColumns="True" 
+                AutoGenerateColumns="False" 
                 BorderThickness="0" 
-                HeadersVisibility="None" GridLinesVisibility="None"/>
+                HeadersVisibility="None" GridLinesVisibility="None">
+                <DataGrid.Columns>
+                    <DataGridComboBoxColumn 
+                        ItemsSource="{Binding Source= model:Visibility}"
+                        SelectedValueBinding="{Binding Visibility}"/>
+
+
+                    <DataGridTextColumn Binding="{Binding Name}" />
+                </DataGrid.Columns>
+            </DataGrid>
             <Rectangle Grid.Row="2" Width="Auto" StrokeThickness="1"/>
             <DataGrid 
                 Grid.Row="3" 
