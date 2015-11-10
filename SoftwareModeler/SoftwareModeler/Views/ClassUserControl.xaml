@@ -16,6 +16,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -52,12 +53,27 @@
                         </i:EventTrigger>-->
                     </i:Interaction.Triggers>
             </TextBlock>
-            <ListView 
+            <!--<ListView 
                 Grid.Row="1"
                 ItemsSource="{Binding Attributes}"/>
             <ListView 
                 Grid.Row="2"
-                ItemsSource="{Binding Methods}"/>
+                ItemsSource="{Binding Methods}"/>-->
+            <DataGrid 
+                Grid.Row="1" 
+                ItemsSource="{Binding Attributes}" 
+                AutoGenerateColumns="True" 
+                BorderThickness="0" 
+                HeadersVisibility="None" GridLinesVisibility="None"/>
+            <Rectangle Grid.Row="2" Width="Auto" StrokeThickness="1"/>
+            <DataGrid 
+                Grid.Row="3" 
+                ItemsSource="{Binding Methods}" 
+                AutoGenerateColumns="True" 
+                BorderThickness="0" 
+                HeadersVisibility="None" GridLinesVisibility="None"/>
+
+
             <!--<Label Width="5" HorizontalAlignment="Right" Grid.Row="3"/>-->
 
             <!--<TextBox HorizontalContentAlignment="Center" FontSize="20" Text="{Binding Name}"></TextBox>
