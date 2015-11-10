@@ -16,9 +16,9 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-        <Button Grid.Column="0" Grid.Row="0">New</Button>
-        <Button Grid.Column="1" Grid.Row="0">Load</Button>
-        <Button Grid.Column="1" Grid.Row="1">Save</Button>
-        <Button Grid.Column="0" Grid.Row="1">Team</Button>
+        <Button Command="{Binding Path=NewCommand}" Grid.Column="0" Grid.Row="0">New</Button>
+        <Button Command="{Binding Path=LoadCommand}" Grid.Column="1" Grid.Row="0">Load</Button>
+        <Button Command="{Binding Path=SaveCommand}" Grid.Column="1" Grid.Row="1">Save</Button>
+        <Button Command="{Binding Path=TeamCommand}" Grid.Column="0" Grid.Row="1">Team</Button>
     </Grid>
 </UserControl>

@@ -14,10 +14,10 @@ namespace Area51.SoftwareModeler.Models
         private Visibility visibility;
         private List<Attribute> attributes;
         private List<Method> methods;
-        
 
-        
-        public Class(String name, String stereotype, Boolean isAbstract, Point anchorPoint, Visibility visibility)
+
+
+        public Class(String name, String stereotype, Boolean isAbstract, Point anchorPoint, Visibility visibility) : base()
         {
             this.name = name;
             this.stereotype = stereotype;
@@ -28,15 +28,23 @@ namespace Area51.SoftwareModeler.Models
             this.visibility = visibility;
             this.attributes = new List<Attribute>();
             this.methods = new List<Method>();
-
         }
 
         public Class() : base()
         {
         }
 
-        public Class(int? id) : base(id)
+        public Class(int? id, String name, String stereotype, Boolean isAbstract, Point anchorPoint, Visibility visibility) : base(id)
         {
+            this.name = name;
+            this.stereotype = stereotype;
+            this.isAbstract = isAbstract;
+            this.X = anchorPoint.X;
+            this.Y = anchorPoint.Y;
+            //this.anchorPoint = anchorPoint;
+            this.visibility = visibility;
+            this.attributes = new List<Attribute>();
+            this.methods = new List<Method>();
         }
 
         //Getters and setters
