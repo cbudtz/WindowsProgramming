@@ -42,24 +42,30 @@ namespace Area51.SoftwareModeler.Models.Commands
             //TODO: Implement recursive function to crawl up and down tree;
         }
 
-        public static void save(CommandTree commandTree)
+        public static void save(CommandTree commandTree, StreamWriter saveWriter)
         {
             
             //Making sure that new shapes will get a new ID when deSerializing
             commandTree.NextShapeId = Shape.nextId;
             //Serialize CommandTree TODO: Add FileSelectBox
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
-            using (StreamWriter writer = new StreamWriter(@"output.xml"))
+            using (StreamWriter writer = saveWriter)
                 serializer.Serialize(writer, commandTree);
         }
-        public static CommandTree load()
+
+        public static void save(CommandTree commandTree)
+        {
+            save(commandTree, new StreamWriter(@"output.xml"));
+        }
+
+        public static CommandTree load(StreamReader loadReader)
         {
             //Empty ShapeCollector Singleton
             ShapeCollector.getI().reset();
             //restore Tree
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
             CommandTree restoredTree;
-            using (StreamReader reader = new StreamReader(@"output.xml"))
+            using (StreamReader reader = loadReader)
                 restoredTree = serializer.Deserialize(reader) as CommandTree;
             //Make sure that newly Added Shapes get a new ID
             Shape.nextId = restoredTree.NextShapeId;
@@ -71,6 +77,12 @@ namespace Area51.SoftwareModeler.Models.Commands
             return restoredTree;
 
         }
+
+        public static CommandTree load()
+        {
+            return load(new StreamReader(@"output.xml"));
+        }
+
 
         public void reExecute()
         {
