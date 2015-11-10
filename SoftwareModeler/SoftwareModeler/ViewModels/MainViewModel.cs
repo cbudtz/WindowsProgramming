@@ -99,24 +99,7 @@ namespace Area51.SoftwareModeler.ViewModels
             test();
         }
 
-        public void test()
-        {
-            Class TestClass1 = new Class("A Class", "", false, new Point(0, 0), Models.Visibility.Default);
-            TestClass1.addAttribute("int", "something");
-            TestClass1.addAttribute("String", "someAttribute");
-            string[] parameters = { "string", "Int", "Bool" };
-            TestClass1.addMethod(Models.Visibility.Public, "somemethod", parameters);
-            observables.obsShapes.Add(TestClass1);
-            Class TestClass2 = new Class("Another Class", "", false, new Point(300, 320), Models.Visibility.Default);
-            TestClass2.addAttribute("int", "nothing");
-            TestClass2.addAttribute("bool", "True");
-            observables.obsShapes.Add(TestClass2);
 
-            Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Aggregation);
-            //observables.obsConnections.Add(conn);
-            Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
-            Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
-        }
 
         public void MouseDownShape(MouseButtonEventArgs e)
         {
@@ -174,8 +157,16 @@ namespace Area51.SoftwareModeler.ViewModels
         public void MouseDownResizeShape(MouseButtonEventArgs e)
         {
             var shape = TargetShape(e);
+
+            double borderX = shape.X + shape.Width;
+            double borderY = shape.Y + shape.Height;
+            
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
+
+            if (Math.Abs(mousePosition.X - borderX) > 5 && Math.Abs(mousePosition.Y - borderY) > 5) return;
+
+            Console.WriteLine("resizing");
 
             var border = (Border)e.MouseDevice.Target;
 
@@ -191,30 +182,22 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MouseUpResizeShape(MouseButtonEventArgs e)
         {
-            Console.WriteLine("resized done");
+            if (!isResizing) return;
             // The Shape is gotten from the mouse event.
             var shape = TargetShape(e);
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
             // The Shape is moved back to its original position, so the offset given to the move command works.
-
             shape.Width = initialMousePosition.X - shape.X;
             shape.Height = initialMousePosition.Y - shape.Y;
-            //shape.X = initialShapePosition.X; //TODO uncomment when command works
-            //shape.Y = initialShapePosition.Y;
-            // Now that the Move Shape operation is over, the Shape is moved to the final position, 
-            //  by using a MoveNodeCommand to move it.
-            // The MoveNodeCommand is given the offset that it should be moved relative to its original position, 
-            //  and with respect to the Undo/Redo functionality the Shape has only been moved once, with this Command.
-            //TODO fix command
+
             double xOffset = mousePosition.X - initialMousePosition.X;
             double yOffset = mousePosition.Y - initialMousePosition.Y;
      
             commandController.addAndExecute(new ResizeShapeCommand(shape,xOffset, yOffset ));
 
             isResizing = false;
-            //commandController.addAndExecute(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
 
             // The mouse is released, as the move operation is done, so it can be used by other controls.
             e.MouseDevice.Target.ReleaseMouseCapture();
@@ -235,6 +218,43 @@ namespace Area51.SoftwareModeler.ViewModels
             }
             isAddingShape = false;
             newShape = null;
+        }
+
+        private void loadFile()
+        {
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Filter = "XML files (*.xml)|*.xml";
+            ofd.Title = "load diagram from xml";
+            ofd.ShowDialog();
+
+            if(ofd.FileName != "")
+            {
+                System.IO.Stream fileStream = ofd.OpenFile();
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(fileStream))
+                {
+                    // Read the first line from the file and write it the textbox.
+                    //tbResults.Text = reader.ReadLine();
+                }
+            }
+        }
+        
+        private void saveFile()
+        {
+            System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
+            sfd.Filter = "XML files (*.xml)|*.xml";
+            sfd.Title = "Save diagram as xml";
+            sfd.ShowDialog();
+
+            // If the file name is not an empty string open it for saving.
+            if (sfd.FileName != "")
+            {
+               
+                System.IO.FileStream fs = (System.IO.FileStream)sfd.OpenFile();
+                CommandTree.save(commandController); // pass filestream as argument
+
+
+                fs.Close();
+            }
         }
 
         private void AddClass()
@@ -272,8 +292,7 @@ namespace Area51.SoftwareModeler.ViewModels
             newShape = shape;
         }
 
-
-        // Gets the classRep that was clicked.
+        
         private Shape TargetShape(MouseEventArgs e)
         {
             // Here the visual element that the mouse is captured by is retrieved.
@@ -305,6 +324,25 @@ namespace Area51.SoftwareModeler.ViewModels
         {
             dynamic parent = VisualTreeHelper.GetParent(o);
             return parent.GetType().IsAssignableFrom(typeof(T)) ? parent : FindParentOfType<T>(parent);
+        }
+
+        public void test()
+        {
+            Class TestClass1 = new Class("A Class", "", false, new Point(0, 0), Models.Visibility.Default);
+            TestClass1.addAttribute("int", "something");
+            TestClass1.addAttribute("String", "someAttribute");
+            string[] parameters = { "string", "Int", "Bool" };
+            TestClass1.addMethod(Models.Visibility.Public, "somemethod", parameters);
+            observables.obsShapes.Add(TestClass1);
+            Class TestClass2 = new Class("Another Class", "", false, new Point(300, 320), Models.Visibility.Default);
+            TestClass2.addAttribute("int", "nothing");
+            TestClass2.addAttribute("bool", "True");
+            observables.obsShapes.Add(TestClass2);
+
+            Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Aggregation);
+            //observables.obsConnections.Add(conn);
+            Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
+            Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
         }
     }
 }
