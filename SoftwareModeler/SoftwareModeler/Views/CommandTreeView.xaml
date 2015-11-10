@@ -18,7 +18,7 @@
                     <GradientStop Color="LightGray" Offset="0.07"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <Label>Command Tree</Label>
+            <Label HorizontalAlignment="Center">Command Tree</Label>
         </Grid>
     </ScrollViewer>
 </UserControl>
