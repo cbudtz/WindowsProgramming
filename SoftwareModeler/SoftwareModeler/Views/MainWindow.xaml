@@ -14,7 +14,7 @@
         <ViewModel:MainViewModel />
     </Window.DataContext>
 
-    <DockPanel>
+    <DockPanel >
         <Views:ToolboxUserControl DockPanel.Dock="Left"/>
         <Canvas IsHitTestVisible="True" Background="White">
             <ItemsControl ItemsSource="{Binding connections}"/>
@@ -25,5 +25,6 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Canvas>
+        <Views:CommandTreeView DockPanel.Dock="Right" Width="300" HorizontalAlignment="Right"/>
     </DockPanel>
 </Window>
