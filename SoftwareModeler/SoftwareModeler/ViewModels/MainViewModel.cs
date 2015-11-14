@@ -132,16 +132,35 @@ namespace Area51.SoftwareModeler.ViewModels
         {
             KeyStates ctrl = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.LeftCtrl) & KeyStates.Down;
             KeyStates z = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Z) & KeyStates.Down; 
-            KeyStates y = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Y) & KeyStates.Down; 
+            KeyStates y = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Y) & KeyStates.Down;
+            KeyStates s = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.S) & KeyStates.Down;
+            KeyStates o = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.O) & KeyStates.Down;
+            KeyStates esc = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Escape) & KeyStates.Down;
+
+
 
             if (e == null) return;
-            if(ctrl > 0 && z > 0)
+            if(ctrl > 0)
             {
-                commandController.undo();
+                if (z > 0)
+                {
+                    commandController.undo();
+                }
+                else if (y > 0)
+                {
+                    commandController.redo();
+                }
+                else if (s > 0)
+                {
+                    saveFile();
+                }
+                else if (o > 0){
+                    loadFile();
+                }
             }
-            else if (ctrl > 0 && y > 0)
+            if (esc > 0)
             {
-                commandController.redo();
+                Keyboard.ClearFocus();
             }
         }
 
@@ -213,7 +232,6 @@ namespace Area51.SoftwareModeler.ViewModels
 
             if (isAddingAggregation || isAddingAssociation || isAddingComposition)
             {
-                Console.WriteLine("adding line...");
                 ConnectionType type = ConnectionType.Aggregation;
                 if (isAddingComposition) type = ConnectionType.Composition;
                 else if (isAddingAssociation) type = ConnectionType.Association;
@@ -410,7 +428,9 @@ namespace Area51.SoftwareModeler.ViewModels
         }
         private static T FindParentOfType<T>(DependencyObject o)
         {
-            dynamic parent = VisualTreeHelper.GetParent(o);
+            
+            dynamic parent = (o == null ? null : VisualTreeHelper.GetParent(o));
+            if (parent == null) return parent;
             return parent.GetType().IsAssignableFrom(typeof(T)) ? parent : FindParentOfType<T>(parent);
         }
 
