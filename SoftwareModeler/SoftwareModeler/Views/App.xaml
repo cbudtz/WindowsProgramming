@@ -21,28 +21,14 @@
         
 
         <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:Area51.SoftwareModeler.ViewModels" />
-
-        <Style x:Key="highlightButton" TargetType="Button">
+        
+        <Style x:Key="highlightToggleButton" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Background" Value="AntiqueWhite"/>
             <Style.Triggers>
-                    <Trigger Property="IsPressed" Value="True">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)" To="Red"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.EnterActions>
-                    </Trigger>
-                    <!--<Trigger Property="IsUp" Value="True">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)" To="Blue"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.EnterActions>
-                    </Trigger>-->
-                </Style.Triggers>
-            </Style>
+                <Trigger Property="IsChecked" Value="true">
+                    <Setter Property="Background" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>
