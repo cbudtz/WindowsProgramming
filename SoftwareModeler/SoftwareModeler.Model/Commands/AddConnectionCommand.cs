@@ -9,9 +9,17 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     public class AddConnectionCommand : BaseCommand
     {
+        Connection conn;
+        public AddConnectionCommand(Shape from, string fromMult, Shape to, string toMult, ConnectionType type)
+        {
+            //TODO do correct implementation
+           conn = new Connection(from, fromMult, to, toMult, type);
+            
+                }
         public override void execute()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("connection added");
+            ShapeCollector.getI().obsConnections.Add(conn);
         }
 
         public override void unExecute()

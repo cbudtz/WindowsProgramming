@@ -60,6 +60,8 @@ namespace Area51.SoftwareModeler.ViewModels
         public ICommand MouseMoveConnectionCommand { get; }
         public ICommand MouseUpConnectionCommand { get; }
 
+        public ICommand KeyDownCommand { get; }
+
         // toolbox
         public ICommand SaveCommand { get; }
         public ICommand LoadCommand { get; }
@@ -81,8 +83,6 @@ namespace Area51.SoftwareModeler.ViewModels
         private Point initialMousePosition;
         // Saves the initial point that the classRep has during a move operation.
         private Point initialShapePosition;
-
-
 
         //view access to observables
         public ObservableCollection<BaseCommand> commands { get { return commandController.commands; } }
@@ -122,8 +122,27 @@ namespace Area51.SoftwareModeler.ViewModels
 
             AddCompositionCommand = new RelayCommand(AddComposition);
 
+            KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown);
+
             // TODO remove
             test();
+        }
+
+        public void KeyDown(KeyEventArgs e)
+        {
+            KeyStates ctrl = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.LeftCtrl) & KeyStates.Down;
+            KeyStates z = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Z) & KeyStates.Down; 
+            KeyStates y = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Y) & KeyStates.Down; 
+
+            if (e == null) return;
+            if(ctrl > 0 && z > 0)
+            {
+                commandController.undo();
+            }
+            else if (ctrl > 0 && y > 0)
+            {
+                commandController.redo();
+            }
         }
 
         public void MouseMoveShape(MouseEventArgs e)
@@ -132,6 +151,7 @@ namespace Area51.SoftwareModeler.ViewModels
             {
                 // The Shape is gotten from the mouse event.
                 var shape = TargetShape(e);
+                if (shape == null) return;
                 // The mouse position relative to the target of the mouse event.
                 var mousePosition = RelativeMousePosition(e);
                 if((isAddingAggregation || isAddingAssociation || isAddingComposition) && newConnection != null)
@@ -140,7 +160,6 @@ namespace Area51.SoftwareModeler.ViewModels
                 }
                 else if (isResizing)
                 {
-                    Console.WriteLine("is resizing");
                     shape.Width =  mousePosition.X- shape.X;
                     shape.Height = mousePosition.Y - shape.Y;
                     if (Math.Abs(shape.Width) < minShapeWidth) shape.Width = minShapeWidth;
@@ -161,6 +180,7 @@ namespace Area51.SoftwareModeler.ViewModels
         {
             // The Shape is gotten from the mouse event.
             var shape = TargetShape(e);
+            if (shape == null) return;
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
@@ -170,7 +190,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 isAddingComposition = false;
                 isAddingAssociation = false;
                 isAddingAggregation = false;
-                commandController.addAndExecute(new AddConnectionCommand()); // TODO command not implemented yet
+                commandController.addAndExecute(new AddConnectionCommand(newConnection.Start, "", newConnection.End, "", newConnection.type)); // TODO command not implemented yet
                 newConnection = null;
             }
             else
@@ -187,15 +207,17 @@ namespace Area51.SoftwareModeler.ViewModels
         public void MouseDownShape(MouseButtonEventArgs e)
         {
             var shape = TargetShape(e);
+            if (shape == null) return;
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
             if (isAddingAggregation || isAddingAssociation || isAddingComposition)
             {
+                Console.WriteLine("adding line...");
                 ConnectionType type = ConnectionType.Aggregation;
                 if (isAddingComposition) type = ConnectionType.Composition;
                 else if (isAddingAssociation) type = ConnectionType.Association;
-                newConnection = new Connection(shape, "", null, "", type);
+                newConnection = new Connection(shape, "", shape, "", type);
                 newConnection.EndPoint = mousePosition;
                 connections.Add(newConnection);
             }
@@ -210,7 +232,7 @@ namespace Area51.SoftwareModeler.ViewModels
         public void MouseDownResizeShape(MouseButtonEventArgs e)
         {
             var shape = TargetShape(e);
-
+            if (shape == null) return;
             double borderX = shape.X + shape.Width;
             double borderY = shape.Y + shape.Height;
             
@@ -218,8 +240,6 @@ namespace Area51.SoftwareModeler.ViewModels
             var mousePosition = RelativeMousePosition(e);
 
             if (Math.Abs(mousePosition.X - borderX) > 5 && Math.Abs(mousePosition.Y - borderY) > 5) return;
-
-            Console.WriteLine("resizing");
 
             var border = (Border)e.MouseDevice.Target;
 
@@ -238,6 +258,7 @@ namespace Area51.SoftwareModeler.ViewModels
             if (!isResizing) return;
             // The Shape is gotten from the mouse event.
             var shape = TargetShape(e);
+            if (shape == null) return;
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
@@ -324,9 +345,6 @@ namespace Area51.SoftwareModeler.ViewModels
                 {
                     CommandTree.save(commandController, writer);
                 }
-                
-
-
                 filestream.Close();
             }
         }
@@ -368,7 +386,7 @@ namespace Area51.SoftwareModeler.ViewModels
             // Here the visual element that the mouse is captured by is retrieved.
             var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
             // From the shapes visual element, the Shape object which is the DataContext is retrieved.
-            return (Shape)shapeVisualElement.DataContext;
+            return shapeVisualElement.DataContext as Shape;
         }
 
         // Gets the mouse position relative to the canvas.

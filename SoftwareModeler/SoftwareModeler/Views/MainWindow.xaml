@@ -9,7 +9,8 @@
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:ViewModel="clr-namespace:Area51.SoftwareModeler.ViewModels"
         xmlns:Views="clr-namespace:Area51.SoftwareModeler.Views"
-        Title="MainWindow" Height="600" Width="1000">
+        Title="MainWindow" Height="600" Width="1000"
+        >
     <Window.DataContext>
         <ViewModel:MainViewModel />
     </Window.DataContext>
@@ -21,6 +22,7 @@
             <ItemsControl ItemsSource="{Binding connections}"/>
             <ItemsControl ItemsSource="{Binding classes}"/>
             <i:Interaction.Triggers>
+                
                 <i:EventTrigger EventName="MouseUp">
                     <cmd:EventToCommand Command="{Binding Path=MouseClickCommand}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
@@ -28,4 +30,9 @@
         </Canvas>
         
     </DockPanel>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="KeyDown">
+            <cmd:EventToCommand Command="{Binding Path=KeyDownCommand}" PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 </Window>
