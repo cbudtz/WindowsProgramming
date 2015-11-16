@@ -183,50 +183,66 @@ namespace Area51.SoftwareModeler.ViewModels
             {
                 // The Shape is gotten from the mouse event.
                 var shape = TargetShape(e);
-                if (shape == null) return;
+                
                 // The mouse position relative to the target of the mouse event.
                 var mousePosition = RelativeMousePosition(e);
-                if((isAddingAggregation || isAddingAssociation || isAddingComposition || isAddingComment) && newConnection != null)
+                if ((isAddingAggregation || isAddingAssociation || isAddingComposition || isAddingComment) && newConnection != null)
                 {
                     newConnection.EndPoint = mousePosition;
                 }
-                else if (isResizing)
-                {
-                    shape.Width =  mousePosition.X- shape.X;
-                    shape.Height = mousePosition.Y - shape.Y;
-                    if (Math.Abs(shape.Width) < minShapeWidth) shape.Width = minShapeWidth;
-                    if (Math.Abs(shape.Height) < minShapeHeight) shape.Height = minShapeHeight;
-                }
                 else
                 {
-                    shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
-                    shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
+                    if (shape == null) return;
+                    if (isResizing)
+                    {
 
-                    // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
-                    observables.obsConnections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
-                    observables.obsConnections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
+                        shape.Width = mousePosition.X - shape.X;
+                        shape.Height = mousePosition.Y - shape.Y;
+                        if (Math.Abs(shape.Width) < minShapeWidth) shape.Width = minShapeWidth;
+                        if (Math.Abs(shape.Height) < minShapeHeight) shape.Height = minShapeHeight;
+                    }
+                    else
+                    {
+                        shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
+                        shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
+
+                        // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
+                        observables.obsConnections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
+                        observables.obsConnections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
+                    }
                 }
             }
         }
         public void MouseUpShape(MouseButtonEventArgs e)
         {
             // The Shape is gotten from the mouse event.
+            e.MouseDevice.Target.ReleaseMouseCapture();
             var shape = TargetShape(e);
-            if (shape == null) return;
+            
+            
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
             if ((isAddingAggregation || isAddingAssociation || isAddingComposition) && newConnection != null)
             {
-                newConnection.End = shape;
+                if (shape == null)
+                {
+                    connections.Remove(newConnection);
+                }
+                else
+                {
+                    newConnection.End = shape;
+                    commandController.addAndExecute(new AddConnectionCommand(newConnection.Start, "", newConnection.End, "", newConnection.type)); // TODO command not implemented yet
+                    
+                }
                 isAddingComposition = false;
                 isAddingAssociation = false;
                 isAddingAggregation = false;
-                commandController.addAndExecute(new AddConnectionCommand(newConnection.Start, "", newConnection.End, "", newConnection.type)); // TODO command not implemented yet
                 newConnection = null;
             }
             else
             {
+                if (shape == null) return;
                 // The Shape is moved back to its original position, so the offset given to the move command works.
                 shape.X = initialShapePosition.X;
                 shape.Y = initialShapePosition.Y;
@@ -313,6 +329,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MouseClicked(MouseEventArgs e)
         {
+            
             if (isAddingClass || isAddingAbstract || isAddingInterface || isAddingComment)
             {
                 if (e == null) return;
