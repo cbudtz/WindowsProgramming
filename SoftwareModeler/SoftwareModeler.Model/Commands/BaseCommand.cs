@@ -26,7 +26,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         protected string parentstr = "hey";
         protected BaseCommand parent = null;
         protected List<BaseCommand> children = new List<BaseCommand>();
-        public int Id { get; }
+        public int Id { get; set; }
 
         //Getters and setters
         [XmlIgnore]
