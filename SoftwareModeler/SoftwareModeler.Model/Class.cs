@@ -64,7 +64,7 @@ namespace Area51.SoftwareModeler.Models
 
         public void addAttribute(Visibility visibility, string type, string name)
         {
-            this.attributes.Add(new Attribute(type, name));
+            this.attributes.Add(new Attribute(visibility, type, name));
         }
 
         public void addMethod(Visibility visibility, string name, string[] parameters)
