@@ -34,7 +34,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button HorizontalContentAlignment="Left" Command="{Binding Path=addAssociationCommand}" Margin="0,5,0,1">
+                    <ToggleButton Style="{StaticResource highlightToggleButton}" HorizontalContentAlignment="Left" Command="{Binding Path=AddAssociationCommand}" Margin="0,5,0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/association_icon.png" Width="15"/>
@@ -42,23 +42,23 @@
                         <TextBlock Margin="5,-2,0,0"> Association</TextBlock>
                     </TextBlock>
 
-                </Button>
-                <Button Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=AddAggregationCommand}" Margin="0,1">
+                </ToggleButton>
+                    <ToggleButton Style="{StaticResource highlightToggleButton}" Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=AddAggregationCommand}" Margin="0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/aggregation_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Aggregation</TextBlock>
                     </TextBlock>
-                </Button>
-                <Button Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=AddCompositionCommand}" Margin="0,1">
+                </ToggleButton>
+                    <ToggleButton Style="{StaticResource highlightToggleButton}" Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=AddCompositionCommand}" Margin="0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/composition_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Composition</TextBlock>
                     </TextBlock>
-                </Button>
+                </ToggleButton>
                 </Grid>
 
         </GroupBox>
@@ -69,8 +69,8 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                    <Button Style="{StaticResource highlightButton}" HorizontalContentAlignment="Left" Command="{Binding Path=NewClassCommand}" Margin="0,5,0,1">
-
+                    <ToggleButton Style="{StaticResource highlightToggleButton}" HorizontalContentAlignment="Left" Command="{Binding Path=NewClassCommand}" Margin="0,5,0,1">
+                        
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/class_icon.png" Width="15"/>
@@ -78,23 +78,23 @@
                         <TextBlock Margin="5,-2,0,0"> Add Class</TextBlock>
                     </TextBlock>
 
-                </Button>
-                <Button Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=NewAbstractCommand}" Margin="0,1">
+                </ToggleButton>
+                    <ToggleButton Style="{StaticResource highlightToggleButton}" Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=NewAbstractCommand}" Margin="0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/class_abstract_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Add Abstract Class</TextBlock>
                     </TextBlock>
-                </Button>
-                <Button Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=NewInterfaceCommand}" Margin="0,1">
+                </ToggleButton>
+                    <ToggleButton Style="{StaticResource highlightToggleButton}" Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=NewInterfaceCommand}" Margin="0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/class_interface_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Add Interface</TextBlock>
                     </TextBlock>
-                </Button>
+                </ToggleButton>
             </Grid>
         </GroupBox>
 
@@ -103,7 +103,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button HorizontalContentAlignment="Left" Command="{Binding addComment}" Margin="0,5,0,1">
+                    <ToggleButton Style="{StaticResource highlightToggleButton}" HorizontalContentAlignment="Left" Command="{Binding NewCommentCommand}" Margin="0,5,0,1">
                     <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/comment_icon.png" Width="15"/>
@@ -111,7 +111,7 @@
                         <TextBlock Margin="5,-2,0,0"> Add Comment</TextBlock>
                     </TextBlock>
 
-                </Button>
+                </ToggleButton>
 
             </Grid>
         </GroupBox>

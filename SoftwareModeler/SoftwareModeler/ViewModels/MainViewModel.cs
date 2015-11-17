@@ -38,6 +38,7 @@ namespace Area51.SoftwareModeler.ViewModels
         private bool isAddingClass = false;
         private bool isAddingAbstract = false;
         private bool isAddingInterface = false;
+        private bool isAddingComment = false;
 
         double initialWidth = 0;
         private double minShapeWidth = 150;
@@ -46,7 +47,7 @@ namespace Area51.SoftwareModeler.ViewModels
         private Connection newConnection = null;
 
         public string Text { get; set; }
-
+        #region command variables
         // Commands that the UI can be bound to.
         // Shapes
         public ICommand MouseDownShapeCommand { get; }
@@ -55,14 +56,21 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public ICommand MouseDownShapeResizeCommand { get; }
         public ICommand MouseUpShapeResizeCommand { get; }
+        
         // connections
         public ICommand MouseDownConnectionCommand { get; }
         public ICommand MouseMoveConnectionCommand { get; }
         public ICommand MouseUpConnectionCommand { get; }
 
+        // mouse and keyboard
+        public ICommand KeyDownCommand { get; }
+        public ICommand MouseClickCommand { get; }
+
         // toolbox
         public ICommand SaveCommand { get; }
         public ICommand LoadCommand { get; }
+        public ICommand TeamCommand { get; }
+        public ICommand NewCommand { get; }
 
         public ICommand AddAssociationCommand { get; }
         public ICommand AddAggregationCommand { get; }
@@ -72,17 +80,14 @@ namespace Area51.SoftwareModeler.ViewModels
         public ICommand NewAbstractCommand { get; }
         public ICommand NewInterfaceCommand { get; }
         public ICommand NewCommentCommand { get; }
- 
-        public ICommand MouseClickCommand { get; }
-        
+      
+        #endregion
         // Used for saving the classRep that a line is drawn from, while it is being drawn.
         private Shape addingLineFrom;
         // Saves the initial point that the mouse has during a move operation.
         private Point initialMousePosition;
         // Saves the initial point that the classRep has during a move operation.
         private Point initialShapePosition;
-
-
 
         //view access to observables
         public ObservableCollection<BaseCommand> commands { get { return commandController.commands; } }
@@ -100,6 +105,8 @@ namespace Area51.SoftwareModeler.ViewModels
         {
             commandController = new CommandTree();
             // The commands are given the methods they should use to execute, and find out if they can execute.
+
+            #region initialize commands
             MouseDownShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownShape);
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
@@ -107,10 +114,18 @@ namespace Area51.SoftwareModeler.ViewModels
             MouseDownShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownResizeShape);
             MouseUpShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpResizeShape);
 
+            //TODO implement these
+            //MouseDownConnectionCommand =
+            //MouseMoveConnectionCommand = 
+            //MouseUpConnectionCommand =
+             
+            KeyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown);
             MouseClickCommand = new RelayCommand<MouseEventArgs>(MouseClicked);
 
-            SaveCommand = new RelayCommand(saveFile);
+            SaveCommand = new RelayCommand(saveFileCmd);
             LoadCommand = new RelayCommand(loadFile);
+            NewCommand = new RelayCommand(StartNewProject);
+            TeamCommand = new RelayCommand(StartTeamProject);
 
             AddAggregationCommand = new RelayCommand(AddAggregation);
             AddAssociationCommand = new RelayCommand(AddAssociation);
@@ -119,11 +134,47 @@ namespace Area51.SoftwareModeler.ViewModels
             NewClassCommand = new RelayCommand(AddClass);
             NewInterfaceCommand = new RelayCommand(AddInterface);
             NewAbstractCommand = new RelayCommand(AddAbstract);
-
-            AddCompositionCommand = new RelayCommand(AddComposition);
-
+            NewCommentCommand = new RelayCommand(AddComment);
+            
+            #endregion
             // TODO remove
             test();
+        }
+
+
+
+        public void KeyDown(KeyEventArgs e)
+        {
+            KeyStates ctrl = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.LeftCtrl) & KeyStates.Down;
+            KeyStates z = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Z) & KeyStates.Down; 
+            KeyStates y = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Y) & KeyStates.Down;
+            KeyStates s = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.S) & KeyStates.Down;
+            KeyStates o = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.O) & KeyStates.Down;
+            KeyStates esc = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Escape) & KeyStates.Down;
+
+            if (e == null) return;
+            if(ctrl > 0)
+            {
+                if (z > 0)
+                {
+                    commandController.undo();
+                }
+                else if (y > 0)
+                {
+                    commandController.redo();
+                }
+                else if (s > 0)
+                {
+                    saveFile();
+                }
+                else if (o > 0){
+                    loadFile();
+                }
+            }
+            else if (esc > 0)
+            {
+                Keyboard.ClearFocus();
+            }
         }
 
         public void MouseMoveShape(MouseEventArgs e)
@@ -132,49 +183,66 @@ namespace Area51.SoftwareModeler.ViewModels
             {
                 // The Shape is gotten from the mouse event.
                 var shape = TargetShape(e);
+                
                 // The mouse position relative to the target of the mouse event.
                 var mousePosition = RelativeMousePosition(e);
-                if((isAddingAggregation || isAddingAssociation || isAddingComposition) && newConnection != null)
+                if ((isAddingAggregation || isAddingAssociation || isAddingComposition || isAddingComment) && newConnection != null)
                 {
                     newConnection.EndPoint = mousePosition;
                 }
-                else if (isResizing)
-                {
-                    Console.WriteLine("is resizing");
-                    shape.Width =  mousePosition.X- shape.X;
-                    shape.Height = mousePosition.Y - shape.Y;
-                    if (Math.Abs(shape.Width) < minShapeWidth) shape.Width = minShapeWidth;
-                    if (Math.Abs(shape.Height) < minShapeHeight) shape.Height = minShapeHeight;
-                }
                 else
                 {
-                    shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
-                    shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
+                    if (shape == null) return;
+                    if (isResizing)
+                    {
 
-                    // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
-                    observables.obsConnections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
-                    observables.obsConnections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
+                        shape.Width = mousePosition.X - shape.X;
+                        shape.Height = mousePosition.Y - shape.Y;
+                        if (Math.Abs(shape.Width) < minShapeWidth) shape.Width = minShapeWidth;
+                        if (Math.Abs(shape.Height) < minShapeHeight) shape.Height = minShapeHeight;
+                    }
+                    else
+                    {
+                        shape.X = initialShapePosition.X + (mousePosition.X - initialMousePosition.X);
+                        shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
+
+                        // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
+                        observables.obsConnections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
+                        observables.obsConnections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
+                    }
                 }
             }
         }
         public void MouseUpShape(MouseButtonEventArgs e)
         {
             // The Shape is gotten from the mouse event.
+            e.MouseDevice.Target.ReleaseMouseCapture();
             var shape = TargetShape(e);
+            
+            
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
             if ((isAddingAggregation || isAddingAssociation || isAddingComposition) && newConnection != null)
             {
-                newConnection.End = shape;
+                if (shape == null)
+                {
+                    connections.Remove(newConnection);
+                }
+                else
+                {
+                    newConnection.End = shape;
+                    commandController.addAndExecute(new AddConnectionCommand(newConnection.Start, "", newConnection.End, "", newConnection.type)); // TODO command not implemented yet
+                    
+                }
                 isAddingComposition = false;
                 isAddingAssociation = false;
                 isAddingAggregation = false;
-                commandController.addAndExecute(new AddConnectionCommand()); // TODO command not implemented yet
                 newConnection = null;
             }
             else
             {
+                if (shape == null) return;
                 // The Shape is moved back to its original position, so the offset given to the move command works.
                 shape.X = initialShapePosition.X;
                 shape.Y = initialShapePosition.Y;
@@ -187,6 +255,7 @@ namespace Area51.SoftwareModeler.ViewModels
         public void MouseDownShape(MouseButtonEventArgs e)
         {
             var shape = TargetShape(e);
+            if (shape == null) return;
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
@@ -195,7 +264,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 ConnectionType type = ConnectionType.Aggregation;
                 if (isAddingComposition) type = ConnectionType.Composition;
                 else if (isAddingAssociation) type = ConnectionType.Association;
-                newConnection = new Connection(shape, "", null, "", type);
+                newConnection = new Connection(shape, "", shape, "", type);
                 newConnection.EndPoint = mousePosition;
                 connections.Add(newConnection);
             }
@@ -210,7 +279,7 @@ namespace Area51.SoftwareModeler.ViewModels
         public void MouseDownResizeShape(MouseButtonEventArgs e)
         {
             var shape = TargetShape(e);
-
+            if (shape == null) return;
             double borderX = shape.X + shape.Width;
             double borderY = shape.Y + shape.Height;
             
@@ -218,8 +287,6 @@ namespace Area51.SoftwareModeler.ViewModels
             var mousePosition = RelativeMousePosition(e);
 
             if (Math.Abs(mousePosition.X - borderX) > 5 && Math.Abs(mousePosition.Y - borderY) > 5) return;
-
-            Console.WriteLine("resizing");
 
             var border = (Border)e.MouseDevice.Target;
 
@@ -238,6 +305,7 @@ namespace Area51.SoftwareModeler.ViewModels
             if (!isResizing) return;
             // The Shape is gotten from the mouse event.
             var shape = TargetShape(e);
+            if (shape == null) return;
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
@@ -261,7 +329,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MouseClicked(MouseEventArgs e)
         {
-            if (isAddingClass || isAddingAbstract || isAddingInterface)
+            
+            if (isAddingClass || isAddingAbstract || isAddingInterface || isAddingComment)
             {
                 if (e == null) return;
                 var mousePosition = RelativeMousePosition(e);
@@ -288,6 +357,39 @@ namespace Area51.SoftwareModeler.ViewModels
             isAddingInterface = false;
             isAddingAbstract = false;
             isAddingClass = false;
+            isAddingComment = false;
+        }
+
+        private void StartNewProject()
+        {
+            bool clear = false;
+            if (ShapeCollector.getI().obsConnections.Any() || ShapeCollector.getI().obsShapes.Any())
+            {
+                MessageBoxResult res = MessageBox.Show("You have already a diagram in progress. Do you want to save first?", "Save current diagram", MessageBoxButton.YesNoCancel);
+                if (res == MessageBoxResult.Yes)
+                {
+                    clear = saveFile();
+                }
+                else if (res == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+                else if (res == MessageBoxResult.No)
+                {
+                    clear = true;
+                }
+
+            }
+            if (clear)
+            {
+                ShapeCollector.getI().obsConnections.Clear();
+                ShapeCollector.getI().obsShapes.Clear();
+            }
+        }
+
+        private void StartTeamProject()
+        {
+            MessageBox.Show("This feature is not implemented yet");
         }
 
         private void loadFile()
@@ -308,8 +410,13 @@ namespace Area51.SoftwareModeler.ViewModels
             }
         }
         
-        private void saveFile()
+        private void saveFileCmd()
         {
+            saveFile();
+        }
+        private bool saveFile()
+        {
+            bool saved = false;
             System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
             sfd.Filter = "XML files (*.xml)|*.xml";
             sfd.Title = "Save diagram as xml";
@@ -323,12 +430,11 @@ namespace Area51.SoftwareModeler.ViewModels
                 using(System.IO.StreamWriter writer = new System.IO.StreamWriter(filestream))
                 {
                     CommandTree.save(commandController, writer);
+                    saved = true;
                 }
-                
-
-
                 filestream.Close();
             }
+            return saved;
         }
 
         private void AddComposition()
@@ -339,6 +445,7 @@ namespace Area51.SoftwareModeler.ViewModels
         private void AddAssociation()
         {
             isAddingAssociation = true;
+            
         }
 
         private void AddAggregation()
@@ -362,13 +469,18 @@ namespace Area51.SoftwareModeler.ViewModels
             isAddingInterface = true;
         }
 
-       
+        private void AddComment()
+        {
+            isAddingComment = true;
+        }
+
+
         private Shape TargetShape(MouseEventArgs e)
         {
             // Here the visual element that the mouse is captured by is retrieved.
             var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
             // From the shapes visual element, the Shape object which is the DataContext is retrieved.
-            return (Shape)shapeVisualElement.DataContext;
+            return shapeVisualElement.DataContext as Shape;
         }
 
         // Gets the mouse position relative to the canvas.
@@ -392,7 +504,9 @@ namespace Area51.SoftwareModeler.ViewModels
         }
         private static T FindParentOfType<T>(DependencyObject o)
         {
-            dynamic parent = VisualTreeHelper.GetParent(o);
+            
+            dynamic parent = (o == null ? null : VisualTreeHelper.GetParent(o));
+            if (parent == null) return parent;
             return parent.GetType().IsAssignableFrom(typeof(T)) ? parent : FindParentOfType<T>(parent);
         }
 

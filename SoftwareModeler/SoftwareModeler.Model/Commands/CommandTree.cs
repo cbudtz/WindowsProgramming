@@ -16,7 +16,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public string Name;
         public BaseCommand root;
         public BaseCommand active;
-        public List<BaseCommand> undone { get; set; }
+        public List<BaseCommand> undone { get; set; } = new List<BaseCommand>();
         public int NextShapeId { get; set; }
         public ObservableCollection<BaseCommand> commands { get; set; } = new ObservableCollection<BaseCommand>();
 
@@ -154,9 +154,15 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public void undo()
         {
+            if(active == root)
+            {
+                
+                return;
+            }
             active.unExecute();
-            setActive(active.Parent);
             undone.Add(active);
+            setActive(active.Parent);
+            
         }
 
         public void redo()

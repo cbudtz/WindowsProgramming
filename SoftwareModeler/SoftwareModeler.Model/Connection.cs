@@ -39,7 +39,7 @@ namespace Area51.SoftwareModeler.Models
         private PointCollection pointCollection;
         public PointCollection PointCollection { get { return pointCollection; } set { pointCollection = value; } }
 
-        private ConnectionType type;
+        public ConnectionType type;
         //Unique identifyer
         private int connectionID;
 
