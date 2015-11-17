@@ -7,10 +7,26 @@
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
              xmlns:model="clr-namespace:Area51.SoftwareModeler.Models"
+             xmlns:models="clr-namespace:Area51.SoftwareModeler.Models;assembly=SoftwareModeler.Model"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}">
     <!--              Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="Auto" Height="Auto">-->
+
+    <UserControl.Resources>
+        <models:VisibilityConverter x:Key="VisibilityConverter"/>
+        <ObjectDataProvider x:Key="VisibilityEnum"
+                MethodName="GetValues" 
+                ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:Visibility" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+
+    </UserControl.Resources>
+
     <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2,2,5,5">
 
         <Grid Margin="5,5,5,5">
@@ -68,10 +84,27 @@
                 HeadersVisibility="None" GridLinesVisibility="None">
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn 
+                        ItemsSource="{Binding Source={StaticResource VisibilityEnum}, Mode=OneWay}" 
+                        SelectedItemBinding="{Binding Path= Visibility, Mode=TwoWay}" />
+                    <!--<DataGridTextColumn Binding="{Binding ElementName=txtValue, 
+                                          Path=Text, 
+                                          Converter={StaticResource VisibilityConverter}}" />-->
+                    <!--
+                    <DataGridComboBoxColumn ItemsSource="{Binding ElementName=txtValue, 
+                                          Path=Text, 
+                                          Converter={StaticResource VisibilityConverter}}"
+                                            SelectedItemBinding="{Binding ElementName=txtValue, 
+                                          Path=Text, 
+                                          Converter={StaticResource VisibilityConverter}}"/>
+                    -->
+                        <!--
                         ItemsSource="{Binding Source= model:Visibility}"
                         SelectedValueBinding="{Binding Visibility}"/>
-
-
+                        -->
+                    <!--"{Binding ElementName=txtValue, 
+                                          Path=Text, 
+                                          Converter={StaticResource YesNoToBooleanConverter}}"
+                    -->
                     <DataGridTextColumn Binding="{Binding Name}" />
                 </DataGrid.Columns>
             </DataGrid>
