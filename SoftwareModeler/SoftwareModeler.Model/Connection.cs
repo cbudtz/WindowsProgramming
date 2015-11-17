@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models
@@ -38,6 +39,8 @@ namespace Area51.SoftwareModeler.Models
         public Point EndPoint { get { return endPoint; } set { endPoint = value; } }
         private PointCollection pointCollection;
         public PointCollection PointCollection { get { return pointCollection; } set { pointCollection = value; } }
+        private PointCollection polygonPoints;
+        public PointCollection PolygonPoints { get { return polygonPoints; } set { polygonPoints = value; } }
 
         public ConnectionType type;
         //Unique identifyer
@@ -75,15 +78,15 @@ namespace Area51.SoftwareModeler.Models
             pointCollection = new PointCollection();
 
             //direktional modifier to turn the arrows the correct way.
-            double dm = (endShape.CanvasCenterY - startShape.CanvasCenterY) > 0 ? -1 : 1;
+            double dm = (endShape.CanvasCenterY - startShape.CanvasCenterY) > 0 ? 1 : -1;
 
             //horisontalt center
             startPoint.X = startShape.CanvasCenterX;
             endPoint.X = endShape.CanvasCenterX;
 
             //vertikalt center, minus halvdelen af shapens højde.
-            startPoint.Y = startShape.CanvasCenterY - (dm * (startShape.Height / 2 - 2));
-            endPoint.Y = endShape.CanvasCenterY - ((endShape.Height / 2.0));
+            startPoint.Y = startShape.CanvasCenterY;
+            endPoint.Y = endShape.CanvasCenterY - (dm * (endShape.Height / 2.0));
 
             p1.X = startShape.CanvasCenterX;
             p1.Y = (startShape.CanvasCenterY + endShape.CanvasCenterY) / 2.0;
@@ -119,15 +122,15 @@ namespace Area51.SoftwareModeler.Models
         //association
         private void drawArrow(double dm)
         {
-            //Point p = new Point();
-            //p.X = endShape.CanvasCenterX - (2);
-            //p.Y = dm * (endShape.CanvasCenterY - (endShape.Height / 2) - 4);
-            //pointCollection.Add(p);
-            //pointCollection.Add(endPoint);
-            //p.X = endShape.CanvasCenterX + (2);
-            //p.Y = dm * (endShape.CanvasCenterY - (endShape.Height / 2) - 4);
-            //pointCollection.Add(p);
-            //pointCollection.Add(endPoint);
+            Point p = new Point();
+            p.X = endShape.CanvasCenterX - (2);
+            p.Y = endShape.CanvasCenterY - (dm*(endShape.Height / 2) + (dm*4));
+            pointCollection.Add(p);
+            pointCollection.Add(endPoint);
+            p.X = endShape.CanvasCenterX + (2);
+            p.Y = endShape.CanvasCenterY - (dm * (endShape.Height / 2) + (dm*4));
+            pointCollection.Add(p);
+            pointCollection.Add(endPoint);
         }
 
         //agregation
@@ -136,17 +139,17 @@ namespace Area51.SoftwareModeler.Models
             pointCollection.RemoveAt(pointCollection.Count - 1);
             Point p = new Point();
             p.X = endPoint.X;
-            p.Y = dm * (endPoint.Y - 30);
+            p.Y = (endPoint.Y -(dm * 30));
             PointCollection.Add(p);
             p.X = endPoint.X - 5;
-            p.Y = endPoint.Y - 15;
+            p.Y = endPoint.Y - (dm*15);
             PointCollection.Add(p);
             PointCollection.Add(endPoint);
             p.X = endPoint.X + 5;
-            p.Y = dm * (endPoint.Y - 15);
+            p.Y = endPoint.Y - (dm*15);
             PointCollection.Add(p);
             p.X = endPoint.X;
-            p.Y = dm * (endPoint.Y - 30);
+            p.Y = (endPoint.Y - (dm * 30));
             PointCollection.Add(p);
         }
 
@@ -156,18 +159,26 @@ namespace Area51.SoftwareModeler.Models
             pointCollection.RemoveAt(pointCollection.Count - 1);
             Point p = new Point();
             p.X = endPoint.X;
-            p.Y = endPoint.Y - 30;
+            p.Y = (endPoint.Y - (dm * 30));
             PointCollection.Add(p);
+            Polygon poly = new Polygon();
+            poly.Stroke = Brushes.Black;
+            poly.Fill = Brushes.Black;
+            polygonPoints = new PointCollection();
+            polygonPoints.Add(p);
             p.X = endPoint.X - 5;
-            p.Y = endPoint.Y - 15;
-            PointCollection.Add(p);
-            PointCollection.Add(endPoint);
+            p.Y = endPoint.Y - (dm * 15);
+            polygonPoints.Add(p);
+            polygonPoints.Add(endPoint);
             p.X = endPoint.X + 5;
-            p.Y = endPoint.Y - 15;
-            PointCollection.Add(p);
+            p.Y = endPoint.Y - (dm * 15);
+            polygonPoints.Add(p);
             p.X = endPoint.X;
-            p.Y = endPoint.Y - 30;
-            PointCollection.Add(p);
+            p.Y = (endPoint.Y - (dm * 30));
+            polygonPoints.Add(p);
+
+            poly.Points = polygonPoints;
+
         }
     }
 }
