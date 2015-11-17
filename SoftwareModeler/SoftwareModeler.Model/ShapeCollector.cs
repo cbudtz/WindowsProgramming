@@ -1,4 +1,5 @@
 ﻿using Area51.SoftwareModeler.Models;
+using Area51.SoftwareModeler.Models.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,12 +19,14 @@ namespace Area51.SoftwareModeler.Models
         public ObservableCollection<Shape> obsShapes { get; set;   }
         [XmlIgnore]
         public ObservableCollection<Connection> obsConnections { get; set; }
-
+        [XmlIgnore]
+        public ObservableCollection<BaseCommand> commands { get; set; }
 
 
         private ShapeCollector()  {
             obsShapes = new ObservableCollection<Shape>();            
             obsConnections = new ObservableCollection<Connection>();
+            commands = new ObservableCollection<BaseCommand>(); 
         }
         ///<summary>Get instance</summary>
         public static ShapeCollector getI()

@@ -21,6 +21,13 @@ namespace Area51.SoftwareModeler.Models
             this.name = name;
         }
 
+        public Attribute(Visibility visibility, string type, string name)
+        {
+            this.visibility = visibility;
+            this.type = type;
+            this.name = name;
+        }
+
         public static implicit operator List<object>(Attribute v)
         {
             throw new NotImplementedException();
