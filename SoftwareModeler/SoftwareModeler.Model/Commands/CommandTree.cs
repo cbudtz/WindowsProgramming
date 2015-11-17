@@ -15,49 +15,49 @@ namespace Area51.SoftwareModeler.Models.Commands
     public class CommandTree : NotifyBase
     {
         public string Name;
-        public BaseCommand root;
-        public BaseCommand active;
+        public BaseCommand Root { get; set; }
+        public BaseCommand Active { get; set; }
         public List<BaseCommand> undone { get; set; } = new List<BaseCommand>();
         public int NextShapeId { get; set; }
-        public ObservableCollection<BaseCommand> commands { get; set; } = new ObservableCollection<BaseCommand>();
+        
 
         //TODO: implement
         //public event PropertyChangedEventHandler PropertyChanged;
 
         public void addAndExecute(BaseCommand command)
         {
-            if (root == null)
+            if (Root == null)
             {
                 //Root node - serialization starts here...
-                root = command;
-                setActive(root);
+                Root = command;
+                setActive(Root);
             }
             else
             {
                 
                 //Add child to tree
-                command.Parent = active;
-                active.addChild(command);
+                command.Parent = Active;
+                Active.addChild(command);
                 setActive(command);
             }
-            commands.Add(command);
-            NotifyPropertyChanged(() => commands);
+            ShapeCollector.getI().commands.Add(command);
+            NotifyPropertyChanged(() => ShapeCollector.getI().commands);
             
-            foreach (BaseCommand baseCommand in commands)
+            foreach (BaseCommand baseCommand in ShapeCollector.getI().commands)
             {
                 Console.WriteLine(baseCommand.Id + baseCommand.color.ToString() + baseCommand.BranchLayer);
             }
             //ececute new command
-            active.execute();
+            Active.execute();
             
         }
 
         private void setActive(BaseCommand node)
         {
             
-            if (active !=null)active.color = Colors.Transparent;
-            active = node;
-            active.color = Colors.Aquamarine;
+            if (Active !=null)Active.color = Colors.Transparent;
+            Active = node;
+            Active.color = Colors.Aquamarine;
         }
 
         public void setActiveCommand(BaseCommand command)
@@ -94,8 +94,10 @@ namespace Area51.SoftwareModeler.Models.Commands
                 restoredTree = serializer.Deserialize(reader) as CommandTree;
             //Make sure that newly Added Shapes get a new ID
             Shape.nextId = restoredTree.NextShapeId;
+            Console.WriteLine("Active node:"+ restoredTree.Active.Id);
+            Console.WriteLine(restoredTree.Root);
             //Reestablishing parents and finding active node
-            restoredTree.setActive(CommandTree.reParseTree(restoredTree.root, restoredTree.active.Id));
+            restoredTree.setActive(CommandTree.reParseTree(restoredTree.Root, restoredTree.Active.Id));
             //Moving diagram to active state
             restoredTree.reExecute();
 
@@ -116,7 +118,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             ShapeCollector.getI().reset();
             //Execute all commands on branch to active node.
             LinkedList<BaseCommand> reExecuteList = new LinkedList<BaseCommand>();
-            BaseCommand curCommand = active;
+            BaseCommand curCommand = Active;
             while (curCommand != null)
             {
                 reExecuteList.AddFirst(curCommand);
@@ -134,10 +136,14 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         private static BaseCommand reParseTree(BaseCommand node, int id)
         {
+            Console.WriteLine("looking for: " + id);
+            Console.WriteLine("Looking at:" + node.Id);
             BaseCommand activeNode = null;
+
          
-            if(node.Id == id)
+            if(node!=null && node.Id == id)
             {
+                Console.WriteLine("Found active node");
                 activeNode = node;
             }
             if(!node.Children.Equals(null) && node.Children.Count > 0)
@@ -151,20 +157,21 @@ namespace Area51.SoftwareModeler.Models.Commands
 
                 }
             }
+            Console.WriteLine(activeNode);
             return activeNode;
             
         }
 
         public void undo()
         {
-            if(active == root)
+            if(Active == Root)
             {
                 
                 return;
             }
-            active.unExecute();
-            undone.Add(active);
-            setActive(active.Parent);
+            Active.unExecute();
+            undone.Add(Active);
+            setActive(Active.Parent);
             
         }
 

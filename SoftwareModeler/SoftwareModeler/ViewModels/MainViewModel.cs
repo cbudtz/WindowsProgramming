@@ -90,7 +90,7 @@ namespace Area51.SoftwareModeler.ViewModels
         private Point initialShapePosition;
 
         //view access to observables
-        public ObservableCollection<BaseCommand> commands { get { return commandController.commands; } }
+        public ObservableCollection<BaseCommand> commands { get { return ShapeCollector.getI().commands; } }
         public ObservableCollection<Shape> classes { get { return ShapeCollector.getI().obsShapes; } }
         public ObservableCollection<Connection> connections { get { return ShapeCollector.getI().obsConnections; } }
 

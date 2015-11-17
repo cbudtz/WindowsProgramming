@@ -7,7 +7,7 @@
              xmlns:model="clr-namespace:Area51.SoftwareModeler.Models.Commands"
              mc:Ignorable="d" 
              d:DesignHeight="25"
-             Canvas.Left="{Binding BranchLayer}" Canvas.Top="{Binding Id}" Width="{Binding Width}" Height="{Binding Height}"
+             Canvas.Left="{Binding BranchLayer}" Canvas.Top="{Binding Id}"
              >
     <Grid
                                                                                                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
