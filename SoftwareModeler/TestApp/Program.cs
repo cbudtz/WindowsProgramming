@@ -38,13 +38,13 @@ namespace TestApp
             Console.WriteLine("ShapeCollector has shapes: " + ShapeCollector.getI().obsShapes.Count);
             Console.ReadKey();
             CommandTree commandTreeCopy = CommandTree.load();
-            Console.WriteLine("no cmd: " + (cTree.active.id + 1));
-            Console.WriteLine("active id: " + commandTreeCopy.active.id);
-            Console.WriteLine("root id: " + commandTreeCopy.root.id);
-            Console.WriteLine("root child id: " + commandTreeCopy.root.Children.ElementAt(0).id);
-            Console.WriteLine("root child child id: " + commandTreeCopy.root.Children.ElementAt(0).Children.ElementAt(0).id);
-            Console.WriteLine("active parent id: " + commandTreeCopy.active.Parent.id);
-            Console.WriteLine("active parent parent id: " + commandTreeCopy.active.Parent.Parent.id);
+            Console.WriteLine("no cmd: " + (cTree.active.Id + 1));
+            Console.WriteLine("active id: " + commandTreeCopy.active.Id);
+            Console.WriteLine("root id: " + commandTreeCopy.root.Id);
+            Console.WriteLine("root child id: " + commandTreeCopy.root.Children.ElementAt(0).Id);
+            Console.WriteLine("root child child id: " + commandTreeCopy.root.Children.ElementAt(0).Children.ElementAt(0).Id);
+            Console.WriteLine("active parent id: " + commandTreeCopy.active.Parent.Id);
+            Console.WriteLine("active parent parent id: " + commandTreeCopy.active.Parent.Parent.Id);
             Console.WriteLine("nextShapeID: " + Shape.nextId);
             Console.WriteLine("Shapes In shapeCollector: " + ShapeCollector.getI().obsShapes.Count);
 

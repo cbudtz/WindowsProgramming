@@ -215,6 +215,7 @@ namespace Area51.SoftwareModeler.ViewModels
         }
         public void MouseUpShape(MouseButtonEventArgs e)
         {
+            Console.WriteLine("commandscount: " + commands.Count);
             // The Shape is gotten from the mouse event.
             e.MouseDevice.Target.ReleaseMouseCapture();
             var shape = TargetShape(e);
@@ -254,6 +255,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MouseDownShape(MouseButtonEventArgs e)
         {
+            
             var shape = TargetShape(e);
             if (shape == null) return;
             // The mouse position relative to the target of the mouse event.
@@ -512,6 +514,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void test()
         {
+
+            commands.Add(new DummyCommand());
             Class TestClass1 = new Class("A Class", "", false, new Point(0, 0), Models.Visibility.Default);
             TestClass1.addAttribute("int", "something");
             TestClass1.addAttribute("String", "someAttribute");
