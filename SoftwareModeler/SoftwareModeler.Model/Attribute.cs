@@ -35,7 +35,18 @@ namespace Area51.SoftwareModeler.Models
 
         public string Name { get { return name; } set { name = value; } }
         public string Type { get { return type; } set { type = value; } }
-        public Visibility Visibility { get { return visibility; } set { visibility = value; } }
+
+        public Visibility Visibility
+        {
+            get
+            {
+                return visibility;
+            }
+            set
+            {
+                visibility = value;
+            }
+        }
 
         public override string ToString()
         {
