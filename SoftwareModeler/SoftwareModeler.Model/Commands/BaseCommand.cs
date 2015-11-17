@@ -26,7 +26,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         protected string parentstr = "hey";
         protected BaseCommand parent = null;
         protected List<BaseCommand> children = new List<BaseCommand>();
-        public int id;
+        public int Id { get; }
 
         //Getters and setters
         [XmlIgnore]
@@ -44,7 +44,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         }
         public BaseCommand()
         {
-            this.id = BaseCommand.getNextId();
+            this.Id = BaseCommand.getNextId();
         }
 
         public static int getNextId()

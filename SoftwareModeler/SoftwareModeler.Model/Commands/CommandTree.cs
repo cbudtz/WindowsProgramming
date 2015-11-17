@@ -8,10 +8,11 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
-    public class CommandTree : INotifyPropertyChanged
+    public class CommandTree : NotifyBase
     {
         public string Name;
         public BaseCommand root;
@@ -21,7 +22,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public ObservableCollection<BaseCommand> commands { get; set; } = new ObservableCollection<BaseCommand>();
 
         //TODO: implement
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
         public void addAndExecute(BaseCommand command)
         {
@@ -40,20 +41,22 @@ namespace Area51.SoftwareModeler.Models.Commands
                 setActive(command);
             }
             commands.Add(command);
+            NotifyPropertyChanged(() => commands);
+            
             foreach (BaseCommand baseCommand in commands)
             {
-                Console.WriteLine(baseCommand.id + baseCommand.color.ToString() + baseCommand.BranchLayer);
+                Console.WriteLine(baseCommand.Id + baseCommand.color.ToString() + baseCommand.BranchLayer);
             }
             //ececute new command
             active.execute();
             
         }
 
-        private void setActive(BaseCommand root)
+        private void setActive(BaseCommand node)
         {
             
             if (active !=null)active.color = Colors.Transparent;
-            active = root;
+            active = node;
             active.color = Colors.Aquamarine;
         }
 
@@ -92,7 +95,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             //Make sure that newly Added Shapes get a new ID
             Shape.nextId = restoredTree.NextShapeId;
             //Reestablishing parents and finding active node
-            restoredTree.setActive(CommandTree.reParseTree(restoredTree.root, restoredTree.active.id));
+            restoredTree.setActive(CommandTree.reParseTree(restoredTree.root, restoredTree.active.Id));
             //Moving diagram to active state
             restoredTree.reExecute();
 
@@ -123,7 +126,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             foreach (BaseCommand b in reExecuteList)
             {
                 b.execute();
-                Console.WriteLine("reExecuted " + b.id);
+                Console.WriteLine("reExecuted " + b.Id);
             }
 
 
@@ -133,7 +136,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             BaseCommand activeNode = null;
          
-            if(node.id == id)
+            if(node.Id == id)
             {
                 activeNode = node;
             }
