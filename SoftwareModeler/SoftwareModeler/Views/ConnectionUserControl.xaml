@@ -10,14 +10,18 @@
     <!-- The important thing to understand is that the DataContext of this UserControl is a 'Line' object, -->
     <!--  from the MainViewModels 'Lines' collection because this 'UserControl' is used by the ItemsCollection in the MainWindow, -->
     <!--  and that ItemsCollection is bound to the MainViewModels 'Lines' collection. -->
-
-    <Path Stroke="Black" StrokeThickness="3">
-        <Path.Data>
-            <PathGeometry>
-                <PathFigure StartPoint="{Binding StartPoint }">
-                    <PolyLineSegment Points="{Binding PointCollection}"/>
-                </PathFigure>
-            </PathGeometry>
-        </Path.Data>
-    </Path>
+    <Grid>
+        <Path Stroke="Black" StrokeThickness="2">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="{Binding StartPoint }">
+                        <PolyLineSegment Points="{Binding PointCollection}"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+        <Polygon Points="{Binding PolygonPoints}"
+    Stroke="Black" StrokeThickness="2"
+         Fill="Black" />
+    </Grid>
 </UserControl>

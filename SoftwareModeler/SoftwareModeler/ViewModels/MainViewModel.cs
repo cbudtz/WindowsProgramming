@@ -525,9 +525,17 @@ namespace Area51.SoftwareModeler.ViewModels
             TestClass2.addAttribute("int", "nothing");
             TestClass2.addAttribute("bool", "True");
             observables.obsShapes.Add(TestClass2);
+            Class TestClass3 = new Class("Another Class", "", false, new Point(100, 60), Models.Visibility.Default);
+            TestClass2.addAttribute("int", "nothing");
+            TestClass2.addAttribute("bool", "True");
+            observables.obsShapes.Add(TestClass3);
 
-            Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Aggregation);
-            //observables.obsConnections.Add(conn);
+            Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Association);
+            observables.obsConnections.Add(conn);
+            Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
+            Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
+            Connection conn2 = new Connection(TestClass2, "asd", TestClass3, "efg", ConnectionType.Association);
+            observables.obsConnections.Add(conn2);
             Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
             Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
         }

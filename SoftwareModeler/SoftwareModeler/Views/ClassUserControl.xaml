@@ -78,14 +78,16 @@
                 ItemsSource="{Binding Methods}"/>-->
             <DataGrid 
                 Grid.Row="1" 
+                IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding Attributes}" 
                 AutoGenerateColumns="False" 
                 BorderThickness="0" 
                 HeadersVisibility="None" GridLinesVisibility="None">
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn 
-                        ItemsSource="{Binding Source={StaticResource VisibilityEnum}, Mode=OneWay}" 
-                        SelectedItemBinding="{Binding Path= Visibility, Mode=TwoWay}" />
+                        ItemsSource="{Binding Source={StaticResource VisibilityEnum}, Mode=OneWay}"
+                        SelectedItemBinding="{Binding Path= Visibility, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                         <!--SelectedItemBinding="{Binding Visibility}" /> -->
                     <!--<DataGridTextColumn Binding="{Binding ElementName=txtValue, 
                                           Path=Text, 
                                           Converter={StaticResource VisibilityConverter}}" />-->

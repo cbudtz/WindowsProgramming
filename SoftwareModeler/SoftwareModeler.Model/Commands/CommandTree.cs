@@ -19,7 +19,8 @@ namespace Area51.SoftwareModeler.Models.Commands
         public BaseCommand Active { get; set; }
         public List<BaseCommand> undone { get; set; } = new List<BaseCommand>();
         public int NextShapeId { get; set; }
-        
+        public ObservableCollection<BaseCommand> Commands1 { get; set; } = ShapeCollector.getI().commands;
+
 
         //TODO: implement
         //public event PropertyChangedEventHandler PropertyChanged;
@@ -63,7 +64,8 @@ namespace Area51.SoftwareModeler.Models.Commands
         public void setActiveCommand(BaseCommand command)
         {
             //Update activeCommand
-            setActive(command);
+            BaseCommand newActiveNode = reParseTree(Root, command.Id);
+            setActive(newActiveNode);
             reExecute();
         }
 
