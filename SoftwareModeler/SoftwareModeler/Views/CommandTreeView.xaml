@@ -4,8 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
+             xmlns:ViewModel="clr-namespace:Area51.SoftwareModeler.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.DataContext>
+        <ViewModel:MainViewModel />
+    </UserControl.DataContext>
+    
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
         <Grid>
@@ -18,8 +24,7 @@
                     <GradientStop Color="LightGray" Offset="0.07"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <Label HorizontalAlignment="Center">Command Tree</Label>
-            
+            <ItemsControl ItemsSource="{Binding commands}"/>
         </Grid>
     </ScrollViewer>
 </UserControl>
