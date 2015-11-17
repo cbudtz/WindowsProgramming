@@ -15,9 +15,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        
             <Grid.Background>
                 <LinearGradientBrush StartPoint="0.5,0">
                     <GradientStop Color="White" Offset="0.9"/>

@@ -19,7 +19,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public BaseCommand Active { get; set; }
         public List<BaseCommand> undone { get; set; } = new List<BaseCommand>();
         public int NextShapeId { get; set; }
-        public ObservableCollection<BaseCommand> commands { get; set; } = new ObservableCollection<BaseCommand>();
+        
 
         //TODO: implement
         //public event PropertyChangedEventHandler PropertyChanged;
@@ -40,10 +40,10 @@ namespace Area51.SoftwareModeler.Models.Commands
                 Active.addChild(command);
                 setActive(command);
             }
-            commands.Add(command);
-            NotifyPropertyChanged(() => commands);
+            ShapeCollector.getI().commands.Add(command);
+            NotifyPropertyChanged(() => ShapeCollector.getI().commands);
             
-            foreach (BaseCommand baseCommand in commands)
+            foreach (BaseCommand baseCommand in ShapeCollector.getI().commands)
             {
                 Console.WriteLine(baseCommand.Id + baseCommand.color.ToString() + baseCommand.BranchLayer);
             }
