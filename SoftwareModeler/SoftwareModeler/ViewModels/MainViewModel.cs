@@ -96,7 +96,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         //Dynamic 
         private CommandTree commandController { get; set; }
-        private ShapeCollector observables = ShapeCollector.getI();
+        //private ShapeCollector observables = ShapeCollector.getI();
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -207,8 +207,8 @@ namespace Area51.SoftwareModeler.ViewModels
                         shape.Y = initialShapePosition.Y + (mousePosition.Y - initialMousePosition.Y);
 
                         // lambda expr. update all connections. first connections where end classRep is the moving classRep then where start classRep is moving classRep
-                        observables.obsConnections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
-                        observables.obsConnections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
+                        connections.Where(x => x.End.id == shape.id).ToList().ForEach(x => x.End = shape);
+                        connections.Where(x => x.Start.id == shape.id).ToList().ForEach(x => x.Start = shape);
                     }
                 }
             }
@@ -385,6 +385,7 @@ namespace Area51.SoftwareModeler.ViewModels
             {
                 ShapeCollector.getI().obsConnections.Clear();
                 ShapeCollector.getI().obsShapes.Clear();
+                ShapeCollector.getI().commands.Clear();
             }
         }
 
@@ -520,24 +521,24 @@ namespace Area51.SoftwareModeler.ViewModels
             TestClass1.addAttribute("String", "someAttribute");
             string[] parameters = { "string", "Int", "Bool" };
             TestClass1.addMethod(Models.Visibility.Private, "somemethod", parameters);
-            observables.obsShapes.Add(TestClass1);
+            //observables.obsShapes.Add(TestClass1);
             Class TestClass2 = new Class("Another Class", "", false, new Point(300, 320), Models.Visibility.Default);
             TestClass2.addAttribute("int", "nothing");
             TestClass2.addAttribute("bool", "True");
-            observables.obsShapes.Add(TestClass2);
+            //observables.obsShapes.Add(TestClass2);
             Class TestClass3 = new Class("Another Class", "", false, new Point(100, 60), Models.Visibility.Default);
             TestClass2.addAttribute("int", "nothing");
             TestClass2.addAttribute("bool", "True");
-            observables.obsShapes.Add(TestClass3);
+            //observables.obsShapes.Add(TestClass3);
 
-            Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Association);
-            observables.obsConnections.Add(conn);
-            Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
-            Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
-            Connection conn2 = new Connection(TestClass2, "asd", TestClass3, "efg", ConnectionType.Association);
-            observables.obsConnections.Add(conn2);
-            Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
-            Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
+            //Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Association);
+            //observables.obsConnections.Add(conn);
+            //Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
+            //Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
+            //Connection conn2 = new Connection(TestClass2, "asd", TestClass3, "efg", ConnectionType.Association);
+            //observables.obsConnections.Add(conn2);
+            //Console.WriteLine(TestClass1.CanvasCenterX + "," + TestClass1.CanvasCenterY);
+            //Console.WriteLine(TestClass2.CanvasCenterX + "," + TestClass2.CanvasCenterY);
         }
     }
 }

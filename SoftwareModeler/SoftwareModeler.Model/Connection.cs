@@ -159,7 +159,7 @@ namespace Area51.SoftwareModeler.Models
             pointCollection.RemoveAt(pointCollection.Count - 1);
             Point p = new Point();
             p.X = endPoint.X;
-            p.Y = (endPoint.Y - (dm * 30));
+            p.Y = (endPoint.Y - (dm * 15));
             PointCollection.Add(p);
             Polygon poly = new Polygon();
             poly.Stroke = Brushes.Black;
@@ -167,14 +167,14 @@ namespace Area51.SoftwareModeler.Models
             polygonPoints = new PointCollection();
             polygonPoints.Add(p);
             p.X = endPoint.X - 5;
-            p.Y = endPoint.Y - (dm * 15);
+            p.Y = endPoint.Y - (dm * 7.5);
             polygonPoints.Add(p);
             polygonPoints.Add(endPoint);
             p.X = endPoint.X + 5;
-            p.Y = endPoint.Y - (dm * 15);
+            p.Y = endPoint.Y - (dm * 7.5);
             polygonPoints.Add(p);
             p.X = endPoint.X;
-            p.Y = (endPoint.Y - (dm * 30));
+            p.Y = (endPoint.Y - (dm * 15));
             polygonPoints.Add(p);
 
             poly.Points = polygonPoints;
