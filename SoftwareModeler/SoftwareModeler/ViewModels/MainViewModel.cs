@@ -517,10 +517,10 @@ namespace Area51.SoftwareModeler.ViewModels
 
             commands.Add(new DummyCommand());
             Class TestClass1 = new Class("A Class", "", false, new Point(0, 0), Models.Visibility.Default);
-            TestClass1.addAttribute("int", "something");
+            TestClass1.addAttribute(Models.Visibility.Private, "int", "something");
             TestClass1.addAttribute("String", "someAttribute");
             string[] parameters = { "string", "Int", "Bool" };
-            TestClass1.addMethod(Models.Visibility.Public, "somemethod", parameters);
+            TestClass1.addMethod(Models.Visibility.Private, "somemethod", parameters);
             observables.obsShapes.Add(TestClass1);
             Class TestClass2 = new Class("Another Class", "", false, new Point(300, 320), Models.Visibility.Default);
             TestClass2.addAttribute("int", "nothing");
