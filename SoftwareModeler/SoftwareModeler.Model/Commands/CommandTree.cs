@@ -44,10 +44,10 @@ namespace Area51.SoftwareModeler.Models.Commands
             ShapeCollector.getI().commands.Add(command);
             NotifyPropertyChanged(() => ShapeCollector.getI().commands);
             
-            foreach (BaseCommand baseCommand in ShapeCollector.getI().commands)
-            {
-                Console.WriteLine(baseCommand.Id + baseCommand.color.ToString() + baseCommand.BranchLayer);
-            }
+     //       foreach (BaseCommand baseCommand in ShapeCollector.getI().commands)
+       //     {
+         //       Console.WriteLine(baseCommand.Id + baseCommand.color.ToString() + baseCommand.BranchLayer);
+           // }
             //ececute new command
             Active.execute();
             
