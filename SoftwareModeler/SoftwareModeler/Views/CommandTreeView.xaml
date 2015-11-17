@@ -19,6 +19,7 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <Label HorizontalAlignment="Center">Command Tree</Label>
+            
         </Grid>
     </ScrollViewer>
 </UserControl>

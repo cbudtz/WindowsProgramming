@@ -97,6 +97,9 @@
     <Compile Include="Views\ClassUserControl.xaml.cs">
       <DependentUpon>ClassUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CommandNodeView.xaml.cs">
+      <DependentUpon>CommandNodeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CommandTreeView.xaml.cs">
       <DependentUpon>CommandTreeView.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\CommandNodeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CommandTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
