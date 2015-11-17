@@ -215,7 +215,6 @@ namespace Area51.SoftwareModeler.ViewModels
         }
         public void MouseUpShape(MouseButtonEventArgs e)
         {
-            Console.WriteLine("commandscount: " + commands.Count);
             // The Shape is gotten from the mouse event.
             e.MouseDevice.Target.ReleaseMouseCapture();
             var shape = TargetShape(e);
