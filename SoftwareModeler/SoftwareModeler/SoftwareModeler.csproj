@@ -109,6 +109,8 @@
     <Compile Include="Views\MenuUserControl.xaml.cs">
       <DependentUpon>MenuUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ColorToBrushConverter.cs" />
+    <Compile Include="Views\NodeCoordinateConverter.cs" />
     <Compile Include="Views\ToolboxUserControl.xaml.cs">
       <DependentUpon>ToolboxUserControl.xaml</DependentUpon>
     </Compile>

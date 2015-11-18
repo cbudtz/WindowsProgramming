@@ -22,7 +22,7 @@
                     <GradientStop Color="LightGray" Offset="0.07"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <ItemsControl ItemsSource="{Binding commands}"/>
+            <ItemsControl ItemsSource="{Binding commands}" Margin= "{Binding commands, Converter={StaticResource nodeCoordinateConverter}}"/>
         </Grid>
     </ScrollViewer>
 </UserControl>

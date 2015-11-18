@@ -21,7 +21,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         //Static
         public static int nextid = 0;
         public int BranchLayer { get; set; }
-        public Color color = Colors.Transparent;
+        public Color Color { get ; set; }= Colors.Azure;
         //Fields
         protected string parentstr = "hey";
         protected BaseCommand parent = null;

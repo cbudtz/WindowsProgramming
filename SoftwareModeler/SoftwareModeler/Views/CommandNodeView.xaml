@@ -7,7 +7,7 @@
              xmlns:model="clr-namespace:Area51.SoftwareModeler.Models.Commands"
              mc:Ignorable="d" 
              d:DesignHeight="25"
-             Canvas.Left="{Binding BranchLayer}" Canvas.Top="{Binding Id}"
+             Canvas.Left="{Binding BranchLayer, Converter={StaticResource nodeCoordinateConverter}}" Canvas.Top="{Binding Id, Converter={StaticResource nodeCoordinateConverter}}"
              >
     <Grid
                                                                                                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
@@ -19,8 +19,8 @@
             <ColumnDefinition Width="30"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Ellipse Grid.Row="0" Grid.Column="0" Width="20" Height="20" Stroke="Aqua" StrokeThickness="3"/>
-        <Border Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="Aqua" CornerRadius="4" >
+        <Ellipse Grid.Row="0" Grid.Column="0" Width="20" Height="20" Stroke="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" StrokeThickness="3"/>
+        <Border Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" CornerRadius="4" >
             <TextBlock Background="LightGray"  Padding="2" Height="20" HorizontalAlignment="Left" Text="{Binding Path=Id}"></TextBlock>
         </Border>
     </Grid>
