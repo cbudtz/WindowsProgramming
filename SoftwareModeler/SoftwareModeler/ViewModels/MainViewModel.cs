@@ -364,7 +364,7 @@ namespace Area51.SoftwareModeler.ViewModels
         private void StartNewProject()
         {
             bool clear = false;
-            if (ShapeCollector.getI().obsConnections.Any() || ShapeCollector.getI().obsShapes.Any())
+            if (ShapeCollector.getI().obsConnections.Any() || ShapeCollector.getI().obsShapes.Any() || commands.Any())
             {
                 MessageBoxResult res = MessageBox.Show("You have already a diagram in progress. Do you want to save first?", "Save current diagram", MessageBoxButton.YesNoCancel);
                 if (res == MessageBoxResult.Yes)
@@ -383,6 +383,7 @@ namespace Area51.SoftwareModeler.ViewModels
             }
             if (clear)
             {
+                commandController = new CommandTree();
                 ShapeCollector.getI().obsConnections.Clear();
                 ShapeCollector.getI().obsShapes.Clear();
                 ShapeCollector.getI().commands.Clear();
