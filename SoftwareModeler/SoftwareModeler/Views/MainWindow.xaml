@@ -17,18 +17,8 @@
 
     <DockPanel >
         <Views:ToolboxUserControl DockPanel.Dock="Left"/>
-        <Views:CommandTreeView DockPanel.Dock="Right" Width="300" HorizontalAlignment="Right"/>
-        <Canvas IsHitTestVisible="True" Background="White">
-            <ItemsControl ItemsSource="{Binding connections}"/>
-            <ItemsControl ItemsSource="{Binding classes}"/>
-            <i:Interaction.Triggers>
-                
-                <i:EventTrigger EventName="MouseUp">
-                    <cmd:EventToCommand Command="{Binding Path=MouseClickCommand}" PassEventArgsToCommand="True"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </Canvas>
-        
+        <Views:CommandTreeView DockPanel.Dock="Right" Width="300" HorizontalAlignment="Right"/>    
+        <Views:DiagramDrawingWindowUserControl HorizontalAlignment="Stretch"/>
     </DockPanel>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="KeyDown">

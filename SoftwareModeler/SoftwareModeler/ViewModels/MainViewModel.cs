@@ -499,6 +499,7 @@ namespace Area51.SoftwareModeler.ViewModels
         {
             // Here the visual element that the mouse is captured by is retrieved.
             var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            if (shapeVisualElement == null) return null;
             // From the shapes visual element, the Shape object which is the DataContext is retrieved.
             return shapeVisualElement.DataContext as Shape;
         }
