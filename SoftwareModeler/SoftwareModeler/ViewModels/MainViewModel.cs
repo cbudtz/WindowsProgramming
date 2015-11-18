@@ -192,7 +192,9 @@ namespace Area51.SoftwareModeler.ViewModels
                 var mousePosition = RelativeMousePosition(e);
                 if ((isAddingAggregation || isAddingAssociation || isAddingComposition || isAddingComment) && newConnection != null)
                 {
+                    
                     newConnection.EndPoint = mousePosition;
+                    newConnection.updatePoints();
                 }
                 else
                 {
@@ -269,7 +271,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 ConnectionType type = ConnectionType.Aggregation;
                 if (isAddingComposition) type = ConnectionType.Composition;
                 else if (isAddingAssociation) type = ConnectionType.Association;
-                newConnection = new Connection(shape, "", shape, "", type);
+                newConnection = new Connection(shape, "", null, "", type);
                 newConnection.EndPoint = mousePosition;
                 connections.Add(newConnection);
             }
