@@ -77,20 +77,25 @@ namespace Area51.SoftwareModeler.Models
         {
             public enum direction {LEFT,RIGHT,UP,DOWN };
         }
-
         public void updatePoints()
+        {
+            updatePoints(null);
+        }
+        public void updatePoints(Point? tempEndpoint)
         {
             
             pointCollection = new PointCollection();
             PolygonPoints = null;
             if (End == null)
             {
-                //StartPoint = new Point(Start.CanvasCenterX, Start.CanvasCenterY);
-                //pointCollection.Add(StartPoint);
+                // drawing temporary line while dragging
+                if (tempEndpoint == null) return;
+                StartPoint = new Point(Start.CanvasCenterX, Start.CanvasCenterY);
+                pointCollection.Add(StartPoint);
 
-                //pointCollection.Add(EndPoint);
-                //NotifyPropertyChanged(() => StartPoint);
-                //NotifyPropertyChanged(() => PointCollection);
+                pointCollection.Add((Point) tempEndpoint);
+                NotifyPropertyChanged(() => StartPoint);
+                NotifyPropertyChanged(() => PointCollection);
                 return;
             }
             
@@ -107,6 +112,7 @@ namespace Area51.SoftwareModeler.Models
             double dist = -1;
             int sInd = -1;
             int eInd = -1;
+            // finds index of startPoint and endPoint. all possible combinations are created in sP and eP arrays above
             for (int i = 0; i < sP.Length; i++)
             {
                 for (int j = 0; j < eP.Length; j++)
@@ -121,12 +127,18 @@ namespace Area51.SoftwareModeler.Models
                 }
             }
             /*
-            01,02,03,10,12,13,20,21,23,30,31,32
-    */      Point sPoint = sP[sInd];
-            Point ePoint = eP[eInd];
+            startpoint index,endpoint index
+            Combinations:       right->left     0,1      right->bottom   0,2
+                                right->top      0,3      left->right     1,0
+                                left->bottom    1,2      left->top       1,3
+                                bottom->right   2,0      bottom->left    2,1
+                                bottom->top     2,3      top->right      3,0
+                                top->left       3,1      top->bottom     3,2
+    */
 
-            StartPoint = sPoint;
-            EndPoint = ePoint;
+            StartPoint = sP[sInd];
+            EndPoint = eP[eInd];
+
             switch (sInd)
             {
                 case 0:
@@ -135,15 +147,18 @@ namespace Area51.SoftwareModeler.Models
                     {
                         case 0:
                         case 1:
-                            p1.X = (ePoint.X + sPoint.X) / 2;
-                            p1.Y = sPoint.Y;
+                            // right/left -> left/right. right->left is same as left->right. 
+                            // left->left and right->right is not possible
+                            p1.X = (EndPoint.X + StartPoint.X) / 2;
+                            p1.Y = StartPoint.Y;
                             p2.X = p1.X;
-                            p2.Y = ePoint.Y;
+                            p2.Y = EndPoint.Y;
                             break;
                         case 2:
                         case 3:
-                            p1.X = ePoint.X;
-                            p1.Y = sPoint.Y;
+                            //right/left ->bottom/top. 4 possible combinations. all the same.
+                            p1.X = EndPoint.X;
+                            p1.Y = StartPoint.Y;
                             p2 = p1;
                             break;
                         default: break;
@@ -155,15 +170,17 @@ namespace Area51.SoftwareModeler.Models
                     {
                         case 0:
                         case 1:
-                            p1.X = ePoint.X;
-                            p1.Y = sPoint.Y;
+                            // bottom/top -> right->left. 4 possible combinations. all work the same.
+                            p1.X = EndPoint.X;
+                            p1.Y = StartPoint.Y;
                             p2 = p1;
                             break;
                         case 2:
                         case 3:
-                            p1.X = sPoint.X;
-                            p1.Y = (sPoint.Y + ePoint.Y) / 2;
-                            p2.X = ePoint.X;
+                            // bottom/top -> top/bottom. 2 possible combinations. 
+                            p1.X = StartPoint.X;
+                            p1.Y = (StartPoint.Y + EndPoint.Y) / 2;
+                            p2.X = EndPoint.X;
                             p2.Y = p1.Y;
                             break;
                         default: break;
@@ -194,7 +211,7 @@ namespace Area51.SoftwareModeler.Models
                     break;
                 default:
                     //whats wrong with you? this is off limits!
-                    throw new ArgumentOutOfRangeException("whats wrong with you!? Thats not part of the enum");
+                    throw new ArgumentOutOfRangeException("should never happen!? Thats not part of the enum. type was: " + type);
             }
 
             NotifyPropertyChanged(() => StartPoint);

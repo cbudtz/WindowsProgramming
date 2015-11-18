@@ -192,9 +192,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 var mousePosition = RelativeMousePosition(e);
                 if ((isAddingAggregation || isAddingAssociation || isAddingComposition || isAddingComment) && newConnection != null)
                 {
-                    
-                    newConnection.EndPoint = mousePosition;
-                    newConnection.updatePoints();
+                    newConnection.updatePoints(mousePosition);
                 }
                 else
                 {
