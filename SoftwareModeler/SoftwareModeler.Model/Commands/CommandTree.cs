@@ -21,6 +21,11 @@ namespace Area51.SoftwareModeler.Models.Commands
         public int NextShapeId { get; set; }
         public ObservableCollection<BaseCommand> Commands1 { get; set; } = ShapeCollector.getI().commands;
 
+        public CommandTree()
+        {
+            BaseCommand.nextid = 0;
+        }
+
 
         //TODO: implement
         //public event PropertyChangedEventHandler PropertyChanged;

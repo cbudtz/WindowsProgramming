@@ -24,7 +24,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
-            throw new NotImplementedException();
+            ShapeCollector.getI().obsConnections.Remove(conn);
         }
     }
 }
