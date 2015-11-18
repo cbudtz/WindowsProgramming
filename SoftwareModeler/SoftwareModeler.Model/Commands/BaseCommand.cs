@@ -16,12 +16,13 @@ namespace Area51.SoftwareModeler.Models.Commands
     [XmlInclude(typeof(DummyCommand))]
     [XmlInclude(typeof(MoveShapeCommand))]
     [XmlInclude(typeof(ResizeShapeCommand))]
-    public abstract class BaseCommand
+    public abstract class BaseCommand : NotifyBase
     {
         //Static
         public static int nextid = 0;
         public int BranchLayer { get; set; }
-        public Color Color { get ; set; }= Colors.Azure;
+        public Color color = Colors.Azure;
+        public Color Color { get { return color; } set { color = value; NotifyPropertyChanged(); } }
         //Fields
         protected string parentstr = "hey";
         protected BaseCommand parent = null;
