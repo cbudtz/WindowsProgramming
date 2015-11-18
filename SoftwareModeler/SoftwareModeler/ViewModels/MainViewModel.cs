@@ -229,7 +229,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
             if ((isAddingAggregation || isAddingAssociation || isAddingComposition) && newConnection != null)
             {
-                if (shape == null)
+                if (shape == null || newConnection.Start.Equals(shape))
                 {
                     connections.Remove(newConnection);
                 }
