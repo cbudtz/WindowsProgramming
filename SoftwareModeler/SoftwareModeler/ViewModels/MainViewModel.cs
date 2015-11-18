@@ -56,6 +56,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public ICommand MouseDownShapeResizeCommand { get; }
         public ICommand MouseUpShapeResizeCommand { get; }
+
+        public ICommand CherryPickCommand { get; }
         
         // connections
         public ICommand MouseDownConnectionCommand { get; }
@@ -113,6 +115,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
             MouseDownShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownResizeShape);
             MouseUpShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpResizeShape);
+
+            CherryPickCommand = new RelayCommand<MouseEventArgs>(CherryPick);
 
             //TODO implement these
             //MouseDownConnectionCommand =
@@ -328,6 +332,13 @@ namespace Area51.SoftwareModeler.ViewModels
             e.MouseDevice.Target.ReleaseMouseCapture();
         }
 
+        public void CherryPick(MouseEventArgs e)
+        {
+            var cmd = TargetCommand(e);
+            Console.WriteLine(cmd.Id);
+            commandController.setActiveCommand(cmd);
+        }
+
         public void MouseClicked(MouseEventArgs e)
         {
             
@@ -477,7 +488,13 @@ namespace Area51.SoftwareModeler.ViewModels
             isAddingComment = true;
         }
 
-
+        private BaseCommand TargetCommand(MouseEventArgs e)
+        {
+            // Here the visual element that the mouse is captured by is retrieved.
+            var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            // From the shapes visual element, the Shape object which is the DataContext is retrieved.
+            return shapeVisualElement.DataContext as BaseCommand;
+        }
         private Shape TargetShape(MouseEventArgs e)
         {
             // Here the visual element that the mouse is captured by is retrieved.
