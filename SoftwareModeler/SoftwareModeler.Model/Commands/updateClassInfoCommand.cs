@@ -15,15 +15,16 @@ namespace Area51.SoftwareModeler.Models.Commands
         //Class reference
         public int? classID;
 
-        //Update parameters
+        //Update parameters - new values
         public string className { get; set; }
         public string oldclassName { get; set; }
-
-        public string stereoType { get; set; }
-        public string oldStereoType { get; set; }
         public bool? isAbstract { get; set; }
-        public bool oldAbstract { get; set; }
         public Visibility? visibility { get; set; }
+
+        ///Previous values
+        public string stereoType { get; set; }
+        public string oldStereoType { get; set; }      
+        public bool oldAbstract { get; set; }     
         public Visibility OldVisibility { get; set; }
 
         public UpdateClassInfoCommand()
