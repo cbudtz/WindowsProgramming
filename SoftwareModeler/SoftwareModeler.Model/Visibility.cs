@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Data;
 using Area51.SoftwareModeler.Helpers;
+using Area51.SoftwareModeler.Models;
 
 namespace Area51.SoftwareModeler.Models
 
@@ -30,36 +31,16 @@ namespace Area51.SoftwareModeler.Models
                 System.Globalization.CultureInfo culture)
         {
 
-            Console.WriteLine("Convert:"+value.ToString());
+            //Console.WriteLine("Convert:"+value.ToString());
             return HelperFunctions.GetDescription((Visibility)value);
-            //return HelperFunctions.GetEnumFromDescription(value.ToString(), Visibility.Default);
-            //switch (value.ToString().ToLower())
-            //{
-            //    case "yes":
-            //        return true;
-            //    case "no":
-            //        return false;
 
-            //    default:
-            //        return Binding.DoNothing;
-            //}
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,
                 System.Globalization.CultureInfo culture)
         {
-            Console.WriteLine("ConvertBack:" + value.ToString());
-            //return HelperFunctions.GetDescription((Visibility) value);
+            //Console.WriteLine("ConvertBack:" + value.ToString());
             return HelperFunctions.GetEnumFromDescription(value.ToString(), Visibility.Default);
-
-            //if (value is bool)
-            //{
-            //    if ((bool)value == true)
-            //        return "yes";
-            //    else
-            //        return "no";
-            //}
-            //return "no";
         }
     }
 
@@ -71,8 +52,7 @@ namespace Area51.SoftwareModeler.Helpers
 {
     public static class HelperFunctions
     {
-        public static string GetDescription<T>(this T enumerationValue)
-        where T : struct
+        public static string GetDescription(Enum enumerationValue)
         {
             Type type = enumerationValue.GetType();
             if (!type.IsEnum)
@@ -100,13 +80,28 @@ namespace Area51.SoftwareModeler.Helpers
 
         public static Array GetDescriptions(Type enumType)
         {
-            String[] myArray = new String[4];
-            myArray[0] = "+";
-            myArray[1] = "";
-            myArray[2] = "#";
-            myArray[3] = "-";
+            //dirty fix
+            String[] enumDescriptions = new String[4];
+            enumDescriptions[0] = "+";
+            enumDescriptions[1] = "";
+            enumDescriptions[2] = "#";
+            enumDescriptions[3] = "-";
 
-            return myArray;
+            return enumDescriptions;
+
+            //work in progress
+            ////Enum[] enumValues = (Enum[])Array.CreateInstance(enumType, System.Enum.GetValues(enumType).Length);
+            //String[] enumValues = new String[System.Enum.GetValues(enumType).Length];
+
+            ////Array[] enumValues = (enumType.GetElementType()[])System.Enum.GetValues(enumType);
+            //String[] enumDescriptions = new String[enumValues.Length];
+            //for (int i=0;i<enumValues.Length;i++)
+            //{
+            //    enumDescriptions[i] = HelperFunctions.GetDescription(System.Enum.Parse(enumValues[i]));
+            //}
+
+            //String[] enumDescriptions = new String[System.Enum.GetValues(enumType).Length];
+
             //Type type = enumerationValue.GetType();
             //if (!type.IsEnum)
             //{

@@ -33,7 +33,19 @@ namespace Area51.SoftwareModeler.Models
             throw new NotImplementedException();
         }
 
-        public string Name { get { return name; } set { name = value; } }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                //Console.WriteLine("Attributename:"+value.ToString());
+            }
+        }
+
         public string Type { get { return type; } set { type = value; } }
 
         public Visibility Visibility

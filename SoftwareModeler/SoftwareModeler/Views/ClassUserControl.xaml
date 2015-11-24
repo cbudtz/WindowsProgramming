@@ -101,7 +101,7 @@
                                           Path=Text, 
                                           Converter={StaticResource YesNoToBooleanConverter}}"
                     -->
-                    <DataGridTextColumn Binding="{Binding Name}" />
+                    <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
                 </DataGrid.Columns>
             </DataGrid>
             <Rectangle Grid.Row="2" Width="Auto" StrokeThickness="1"/>
