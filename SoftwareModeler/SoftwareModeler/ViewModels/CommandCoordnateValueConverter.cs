@@ -8,9 +8,9 @@ using System.Windows.Data;
 
 namespace Area51.SoftwareModeler.ViewModels
 {
-    class CommandCoordnateValueConverter : IValueConverter
+    public class CommandCoordnateValueConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
