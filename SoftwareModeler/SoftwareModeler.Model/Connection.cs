@@ -14,21 +14,17 @@ namespace Area51.SoftwareModeler.Models
     {
         //Unique ID
         public static int nextID = 0;
-        [XmlIgnore]
-        private Shape startShape;
         //TODO: Clean up
         public int? startShapeID;
-        public Shape Start { get { return startShape; } set { startShape = value; updatePoints(); } }
+        public Shape Start { get { return ShapeCollector.getI().getShapeByID(startShapeID); } set { startShapeID = value.id; updatePoints(); } }
         private string startMultiplicity;
         public string StartMultiplicity { get { return startMultiplicity; } set { startMultiplicity = value; } }
         private string endMultiplicity;
         public string EndMultiplicity { get { return endMultiplicity; } set { endMultiplicity = value; } }
-        [XmlIgnore]
-        private Shape endShape;
 
         public int? endShapeID;
 
-        public Shape End { get { return endShape; } set { endShape = value; updatePoints(); } }
+        public Shape End { get { return ShapeCollector.getI().getShapeByID(endShapeID); } set { endShapeID = value.id; updatePoints(); } }
         private Point startPoint;
         public Point StartPoint { get { return startPoint; } set { startPoint = value; } }
         private Point p1;
@@ -44,24 +40,20 @@ namespace Area51.SoftwareModeler.Models
 
         public ConnectionType type;
         //Unique identifyer
-        private int connectionID;
+        public int connectionID { get; set; }
 
         public Connection()
         {
             //Deserialization Constructor - Shapes must be deserialized first!
-            startShape = ShapeCollector.getI().getShapeByID(startShapeID);
-            endShape = ShapeCollector.getI().getShapeByID(endShapeID);
         }
 
         public Connection(Shape _start, string _startMultiplicity, Shape _end, string _endMultiplicity, ConnectionType _type)
         {
             this.connectionID = nextID++;
-            startShape = _start;
-            startShapeID = startShape.id; //Saving ID for serialization!
+            startShapeID = _start.id; //Saving ID for serialization!
 
             startMultiplicity = _startMultiplicity;
-            endShape = _end;
-            endShapeID = endShape == null ? -1 : endShape.id; //Saving ID for serialization
+            if (_end !=null) endShapeID = _end.id; //Saving ID for serialization
             endMultiplicity = _endMultiplicity;
             type = _type;
 
