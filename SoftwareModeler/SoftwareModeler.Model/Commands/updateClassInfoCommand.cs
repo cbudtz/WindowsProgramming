@@ -13,9 +13,6 @@ namespace Area51.SoftwareModeler.Models.Commands
     public class UpdateClassInfoCommand : BaseCommand
     {
         //Class reference
-        [XmlIgnore]
-        public Class classToUpdate;
-
         public int? classID;
 
         //Update parameters
@@ -32,7 +29,6 @@ namespace Area51.SoftwareModeler.Models.Commands
         public UpdateClassInfoCommand()
         {
             //Deserialization constructor
-            classToUpdate = ShapeCollector.getI().getShapeByID(classID) as Class;
         }
 
         /// <summary>
@@ -47,7 +43,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public UpdateClassInfoCommand(Class classToUpdate, string className, string stereoType, bool? isAbstract, Visibility? visibility)
         {
             //ClassInstance
-            this.classToUpdate = classToUpdate;
+            this.classID = classToUpdate.id;
             this.oldclassName = classToUpdate.name;
             this.oldStereoType = classToUpdate.StereoType;
             this.oldAbstract = classToUpdate.IsAbstract;
@@ -62,6 +58,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
+            Class classToUpdate = ShapeCollector.getI().getShapeByID(classID) as Class;
             if (className != null) classToUpdate.name = className;
             if (stereoType != null) classToUpdate.StereoType = stereoType;
             if (isAbstract != null) classToUpdate.IsAbstract = isAbstract.Value;
@@ -70,6 +67,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
+            Class classToUpdate = ShapeCollector.getI().getShapeByID(classID) as Class;
             classToUpdate.name = oldclassName;
             classToUpdate.StereoType = oldStereoType;
             classToUpdate.IsAbstract = oldAbstract;
