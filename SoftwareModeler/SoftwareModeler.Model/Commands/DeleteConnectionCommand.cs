@@ -29,7 +29,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
-            connections.Add(ConnectionToDelete);
+            ShapeCollector.getI().obsConnections.Add(ConnectionToDelete);
         }
     }
 }
