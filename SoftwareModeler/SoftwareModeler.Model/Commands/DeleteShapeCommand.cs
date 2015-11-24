@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
-    class DeleteShapeCommand : BaseCommand
+    public class DeleteShapeCommand : BaseCommand
     {
         public int? shapeID;
         private List<Connection> connectionsToDelete = new List<Connection>();

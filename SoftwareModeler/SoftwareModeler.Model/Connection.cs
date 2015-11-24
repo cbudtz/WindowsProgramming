@@ -16,6 +16,7 @@ namespace Area51.SoftwareModeler.Models
         public static int nextID = 0;
         public int? startShapeID;
         public Shape Start { get { return ShapeCollector.getI().getShapeByID(startShapeID); } set { startShapeID = value.id; updatePoints(); } }
+        public Shape StartTemp { get; set; }
         //private string startMultiplicity;
         public string StartMultiplicity { get;  set ;  }
         //private string endMultiplicity;
@@ -24,6 +25,7 @@ namespace Area51.SoftwareModeler.Models
         public int? endShapeID;
 
         public Shape End { get { return ShapeCollector.getI().getShapeByID(endShapeID); } set { endShapeID = value.id; updatePoints(); } }
+        public Shape EndTemp { get; set; }
         private Point startPoint;
         public Point StartPoint { get { return startPoint; } set { startPoint = value; } }
         private Point p1;
@@ -89,16 +91,18 @@ namespace Area51.SoftwareModeler.Models
                 NotifyPropertyChanged(() => PointCollection);
                 return;
             }
+            if (StartTemp == null) StartTemp = Start;
+            if (EndTemp == null) EndTemp = End;
             
 
-            Point[] sP = new Point[] {  new Point(Start.CanvasCenterX + Start.Width / 2, Start.CanvasCenterY),  //0 right
-                                        new Point(Start.CanvasCenterX - Start.Width / 2, Start.CanvasCenterY),  //1 left
-                                        new Point(Start.CanvasCenterX, Start.CanvasCenterY + Start.Height/2),   //2 bottom
-                                        new Point(Start.CanvasCenterX, Start.CanvasCenterY - Start.Height/2) }; //3 top
-            Point[] eP = new Point[] {  new Point(End.CanvasCenterX + End.Width / 2, End.CanvasCenterY),        //0 right
-                                        new Point(End.CanvasCenterX - End.Width / 2, End.CanvasCenterY),        //1 left
-                                        new Point(End.CanvasCenterX, End.CanvasCenterY + End.Height / 2),       //2 bottom
-                                        new Point(End.CanvasCenterX, End.CanvasCenterY - End.Height / 2)        //3 top
+            Point[] sP = new Point[] {  new Point(StartTemp.CanvasCenterX + StartTemp.Width / 2, StartTemp.CanvasCenterY),  //0 right
+                                        new Point(StartTemp.CanvasCenterX - StartTemp.Width / 2, StartTemp.CanvasCenterY),  //1 left
+                                        new Point(StartTemp.CanvasCenterX, StartTemp.CanvasCenterY + StartTemp.Height/2),   //2 bottom
+                                        new Point(StartTemp.CanvasCenterX, StartTemp.CanvasCenterY - StartTemp.Height/2) }; //3 top
+            Point[] eP = new Point[] {  new Point(EndTemp.CanvasCenterX + EndTemp.Width / 2, EndTemp.CanvasCenterY),        //0 right
+                                        new Point(EndTemp.CanvasCenterX - EndTemp.Width / 2, EndTemp.CanvasCenterY),        //1 left
+                                        new Point(EndTemp.CanvasCenterX, EndTemp.CanvasCenterY + EndTemp.Height / 2),       //2 bottom
+                                        new Point(EndTemp.CanvasCenterX, EndTemp.CanvasCenterY - EndTemp.Height / 2)        //3 top
             };
             double dist = -1;
             int sInd = -1;
