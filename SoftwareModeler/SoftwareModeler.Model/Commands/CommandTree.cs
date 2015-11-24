@@ -100,8 +100,8 @@ namespace Area51.SoftwareModeler.Models.Commands
                 restoredTree = serializer.Deserialize(reader) as CommandTree;
             //Make sure that newly Added Shapes get a new ID
             Shape.nextId = restoredTree.NextShapeId;
-            Console.WriteLine("Active node:"+ restoredTree.Active.Id);
-            Console.WriteLine(restoredTree.Root);
+            Console.WriteLine("Load: Active node:"+ restoredTree.Active.Id);
+            Console.WriteLine("Load: RootNode: " + restoredTree.Root);
             //Reestablishing parents and finding active node
             restoredTree.setActive(CommandTree.reParseTree(restoredTree.Root, restoredTree.Active.Id));
             //Moving diagram to active state
@@ -163,7 +163,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
                 }
             }
-            Console.WriteLine(activeNode);
+            Console.WriteLine("ReparseTree - Found activeNode: " + activeNode);
             return activeNode;
             
         }
