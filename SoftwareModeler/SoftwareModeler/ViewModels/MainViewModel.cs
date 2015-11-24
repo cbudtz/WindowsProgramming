@@ -365,6 +365,14 @@ namespace Area51.SoftwareModeler.ViewModels
             commandController.setActiveCommand(cmd);
         }
 
+        public int getMaxBranchLayer()
+        {
+            int max = 0;
+            foreach(BaseCommand b in commands){
+                if (b.BranchLayer > max) max = b.BranchLayer;
+            }
+            return max;
+        }
         public void MouseClicked(MouseEventArgs e)
         {
             
