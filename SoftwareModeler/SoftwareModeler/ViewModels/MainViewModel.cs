@@ -56,6 +56,8 @@ namespace Area51.SoftwareModeler.ViewModels
         private Connection newConnection = null;
 
         public string Text { get; set; }
+
+        public int MaxBranchLayer{ get{return getMaxBranchLayer();}}
         #region command variables
         // Commands that the UI can be bound to.
         // Shapes
@@ -365,7 +367,7 @@ namespace Area51.SoftwareModeler.ViewModels
             commandController.setActiveCommand(cmd);
         }
 
-        public int getMaxBranchLayer()
+        private int getMaxBranchLayer()
         {
             int max = 0;
             foreach(BaseCommand b in commands){
