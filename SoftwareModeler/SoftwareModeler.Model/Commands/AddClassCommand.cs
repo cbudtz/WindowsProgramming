@@ -28,7 +28,6 @@ namespace Area51.SoftwareModeler.Models.Commands
         public AddClassCommand()
         {
             //When deserializing, no shape is attached, until excecuted...
-            ShapeId = null;
         }
         public AddClassCommand(string className, string stereoType, bool isAbstract,Point anchorPoint, Visibility visibility)
         {
