@@ -50,9 +50,13 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
-            //Check if deserialized and aquire shape
+            //Aquire shape
             Shape shapeToDelete = ShapeCollector.getI().getShapeByID(shapeID);
-            connectionsToDelete = ShapeCollector.getI().obsConnections.Where(x => (shapeToDelete.X == x.End.X && shapeToDelete.Y == x.End.Y) || (shapeToDelete.X == x.Start.X && shapeToDelete.Y == x.Start.Y)).ToList(); //TODO check if it works
+            connectionsToDelete =
+                ShapeCollector.getI()
+                    .obsConnections.Where(x => x.startShapeID == shapeID || x.endShapeID == shapeID)
+                    .ToList();
+
             foreach (Connection connection in connectionsToDelete)
             {
                 ShapeCollector.getI().obsConnections.Remove(connection);
