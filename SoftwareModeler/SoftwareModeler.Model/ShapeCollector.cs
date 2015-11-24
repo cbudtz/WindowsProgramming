@@ -53,7 +53,7 @@ namespace Area51.SoftwareModeler.Models
 
             foreach (Shape obsShape in obsShapes)
             {
-                Console.WriteLine(obsShape);
+                //Console.WriteLine("ShapeCollector - get shapeBy ID:" + obsShape);
                 if (obsShape.id == shapeId) return obsShape;
 
             }
