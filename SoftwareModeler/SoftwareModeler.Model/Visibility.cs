@@ -18,7 +18,7 @@ namespace Area51.SoftwareModeler.Models
         [Description("-")]
         Private 
     }
-
+    
     public enum testMethod
     {
         testCommit, pleasework
@@ -29,16 +29,17 @@ namespace Area51.SoftwareModeler.Models
         public object Convert(object value, Type targetType, object parameter,
                 System.Globalization.CultureInfo culture)
         {
-            switch (value.ToString().ToLower())
-            {
-                case "yes":
-                    return true;
-                case "no":
-                    return false;
+            return helper.GetEnumFromDescription(value.ToString(), Visibility.Default);
+            //switch (value.ToString().ToLower())
+            //{
+            //    case "yes":
+            //        return true;
+            //    case "no":
+            //        return false;
 
-                default:
-                    return Binding.DoNothing;
-            }
+            //    default:
+            //        return Binding.DoNothing;
+            //}
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,
@@ -92,10 +93,9 @@ namespace helpers
 
         }
 
-        public static string GetEnumFromDescription<T>(this T enumerationValue)
-        where T : struct
+        public static string GetEnumFromDescription(string enumerationValue, Enum myEnum)
         {
-            Type type = enumerationValue.GetType();
+            Type type = myEnum.GetType();
             if (!type.IsEnum)
             {
                 throw new ArgumentException("EnumerationValue must be of Enum type", "enumerationValue");
@@ -109,9 +109,11 @@ namespace helpers
             foreach (MemberInfo memberInfo in memberInfos)
             {
                 object[] attrs = memberInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                if (((DescriptionAttribute) attrs[0]).Description == enumerationValue.ToString())
+                if (attrs.Length>0 && ((DescriptionAttribute) attrs[0]).Description == enumerationValue.ToString())
                 {
+                    Console.WriteLine("member:"+ memberInfo.Name);
                     return memberInfo.Name;
+
                 }
             }
 

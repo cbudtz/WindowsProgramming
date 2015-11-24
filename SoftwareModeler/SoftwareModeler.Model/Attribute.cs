@@ -45,6 +45,8 @@ namespace Area51.SoftwareModeler.Models
             set
             {
                 visibility = value;
+                Console.WriteLine("Visibility:"+ helper.GetEnumFromDescription(helper.GetDescription(visibility), Visibility));
+
             }
         }
 
