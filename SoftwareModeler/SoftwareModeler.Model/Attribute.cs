@@ -1,6 +1,6 @@
-﻿using helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Area51.SoftwareModeler.Helpers;
 
 namespace Area51.SoftwareModeler.Models
 {
@@ -45,20 +45,20 @@ namespace Area51.SoftwareModeler.Models
             set
             {
                 visibility = value;
-                Console.WriteLine("Visibility:"+ helper.GetEnumFromDescription(helper.GetDescription(visibility), Visibility));
+                Console.WriteLine("Visibility:"+ HelperFunctions.GetEnumFromDescription(HelperFunctions.GetDescription(visibility), Visibility));
 
             }
         }
 
         public override string ToString()
         {
-            return helper.GetDescription(visibility) + Name + ":" + Type;
+            return HelperFunctions.GetDescription(visibility) + Name + ":" + Type;
     
         }
 
         public string getVisibilityAsString()
         {
-            return helper.GetDescription(visibility);
+            return HelperFunctions.GetDescription(visibility);
         }
     }
 }

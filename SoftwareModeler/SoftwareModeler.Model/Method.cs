@@ -1,4 +1,4 @@
-﻿using helpers;
+﻿using Area51.SoftwareModeler.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ namespace Area51.SoftwareModeler.Models
         }
 
         public string MethodString { get {
-                return helper.GetDescription(visibility) + name  + generateParameterString() + ":" + returnType; }
+                return HelperFunctions.GetDescription(visibility) + name  + generateParameterString() + ":" + returnType; }
         }
 
         public override string ToString()
