@@ -8,18 +8,20 @@
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
              xmlns:model="clr-namespace:Area51.SoftwareModeler.Models"
              xmlns:models="clr-namespace:Area51.SoftwareModeler.Models;assembly=SoftwareModeler.Model"
+             xmlns:helpers="clr-namespace:Area51.SoftwareModeler.Helpers;assembly=SoftwareModeler.Model"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}">
 
     <UserControl.Resources>
-        <models:VisibilityConverter x:Key="VisibilityConverter"/>
+       <models:VisibilityConverter x:Key="VisibilityConverter"/>
         <ObjectDataProvider x:Key="VisibilityEnum"
-                MethodName="GetValues" 
-                ObjectType="{x:Type sys:Enum}">
+                MethodName="GetDescriptions" 
+                ObjectType="{x:Type helpers:HelperFunctions}">
+            
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="models:Visibility" />
+                    <x:Type TypeName="models:Visibility" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
@@ -74,7 +76,11 @@
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn 
                         ItemsSource="{Binding Source={StaticResource VisibilityEnum}, Mode=OneWay}"
-                        SelectedItemBinding="{Binding Path= Visibility, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        SelectedItemBinding="{Binding Path= Visibility, 
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged, 
+                                                Converter={StaticResource VisibilityConverter}}" 
+                        />
                          <!--SelectedItemBinding="{Binding Visibility}" /> -->
                     <!--<DataGridTextColumn Binding="{Binding ElementName=txtValue, 
                                           Path=Text, 
