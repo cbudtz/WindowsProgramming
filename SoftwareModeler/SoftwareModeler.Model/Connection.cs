@@ -14,21 +14,18 @@ namespace Area51.SoftwareModeler.Models
     {
         //Unique ID
         public static int nextID = 0;
-        [XmlIgnore]
-        private Shape startShape;
-        //TODO: Clean up
         public int? startShapeID;
-        public Shape Start { get { return startShape; } set { startShape = value; updatePoints(); } }
-        private string startMultiplicity;
-        public string StartMultiplicity { get { return startMultiplicity; } set { startMultiplicity = value; } }
-        private string endMultiplicity;
-        public string EndMultiplicity { get { return endMultiplicity; } set { endMultiplicity = value; } }
-        [XmlIgnore]
-        private Shape endShape;
+        public Shape Start { get { return ShapeCollector.getI().getShapeByID(startShapeID); } set { startShapeID = value.id; updatePoints(); } }
+        public Shape StartTemp { get; set; }
+        //private string startMultiplicity;
+        public string StartMultiplicity { get;  set ;  }
+        //private string endMultiplicity;
+        public string EndMultiplicity { get ;  set ;  }
 
         public int? endShapeID;
 
-        public Shape End { get { return endShape; } set { endShape = value; updatePoints(); } }
+        public Shape End { get { return ShapeCollector.getI().getShapeByID(endShapeID); } set { endShapeID = value.id; updatePoints(); } }
+        public Shape EndTemp { get; set; }
         private Point startPoint;
         public Point StartPoint { get { return startPoint; } set { startPoint = value; } }
         private Point p1;
@@ -44,25 +41,21 @@ namespace Area51.SoftwareModeler.Models
 
         public ConnectionType type;
         //Unique identifyer
-        private int connectionID;
+        public int connectionID { get; set; }
 
         public Connection()
         {
             //Deserialization Constructor - Shapes must be deserialized first!
-            startShape = ShapeCollector.getI().getShapeByID(startShapeID);
-            endShape = ShapeCollector.getI().getShapeByID(endShapeID);
         }
 
         public Connection(Shape _start, string _startMultiplicity, Shape _end, string _endMultiplicity, ConnectionType _type)
         {
             this.connectionID = nextID++;
-            startShape = _start;
-            startShapeID = startShape.id; //Saving ID for serialization!
+            startShapeID = _start.id; //Saving ID for serialization!
 
-            startMultiplicity = _startMultiplicity;
-            endShape = _end;
-            endShapeID = endShape == null ? -1 : endShape.id; //Saving ID for serialization
-            endMultiplicity = _endMultiplicity;
+            StartMultiplicity = _startMultiplicity;
+            if (_end !=null) endShapeID = _end.id; //Saving ID for serialization
+            EndMultiplicity = _endMultiplicity;
             type = _type;
 
             startPoint = new Point();
@@ -98,16 +91,18 @@ namespace Area51.SoftwareModeler.Models
                 NotifyPropertyChanged(() => PointCollection);
                 return;
             }
+            if (StartTemp == null) StartTemp = Start;
+            if (EndTemp == null) EndTemp = End;
             
 
-            Point[] sP = new Point[] {  new Point(Start.CanvasCenterX + Start.Width / 2, Start.CanvasCenterY),  //0 right
-                                        new Point(Start.CanvasCenterX - Start.Width / 2, Start.CanvasCenterY),  //1 left
-                                        new Point(Start.CanvasCenterX, Start.CanvasCenterY + Start.Height/2),   //2 bottom
-                                        new Point(Start.CanvasCenterX, Start.CanvasCenterY - Start.Height/2) }; //3 top
-            Point[] eP = new Point[] {  new Point(End.CanvasCenterX + End.Width / 2, End.CanvasCenterY),        //0 right
-                                        new Point(End.CanvasCenterX - End.Width / 2, End.CanvasCenterY),        //1 left
-                                        new Point(End.CanvasCenterX, End.CanvasCenterY + End.Height / 2),       //2 bottom
-                                        new Point(End.CanvasCenterX, End.CanvasCenterY - End.Height / 2)        //3 top
+            Point[] sP = new Point[] {  new Point(StartTemp.CanvasCenterX + StartTemp.Width / 2, StartTemp.CanvasCenterY),  //0 right
+                                        new Point(StartTemp.CanvasCenterX - StartTemp.Width / 2, StartTemp.CanvasCenterY),  //1 left
+                                        new Point(StartTemp.CanvasCenterX, StartTemp.CanvasCenterY + StartTemp.Height/2),   //2 bottom
+                                        new Point(StartTemp.CanvasCenterX, StartTemp.CanvasCenterY - StartTemp.Height/2) }; //3 top
+            Point[] eP = new Point[] {  new Point(EndTemp.CanvasCenterX + EndTemp.Width / 2, EndTemp.CanvasCenterY),        //0 right
+                                        new Point(EndTemp.CanvasCenterX - EndTemp.Width / 2, EndTemp.CanvasCenterY),        //1 left
+                                        new Point(EndTemp.CanvasCenterX, EndTemp.CanvasCenterY + EndTemp.Height / 2),       //2 bottom
+                                        new Point(EndTemp.CanvasCenterX, EndTemp.CanvasCenterY - EndTemp.Height / 2)        //3 top
             };
             double dist = -1;
             int sInd = -1;

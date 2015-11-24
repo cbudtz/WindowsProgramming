@@ -27,18 +27,27 @@ namespace Area51.SoftwareModeler.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
+    //public enum ConnectionToAdd { NONE, ASSOCIATION, AGGREGATION, COMPOSITION }
+    //public enum ClassToAdd { NONE, NORMAL, ABSTRACT, INTERFACE, COMMENT}
+    public enum ButtonCommand { NONE, CLASS, ABSTRACT, INTERFACE, COMMENT, ASSOCIATION, AGGREGATION, COMPOSITION}
     public class MainViewModel : ViewModelBase
     {
-        private bool moveShape = false;
-        private bool isAddingShape = false;
+        private Shape selectedShape = null;
         private bool isResizing = false;
-        private bool isAddingAssociation = false;
-        private bool isAddingAggregation = false;
-        private bool isAddingComposition = false;
-        private bool isAddingClass = false;
-        private bool isAddingAbstract = false;
-        private bool isAddingInterface = false;
-        private bool isAddingComment = false;
+
+
+        private ButtonCommand buttonDown = ButtonCommand.NONE;
+        //private ConnectionToAdd isAddingConnection = ConnectionToAdd.NONE;
+        //private bool isAddingAssociation = false;
+        //private bool isAddingAggregation = false;
+        //private bool isAddingComposition = false;
+
+
+        //private ClassToAdd isAddingClass = ClassToAdd.NONE;
+        //private bool isAddingClass = false;
+        //private bool isAddingAbstract = false;
+        //private bool isAddingInterface = false;
+        //private bool isAddingComment = false;
 
         double initialWidth = 0;
         private double minShapeWidth = 150;
@@ -47,6 +56,8 @@ namespace Area51.SoftwareModeler.ViewModels
         private Connection newConnection = null;
 
         public string Text { get; set; }
+
+        public int MaxBranchLayer{ get{return getMaxBranchLayer();}}
         #region command variables
         // Commands that the UI can be bound to.
         // Shapes
@@ -155,6 +166,8 @@ namespace Area51.SoftwareModeler.ViewModels
             KeyStates s = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.S) & KeyStates.Down;
             KeyStates o = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.O) & KeyStates.Down;
             KeyStates esc = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Escape) & KeyStates.Down;
+            KeyStates del = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Delete) & KeyStates.Down;
+
 
             if (e == null) return;
             if(ctrl > 0)
@@ -178,6 +191,13 @@ namespace Area51.SoftwareModeler.ViewModels
             else if (esc > 0)
             {
                 Keyboard.ClearFocus();
+                selectedShape = null;
+                buttonDown = ButtonCommand.NONE;
+            }
+            else if(del > 0 && selectedShape != null)
+            {
+                commandController.addAndExecute(new DeleteShapeCommand(selectedShape));
+                selectedShape = null;
             }
         }
 
@@ -190,13 +210,12 @@ namespace Area51.SoftwareModeler.ViewModels
                 
                 // The mouse position relative to the target of the mouse event.
                 var mousePosition = RelativeMousePosition(e);
-                if ((isAddingAggregation || isAddingAssociation || isAddingComposition || isAddingComment) && newConnection != null)
+                if (!buttonDown.Equals(ButtonCommand.NONE) && newConnection != null)
                 {
                     newConnection.updatePoints(mousePosition);
                 }
-                else
+                else if(buttonDown.Equals(ButtonCommand.NONE) && shape != null)
                 {
-                    if (shape == null) return;
                     if (isResizing)
                     {
 
@@ -227,7 +246,7 @@ namespace Area51.SoftwareModeler.ViewModels
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
-            if ((isAddingAggregation || isAddingAssociation || isAddingComposition) && newConnection != null)
+            if (!buttonDown.Equals(ButtonCommand.NONE) && newConnection != null)
             {
                 if (shape == null || newConnection.Start.Equals(shape))
                 {
@@ -239,14 +258,10 @@ namespace Area51.SoftwareModeler.ViewModels
                     commandController.addAndExecute(new AddConnectionCommand(newConnection.Start, "", newConnection.End, "", newConnection.type)); // TODO command not implemented yet
                     
                 }
-                isAddingComposition = false;
-                isAddingAssociation = false;
-                isAddingAggregation = false;
                 newConnection = null;
             }
-            else
+            else if(buttonDown.Equals(ButtonCommand.NONE) && shape != null)
             {
-                if (shape == null) return;
                 // The Shape is moved back to its original position, so the offset given to the move command works.
                 shape.X = initialShapePosition.X;
                 shape.Y = initialShapePosition.Y;
@@ -258,22 +273,36 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MouseDownShape(MouseButtonEventArgs e)
         {
-            
+
             var shape = TargetShape(e);
             if (shape == null) return;
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
-            if (isAddingAggregation || isAddingAssociation || isAddingComposition)
+            ConnectionType type = ConnectionType.Association;
+            bool addConnection = true;
+            switch (buttonDown)
             {
-                ConnectionType type = ConnectionType.Aggregation;
-                if (isAddingComposition) type = ConnectionType.Composition;
-                else if (isAddingAssociation) type = ConnectionType.Association;
-                newConnection = new Connection(shape, "", null, "", type);
-                newConnection.EndPoint = mousePosition;
-                connections.Add(newConnection);
+                case ButtonCommand.AGGREGATION:
+                    type = ConnectionType.Aggregation;
+                    break;
+                case ButtonCommand.ASSOCIATION:
+                    type = ConnectionType.Association;
+                    break;
+                case ButtonCommand.COMPOSITION:
+                    type = ConnectionType.Composition;
+                    break;
+                default:
+                    addConnection = false;
+                    break;
+
             }
-          
+
+            if (addConnection) { 
+            newConnection = new Connection(shape, "", null, "", type);
+            newConnection.EndPoint = mousePosition;
+            connections.Add(newConnection);
+        }
 
             initialMousePosition = mousePosition;
             initialShapePosition = new Point(shape.X, shape.Y);
@@ -335,41 +364,54 @@ namespace Area51.SoftwareModeler.ViewModels
         public void CherryPick(MouseEventArgs e)
         {
             var cmd = TargetCommand(e);
-            Console.WriteLine(cmd.Id);
             commandController.setActiveCommand(cmd);
         }
 
+        private int getMaxBranchLayer()
+        {
+            int max = 0;
+            foreach(BaseCommand b in commands){
+                if (b.BranchLayer > max) max = b.BranchLayer;
+            }
+            return max;
+        }
         public void MouseClicked(MouseEventArgs e)
         {
             
-            if (isAddingClass || isAddingAbstract || isAddingInterface || isAddingComment)
+            if (!buttonDown.Equals(ButtonCommand.NONE))
             {
                 if (e == null) return;
                 var mousePosition = RelativeMousePosition(e);
 
                 Point anchorpoint = new Point(mousePosition.X - minShapeWidth / 2, mousePosition.Y - minShapeHeight / 2);
 
-                // default is normal class
+                // default is normal class/comment --- comment should perhaps have some modifications
                 string stereoType = "";
                 bool isAbstract = false;
                 Models.Visibility visibility = Models.Visibility.Public;
-                
-                
-                if (isAddingAbstract) { 
-                    isAbstract = true; 
-                }else if (isAddingInterface)
-                {
-                    stereoType = "<<interface>>";
+
+                switch(buttonDown){
+                    case ButtonCommand.ABSTRACT:
+                        isAbstract = true;
+                        break;
+                    case ButtonCommand.INTERFACE:
+                        stereoType = "<<interface>>";
+                        break;
+                    case ButtonCommand.CLASS:
+                    case ButtonCommand.COMMENT:
+                        break;
+                    default:
+                        return;
                 }
+             
 
                 commandController.addAndExecute(new AddClassCommand(null, stereoType, isAbstract, anchorpoint, visibility));
-                Console.WriteLine("new class");
-
             }
-            isAddingInterface = false;
-            isAddingAbstract = false;
-            isAddingClass = false;
-            isAddingComment = false;
+            else
+            {
+                var shape = TargetShape(e);
+                selectedShape = shape;
+            }
         }
 
         private void StartNewProject()
@@ -453,39 +495,39 @@ namespace Area51.SoftwareModeler.ViewModels
 
         private void AddComposition()
         {
-            isAddingComposition = true;
+            buttonDown = (buttonDown.Equals(ButtonCommand.COMPOSITION) ? ButtonCommand.NONE : ButtonCommand.COMPOSITION);
         }
 
         private void AddAssociation()
         {
-            isAddingAssociation = true;
-            
+            buttonDown = (buttonDown.Equals(ButtonCommand.ASSOCIATION) ? ButtonCommand.NONE : ButtonCommand.ASSOCIATION);
+
         }
 
         private void AddAggregation()
         {
-            isAddingAggregation = true;
+            buttonDown = (buttonDown.Equals(ButtonCommand.AGGREGATION) ? ButtonCommand.NONE : ButtonCommand.AGGREGATION);
         }
 
         private void AddClass()
         {
-            isAddingClass = true;
+            buttonDown = (buttonDown.Equals(ButtonCommand.CLASS) ? ButtonCommand.NONE : ButtonCommand.CLASS);
         }
 
 
         private void AddAbstract()
         {
-            isAddingAbstract = true;
+            buttonDown = (buttonDown.Equals(ButtonCommand.ABSTRACT) ? ButtonCommand.NONE : ButtonCommand.ABSTRACT);
         }
 
         private void AddInterface()
         {
-            isAddingInterface = true;
+            buttonDown = (buttonDown.Equals(ButtonCommand.INTERFACE) ? ButtonCommand.NONE : ButtonCommand.INTERFACE);
         }
 
         private void AddComment()
         {
-            isAddingComment = true;
+            buttonDown = (buttonDown.Equals(ButtonCommand.COMMENT) ? ButtonCommand.NONE : ButtonCommand.COMMENT);
         }
 
         private BaseCommand TargetCommand(MouseEventArgs e)

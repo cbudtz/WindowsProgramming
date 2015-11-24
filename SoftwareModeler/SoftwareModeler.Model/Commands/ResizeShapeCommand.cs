@@ -12,8 +12,6 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     public class ResizeShapeCommand : BaseCommand
     {
-        [XmlIgnore]
-        private Shape shape;
         public int? ShapeId { get; set; }
         public double xResize;
         public double YResize;
@@ -26,7 +24,6 @@ namespace Area51.SoftwareModeler.Models.Commands
         public ResizeShapeCommand(Shape _shape, double _xResize, double _yResize)
         {
             //When first constructed
-            shape = _shape;
             ShapeId = _shape.id;
             xResize = _xResize;
             YResize = _yResize;
@@ -35,10 +32,8 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
-            if (shape == null) //If deserialized
-            {
-                shape = ShapeCollector.getI().getShapeByID(ShapeId);
-            }
+            Shape shape = ShapeCollector.getI().getShapeByID(ShapeId);
+
             Console.WriteLine("Executing ResizeShapeCommand");
             Console.WriteLine("Shape =" + shape);
             shape.Width += xResize;
@@ -47,6 +42,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
+            Shape shape = ShapeCollector.getI().getShapeByID(ShapeId);
             shape.Width -= xResize;
             shape.Height -= YResize;
         }
