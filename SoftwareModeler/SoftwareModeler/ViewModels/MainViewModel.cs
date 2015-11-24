@@ -56,6 +56,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public ICommand MouseDownShapeResizeCommand { get; }
         public ICommand MouseUpShapeResizeCommand { get; }
+
+        public ICommand CherryPickCommand { get; }
         
         // connections
         public ICommand MouseDownConnectionCommand { get; }
@@ -113,6 +115,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
             MouseDownShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownResizeShape);
             MouseUpShapeResizeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpResizeShape);
+
+            CherryPickCommand = new RelayCommand<MouseEventArgs>(CherryPick);
 
             //TODO implement these
             //MouseDownConnectionCommand =
@@ -188,7 +192,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 var mousePosition = RelativeMousePosition(e);
                 if ((isAddingAggregation || isAddingAssociation || isAddingComposition || isAddingComment) && newConnection != null)
                 {
-                    newConnection.EndPoint = mousePosition;
+                    newConnection.updatePoints(mousePosition);
                 }
                 else
                 {
@@ -225,7 +229,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
             if ((isAddingAggregation || isAddingAssociation || isAddingComposition) && newConnection != null)
             {
-                if (shape == null)
+                if (shape == null || newConnection.Start.Equals(shape))
                 {
                     connections.Remove(newConnection);
                 }
@@ -265,7 +269,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 ConnectionType type = ConnectionType.Aggregation;
                 if (isAddingComposition) type = ConnectionType.Composition;
                 else if (isAddingAssociation) type = ConnectionType.Association;
-                newConnection = new Connection(shape, "", shape, "", type);
+                newConnection = new Connection(shape, "", null, "", type);
                 newConnection.EndPoint = mousePosition;
                 connections.Add(newConnection);
             }
@@ -328,6 +332,13 @@ namespace Area51.SoftwareModeler.ViewModels
             e.MouseDevice.Target.ReleaseMouseCapture();
         }
 
+        public void CherryPick(MouseEventArgs e)
+        {
+            var cmd = TargetCommand(e);
+            Console.WriteLine(cmd.Id);
+            commandController.setActiveCommand(cmd);
+        }
+
         public void MouseClicked(MouseEventArgs e)
         {
             
@@ -364,7 +375,7 @@ namespace Area51.SoftwareModeler.ViewModels
         private void StartNewProject()
         {
             bool clear = false;
-            if (ShapeCollector.getI().obsConnections.Any() || ShapeCollector.getI().obsShapes.Any())
+            if (ShapeCollector.getI().obsConnections.Any() || ShapeCollector.getI().obsShapes.Any() || commands.Any())
             {
                 MessageBoxResult res = MessageBox.Show("You have already a diagram in progress. Do you want to save first?", "Save current diagram", MessageBoxButton.YesNoCancel);
                 if (res == MessageBoxResult.Yes)
@@ -383,6 +394,7 @@ namespace Area51.SoftwareModeler.ViewModels
             }
             if (clear)
             {
+                commandController = new CommandTree();
                 ShapeCollector.getI().obsConnections.Clear();
                 ShapeCollector.getI().obsShapes.Clear();
                 ShapeCollector.getI().commands.Clear();
@@ -476,11 +488,18 @@ namespace Area51.SoftwareModeler.ViewModels
             isAddingComment = true;
         }
 
-
+        private BaseCommand TargetCommand(MouseEventArgs e)
+        {
+            // Here the visual element that the mouse is captured by is retrieved.
+            var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            // From the shapes visual element, the Shape object which is the DataContext is retrieved.
+            return shapeVisualElement.DataContext as BaseCommand;
+        }
         private Shape TargetShape(MouseEventArgs e)
         {
             // Here the visual element that the mouse is captured by is retrieved.
             var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            if (shapeVisualElement == null) return null;
             // From the shapes visual element, the Shape object which is the DataContext is retrieved.
             return shapeVisualElement.DataContext as Shape;
         }

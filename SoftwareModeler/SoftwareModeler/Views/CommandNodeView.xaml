@@ -4,13 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              xmlns:model="clr-namespace:Area51.SoftwareModeler.Models.Commands"
              mc:Ignorable="d" 
              d:DesignHeight="25"
-             Canvas.Left="{Binding BranchLayer}" Canvas.Top="{Binding Id}"
+             Canvas.Left="{Binding BranchLayer, Converter={StaticResource nodeCoordinateConverter}}" 
+             Canvas.Top="{Binding Id, Converter={StaticResource nodeCoordinateConverter}}"
              >
-    <Grid
-                                                                                                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+        
          <Grid.RowDefinitions>
              <RowDefinition   />
              
@@ -19,9 +22,16 @@
             <ColumnDefinition Width="30"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Ellipse Grid.Row="0" Grid.Column="0" Width="20" Height="20" Stroke="Aqua" StrokeThickness="3"/>
-        <Border Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="Aqua" CornerRadius="4" >
+        <Ellipse Grid.Row="0" Grid.Column="0" Width="20" Height="20" Stroke="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" StrokeThickness="3"/>
+        <Border Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" CornerRadius="4" >
             <TextBlock Background="LightGray"  Padding="2" Height="20" HorizontalAlignment="Left" Text="{Binding Path=Id}"></TextBlock>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseUp" >
+                    <cmd:EventToCommand Command="{Binding DataContext.CherryPickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </Border>
+        
     </Grid>
+    
 </UserControl>

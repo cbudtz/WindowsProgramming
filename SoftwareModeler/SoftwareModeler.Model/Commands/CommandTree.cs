@@ -21,6 +21,11 @@ namespace Area51.SoftwareModeler.Models.Commands
         public int NextShapeId { get; set; }
         public ObservableCollection<BaseCommand> Commands1 { get; set; } = ShapeCollector.getI().commands;
 
+        public CommandTree()
+        {
+            BaseCommand.nextid = 0;
+        }
+
 
         //TODO: implement
         //public event PropertyChangedEventHandler PropertyChanged;
@@ -46,7 +51,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             
      //       foreach (BaseCommand baseCommand in ShapeCollector.getI().commands)
        //     {
-         //       Console.WriteLine(baseCommand.Id + baseCommand.color.ToString() + baseCommand.BranchLayer);
+         //       Console.WriteLine(baseCommand.Id + baseCommand.Color.ToString() + baseCommand.BranchLayer);
            // }
             //ececute new command
             Active.execute();
@@ -55,10 +60,13 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         private void setActive(BaseCommand node)
         {
-            
-            if (Active !=null)Active.color = Colors.Transparent;
+
+            if (Active != null)
+            {
+                Active.Color = Colors.Azure;
+            }
             Active = node;
-            Active.color = Colors.Aquamarine;
+            Active.Color = Colors.Aquamarine;
         }
 
         public void setActiveCommand(BaseCommand command)
