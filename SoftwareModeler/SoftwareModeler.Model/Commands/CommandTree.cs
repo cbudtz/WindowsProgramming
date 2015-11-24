@@ -66,7 +66,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 Active.Color = Colors.Azure;
             }
             Active = node;
-            Active.Color = Colors.Aquamarine;
+            if(Active != null) Active.Color = Colors.Aquamarine;
         }
 
         public void setActiveCommand(BaseCommand command)
