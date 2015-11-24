@@ -12,8 +12,6 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     public class MoveShapeCommand : BaseCommand
     {
-        [XmlIgnore]
-        private Shape shape;
         public int? ShapeId { get; set; }
         public double xOffset;
         public double yOffset;
@@ -26,7 +24,6 @@ namespace Area51.SoftwareModeler.Models.Commands
         public MoveShapeCommand(Shape _shape, double _xOffset, double _yOffset)
         {
             //When first constructed
-            shape = _shape;
             ShapeId = _shape.id;
             xOffset = _xOffset;
             yOffset = _yOffset;
@@ -35,18 +32,19 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
-            if (shape == null) //If deserialized
-            {
-                shape = ShapeCollector.getI().getShapeByID(ShapeId);
-            }
+            
+                Shape shape = ShapeCollector.getI().getShapeByID(ShapeId);
+            
             Console.WriteLine("Executing moveShapeCommand");
-            Console.WriteLine("Shape =" + shape);
+            Console.WriteLine("Shape =" + shape + "Center : " + shape.CanvasCenterX + " ," + shape.CanvasCenterY);
             shape.CanvasCenterX += xOffset;
             shape.CanvasCenterY += yOffset;
+            Console.WriteLine("Shape =" + shape + "Center : " + shape.CanvasCenterX + " ," + shape.CanvasCenterY);
         }
 
         public override void unExecute()
         {
+            Shape shape = ShapeCollector.getI().getShapeByID(ShapeId);
             shape.CanvasCenterX -= xOffset;
             shape.CanvasCenterY -= yOffset;
         }
