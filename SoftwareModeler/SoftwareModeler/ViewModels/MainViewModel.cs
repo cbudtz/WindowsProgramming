@@ -35,6 +35,7 @@ namespace Area51.SoftwareModeler.ViewModels
         private Shape selectedShape = null;
         private bool isResizing = false;
 
+        
 
         private ButtonCommand buttonDown = ButtonCommand.NONE;
         //private ConnectionToAdd isAddingConnection = ConnectionToAdd.NONE;
@@ -168,8 +169,7 @@ namespace Area51.SoftwareModeler.ViewModels
             KeyStates esc = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Escape) & KeyStates.Down;
             KeyStates del = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Delete) & KeyStates.Down;
 
-
-            if (e == null) return;
+            
             if(ctrl > 0)
             {
                 if (z > 0)
@@ -190,13 +190,13 @@ namespace Area51.SoftwareModeler.ViewModels
             }
             else if (esc > 0)
             {
-                Keyboard.ClearFocus();
+                //Keyboard.ClearFocus();
                 selectedShape = null;
                 buttonDown = ButtonCommand.NONE;
             }
             else if(del > 0 && selectedShape != null)
             {
-                commandController.addAndExecute(new DeleteShapeCommand(selectedShape));
+                execCommand(new DeleteShapeCommand(selectedShape));
                 selectedShape = null;
             }
         }
@@ -255,7 +255,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 else
                 {
                     newConnection.End = shape;
-                    commandController.addAndExecute(new AddConnectionCommand(newConnection.Start, "", newConnection.End, "", newConnection.type)); // TODO command not implemented yet
+                    execCommand(new AddConnectionCommand(newConnection.Start, "", newConnection.End, "", newConnection.type)); // TODO command not implemented yet
                     
                 }
                 newConnection = null;
@@ -265,7 +265,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 // The Shape is moved back to its original position, so the offset given to the move command works.
                 shape.X = initialShapePosition.X;
                 shape.Y = initialShapePosition.Y;
-                commandController.addAndExecute(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
+                execCommand(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
             }
             // The mouse is released, as the move operation is done, so it can be used by other controls.
             e.MouseDevice.Target.ReleaseMouseCapture();
@@ -353,7 +353,7 @@ namespace Area51.SoftwareModeler.ViewModels
             if (Math.Abs(shape.Width + xOffset) < minShapeWidth) xOffset = minShapeWidth - shape.Width;
             if (Math.Abs(shape.Height + yOffset) < minShapeHeight) yOffset = minShapeHeight - shape.Height;
 
-            commandController.addAndExecute(new ResizeShapeCommand(shape,xOffset, yOffset ));
+            execCommand(new ResizeShapeCommand(shape,xOffset, yOffset ));
 
             isResizing = false;
 
@@ -403,9 +403,9 @@ namespace Area51.SoftwareModeler.ViewModels
                     default:
                         return;
                 }
-             
 
-                commandController.addAndExecute(new AddClassCommand(null, stereoType, isAbstract, anchorpoint, visibility));
+
+                execCommand(new AddClassCommand(null, stereoType, isAbstract, anchorpoint, visibility));
             }
             else
             {
@@ -571,6 +571,12 @@ namespace Area51.SoftwareModeler.ViewModels
             dynamic parent = (o == null ? null : VisualTreeHelper.GetParent(o));
             if (parent == null) return parent;
             return parent.GetType().IsAssignableFrom(typeof(T)) ? parent : FindParentOfType<T>(parent);
+        }
+
+        public void execCommand(BaseCommand command)
+        {
+            commandController.addAndExecute(command);
+            
         }
 
         public void test()
