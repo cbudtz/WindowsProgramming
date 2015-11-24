@@ -14,13 +14,12 @@ namespace Area51.SoftwareModeler.Models
     {
         //Unique ID
         public static int nextID = 0;
-        //TODO: Clean up
         public int? startShapeID;
         public Shape Start { get { return ShapeCollector.getI().getShapeByID(startShapeID); } set { startShapeID = value.id; updatePoints(); } }
-        private string startMultiplicity;
-        public string StartMultiplicity { get { return startMultiplicity; } set { startMultiplicity = value; } }
-        private string endMultiplicity;
-        public string EndMultiplicity { get { return endMultiplicity; } set { endMultiplicity = value; } }
+        //private string startMultiplicity;
+        public string StartMultiplicity { get;  set ;  }
+        //private string endMultiplicity;
+        public string EndMultiplicity { get ;  set ;  }
 
         public int? endShapeID;
 
@@ -52,9 +51,9 @@ namespace Area51.SoftwareModeler.Models
             this.connectionID = nextID++;
             startShapeID = _start.id; //Saving ID for serialization!
 
-            startMultiplicity = _startMultiplicity;
+            StartMultiplicity = _startMultiplicity;
             if (_end !=null) endShapeID = _end.id; //Saving ID for serialization
-            endMultiplicity = _endMultiplicity;
+            EndMultiplicity = _endMultiplicity;
             type = _type;
 
             startPoint = new Point();
