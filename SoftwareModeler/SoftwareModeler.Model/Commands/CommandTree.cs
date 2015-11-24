@@ -26,10 +26,6 @@ namespace Area51.SoftwareModeler.Models.Commands
             BaseCommand.nextid = 0;
         }
 
-
-        //TODO: implement
-        //public event PropertyChangedEventHandler PropertyChanged;
-
         public void addAndExecute(BaseCommand command)
         {
             if (Root == null)
