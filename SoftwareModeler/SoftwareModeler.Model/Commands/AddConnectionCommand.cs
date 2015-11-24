@@ -9,7 +9,12 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     public class AddConnectionCommand : BaseCommand
     {
-        Connection conn;
+        public Connection conn { get; set; }
+
+        public AddConnectionCommand()
+        {
+            
+        }
         public AddConnectionCommand(Shape from, string fromMult, Shape to, string toMult, ConnectionType type)
         {
             //TODO do correct implementation
@@ -24,7 +29,12 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
-            ShapeCollector.getI().obsConnections.Remove(conn);
+            Connection connToremove = null;
+            foreach (Connection obsConnection in ShapeCollector.getI().obsConnections)
+            {
+                if (connToremove==null && obsConnection.connectionID == connToremove.connectionID)
+                    ShapeCollector.getI().obsConnections.Remove(obsConnection);
+            }
         }
     }
 }

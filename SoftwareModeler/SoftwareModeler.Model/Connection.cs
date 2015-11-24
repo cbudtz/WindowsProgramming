@@ -15,7 +15,9 @@ namespace Area51.SoftwareModeler.Models
         //Unique ID
         public static int nextID = 0;
         public int? startShapeID;
+        [XmlIgnore]
         public Shape Start { get { return ShapeCollector.getI().getShapeByID(startShapeID); } set { startShapeID = value.id; updatePoints(); } }
+        [XmlIgnore]
         public Shape StartTemp { get; set; }
         //private string startMultiplicity;
         public string StartMultiplicity { get;  set ;  }
@@ -23,8 +25,9 @@ namespace Area51.SoftwareModeler.Models
         public string EndMultiplicity { get ;  set ;  }
 
         public int? endShapeID;
-
+        [XmlIgnore]
         public Shape End { get { return ShapeCollector.getI().getShapeByID(endShapeID); } set { endShapeID = value.id; updatePoints(); } }
+        [XmlIgnore]
         public Shape EndTemp { get; set; }
         private Point startPoint;
         public Point StartPoint { get { return startPoint; } set { startPoint = value; } }
