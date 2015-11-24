@@ -11,21 +11,25 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     class DeleteConnectionCommand : BaseCommand
     {
-        private Connection connectionToDelete;
-        private ObservableCollection<Connection> connections;
-        public DeleteConnectionCommand(Connection _connectionToDelete, ObservableCollection<Connection> _connections)
+        public Connection ConnectionToDelete { get; set; }
+       
+        public DeleteConnectionCommand(Connection _connectionToDelete)
         {
-            connectionToDelete = _connectionToDelete;
-            connections = _connections;
+            ConnectionToDelete = _connectionToDelete;
         }
         public override void execute()
         {
-            connections.Remove(connectionToDelete);
+            foreach (Connection obsConnection in ShapeCollector.getI().obsConnections)
+            {
+                if (obsConnection != null && obsConnection.connectionID == ConnectionToDelete.connectionID)
+                    ShapeCollector.getI().obsConnections.Remove(obsConnection);
+            }
+            ShapeCollector.getI().obsConnections.Remove(ConnectionToDelete);
         }
 
         public override void unExecute()
         {
-            connections.Add(connectionToDelete);
+            connections.Add(ConnectionToDelete);
         }
     }
 }
