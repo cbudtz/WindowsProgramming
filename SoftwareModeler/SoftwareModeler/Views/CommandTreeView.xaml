@@ -12,17 +12,25 @@
         <ViewModel:MainViewModel />
     </UserControl.DataContext>
     
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-
-        <Grid>
-        
-            <Grid.Background>
+    <!--scrollpanel--> 
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True" >
+            <!--backround color of the scrollpannel-->
+            <ScrollViewer.Background>
                 <LinearGradientBrush StartPoint="0.5,0">
                     <GradientStop Color="White" Offset="0.9"/>
                     <GradientStop Color="LightGray" Offset="0.07"/>
                 </LinearGradientBrush>
-            </Grid.Background>
+            </ScrollViewer.Background>
+        <!--A canvas surrounding the collection of commands, this is here to make sure the scrollviewer updates to the correct size.
+        It takes the max number of "command" objects as height, and the max debth of the tree as width.
+        The valueconverter is used to match the width of the "command" object-->
+        <Canvas  VerticalAlignment="Top" HorizontalAlignment="Left" Background="Red" 
+                 Height="{Binding commands.Count, Converter={StaticResource nodeCoordinateConverter}}" 
+                 Width="{Binding  MaxBranchLayer, Converter={StaticResource nodeCoordinateConverter}}">
+            
+            <!--The itemcontrol that contains the CommandNodeView-usercontroll-->
             <ItemsControl ItemsSource="{Binding commands}" Margin= "{Binding commands, Converter={StaticResource nodeCoordinateConverter}}"/>
-        </Grid>
+            
+        </Canvas>
     </ScrollViewer>
 </UserControl>
