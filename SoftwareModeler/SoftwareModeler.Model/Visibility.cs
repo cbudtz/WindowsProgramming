@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Data;
-using helpers;
+using Area51.SoftwareModeler.Helpers;
 
 namespace Area51.SoftwareModeler.Models
 
@@ -29,7 +29,7 @@ namespace Area51.SoftwareModeler.Models
         public object Convert(object value, Type targetType, object parameter,
                 System.Globalization.CultureInfo culture)
         {
-            return helper.GetEnumFromDescription(value.ToString(), Visibility.Default);
+            return HelperFunctions.GetEnumFromDescription(value.ToString(), Visibility.Default);
             //switch (value.ToString().ToLower())
             //{
             //    case "yes":
@@ -45,7 +45,7 @@ namespace Area51.SoftwareModeler.Models
         public object ConvertBack(object value, Type targetType, object parameter,
                 System.Globalization.CultureInfo culture)
         {
-            return helper.GetDescription((Visibility) value);
+            return HelperFunctions.GetDescription((Visibility) value);
             
             //if (value is bool)
             //{
@@ -62,9 +62,9 @@ namespace Area51.SoftwareModeler.Models
 
 
 }
-namespace helpers
+namespace Area51.SoftwareModeler.Helpers
 {
-    public static class helper
+    public static class HelperFunctions
     {
         public static string GetDescription<T>(this T enumerationValue)
         where T : struct
@@ -104,7 +104,6 @@ namespace helpers
             //Tries to find a DescriptionAttribute for a potential friendly name
             //for the enum
             MemberInfo[] memberInfos = type.GetMembers();
-                //(enumerationValue.ToString());
 
             foreach (MemberInfo memberInfo in memberInfos)
             {
@@ -117,16 +116,6 @@ namespace helpers
                 }
             }
 
-            //if (memberInfo != null && memberInfo.Length > 0)
-            //{
-            //    object[] attrs = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
-
-            //    if (attrs != null && attrs.Length > 0)
-            //    {
-            //        //Pull out the description value
-            //        return ((DescriptionAttribute)attrs[0]).Description;
-            //    }
-            //}
             //If we have no description attribute, just return the ToString of the enum
             return enumerationValue.ToString();
 
