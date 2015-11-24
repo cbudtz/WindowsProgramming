@@ -10,6 +10,9 @@ using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
+    /// <summary>
+    /// For testing purposes only
+    /// </summary>
    public class DummyCommand : BaseCommand
     {
         public event EventHandler CanExecuteChanged;
