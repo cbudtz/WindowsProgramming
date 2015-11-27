@@ -53,6 +53,7 @@ namespace Area51.SoftwareModeler.ViewModels
         double initialWidth = 0;
         private double minShapeWidth = 150;
         private double minShapeHeight = 100;
+        public bool isEditable { get; set; } = false;
         
         private Connection newConnection = null;
 
@@ -62,6 +63,8 @@ namespace Area51.SoftwareModeler.ViewModels
         #region command variables
         // Commands that the UI can be bound to.
         // Shapes
+        public ICommand EditClassContentCommand { get; }
+
         public ICommand MouseDownShapeCommand { get; }
         public ICommand MouseMoveShapeCommand { get; }
         public ICommand MouseUpShapeCommand { get; }
@@ -121,6 +124,8 @@ namespace Area51.SoftwareModeler.ViewModels
             // The commands are given the methods they should use to execute, and find out if they can execute.
 
             #region initialize commands
+            EditClassContentCommand = new RelayCommand<SelectedCellsChangedEventArgs>(EditClassContent);
+
             MouseDownShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownShape);
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
@@ -201,6 +206,10 @@ namespace Area51.SoftwareModeler.ViewModels
             }
         }
 
+        public void EditClassContent(SelectedCellsChangedEventArgs e)
+        {
+            Console.WriteLine("test: ");
+        }
         public void MouseMoveShape(MouseEventArgs e)
         {
             if (Mouse.Captured != null)
@@ -265,7 +274,10 @@ namespace Area51.SoftwareModeler.ViewModels
                 // The Shape is moved back to its original position, so the offset given to the move command works.
                 shape.X = initialShapePosition.X;
                 shape.Y = initialShapePosition.Y;
-                execCommand(new MoveShapeCommand(shape, mousePosition.X - initialMousePosition.X, mousePosition.Y - initialMousePosition.Y));
+                double xOffset = mousePosition.X - initialMousePosition.X;
+                double yOffset = mousePosition.Y - initialMousePosition.Y;
+                if(Math.Abs(xOffset) > 10 || Math.Abs(yOffset) > 10)
+                execCommand(new MoveShapeCommand(shape, xOffset, yOffset));
             }
             // The mouse is released, as the move operation is done, so it can be used by other controls.
             e.MouseDevice.Target.ReleaseMouseCapture();
@@ -582,20 +594,20 @@ namespace Area51.SoftwareModeler.ViewModels
         public void test()
         {
 
-            commands.Add(new DummyCommand());
-            Class TestClass1 = new Class("A Class", "", false, new Point(0, 0), Models.Visibility.Default);
-            TestClass1.addAttribute(Models.Visibility.Private, "int", "something");
-            TestClass1.addAttribute("String", "someAttribute");
-            string[] parameters = { "string", "Int", "Bool" };
-            TestClass1.addMethod(Models.Visibility.Private, "somemethod", parameters);
-            //observables.obsShapes.Add(TestClass1);
-            Class TestClass2 = new Class("Another Class", "", false, new Point(300, 320), Models.Visibility.Default);
-            TestClass2.addAttribute("int", "nothing");
-            TestClass2.addAttribute("bool", "True");
-            //observables.obsShapes.Add(TestClass2);
-            Class TestClass3 = new Class("Another Class", "", false, new Point(100, 60), Models.Visibility.Default);
-            TestClass2.addAttribute("int", "nothing");
-            TestClass2.addAttribute("bool", "True");
+            //commands.Add(new DummyCommand());
+            //Class TestClass1 = new Class("A Class", "", false, new Point(0, 0), Models.Visibility.Default);
+            //TestClass1.addAttribute(Models.Visibility.Private, "int", "something");
+            //TestClass1.addAttribute("String", "someAttribute");
+            //string[] parameters = { "string", "Int", "Bool" };
+            //TestClass1.addMethod(Models.Visibility.Private, "somemethod", parameters);
+            ////observables.obsShapes.Add(TestClass1);
+            //Class TestClass2 = new Class("Another Class", "", false, new Point(300, 320), Models.Visibility.Default);
+            //TestClass2.addAttribute("int", "nothing");
+            //TestClass2.addAttribute("bool", "True");
+            ////observables.obsShapes.Add(TestClass2);
+            //Class TestClass3 = new Class("Another Class", "", false, new Point(100, 60), Models.Visibility.Default);
+            //TestClass2.addAttribute("int", "nothing");
+            //TestClass2.addAttribute("bool", "True");
             //observables.obsShapes.Add(TestClass3);
 
             //Connection conn = new Connection(TestClass1, "asd", TestClass2, "efg", ConnectionType.Association);

@@ -28,9 +28,8 @@
 
     </UserControl.Resources>
 
-    <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2,2,5,5">
-
-        <Grid Margin="5,5,5,5">
+    <Border Name="borderName" BorderBrush="Gray" Background="LightGray" CornerRadius="6" BorderThickness="2,2,5,5">
+        <Grid Margin="5,5,5,5" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -38,11 +37,16 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Text="{Binding }" HorizontalAlignment="Center">
+            
+            
+            
+            <TextBlock Grid.Row="0" Text="{Binding name}" HorizontalAlignment="Stretch" TextAlignment="Center">
                 <TextBlock.Style>
+                    
                     <Style TargetType="{x:Type TextBlock}">
+
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsAbstract}" Value="True">
                                 <Setter Property="FontStyle" Value="Italic"/>
@@ -51,6 +55,9 @@
                     </Style>
                 </TextBlock.Style>
                     <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <cmd:EventToCommand Command="{Binding DataContext.EditClassContentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                        </i:EventTrigger>
 		                <local:EventTriggerWithoutPropagation EventName="MouseDown" >
                             <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
                         </local:EventTriggerWithoutPropagation>
@@ -66,13 +73,14 @@
             <ListView 
                 Grid.Row="2"
                 ItemsSource="{Binding Methods}"/>-->
-            <DataGrid 
+            <DataGrid
                 Grid.Row="1" 
                 IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding Attributes}" 
                 AutoGenerateColumns="False" 
                 BorderThickness="0" 
                 HeadersVisibility="None" GridLinesVisibility="None">
+
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn 
                         ItemsSource="{Binding Source={StaticResource VisibilityEnum}, Mode=OneWay}"
@@ -81,7 +89,7 @@
                                                 UpdateSourceTrigger=PropertyChanged, 
                                                 Converter={StaticResource VisibilityConverter}}" 
                         />
-                         <!--SelectedItemBinding="{Binding Visibility}" /> -->
+                    <!--SelectedItemBinding="{Binding Visibility}" /> -->
                     <!--<DataGridTextColumn Binding="{Binding ElementName=txtValue, 
                                           Path=Text, 
                                           Converter={StaticResource VisibilityConverter}}" />-->
@@ -93,7 +101,7 @@
                                           Path=Text, 
                                           Converter={StaticResource VisibilityConverter}}"/>
                     -->
-                        <!--
+                    <!--
                         ItemsSource="{Binding Source= model:Visibility}"
                         SelectedValueBinding="{Binding Visibility}"/>
                         -->
@@ -101,16 +109,28 @@
                                           Path=Text, 
                                           Converter={StaticResource YesNoToBooleanConverter}}"
                     -->
-                    <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
                 </DataGrid.Columns>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedCellsChanged">
+                        <cmd:EventToCommand Command="{Binding DataContext.EditClassContentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </DataGrid>
+
             <Rectangle Grid.Row="2" Width="Auto" StrokeThickness="1"/>
-            <DataGrid 
+            <DataGrid
                 Grid.Row="3" 
                 ItemsSource="{Binding Methods}" 
                 AutoGenerateColumns="True" 
                 BorderThickness="0" 
-                HeadersVisibility="None" GridLinesVisibility="None"/>
+                HeadersVisibility="None" GridLinesVisibility="None" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DataContextChanged" >
+                        <cmd:EventToCommand Command="{Binding DataContext.EditClassContentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </DataGrid>
 
 
             <!--<Label Width="5" HorizontalAlignment="Right" Grid.Row="3"/>-->
@@ -149,5 +169,4 @@
             </i:EventTrigger>
         </i:Interaction.Triggers>
     </Border>
-
 </UserControl>

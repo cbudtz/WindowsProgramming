@@ -24,6 +24,16 @@ namespace Area51.SoftwareModeler.Views
         {
             InitializeComponent();
         }
+
+        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+
+        }
+
+        private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+
+        }
     }
     public class EventTriggerWithoutPropagation : System.Windows.Interactivity.EventTrigger
     {
