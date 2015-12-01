@@ -31,10 +31,10 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             Connection connToRemove = null;
             //TODO - dont remove from same collection!
-            foreach (Connection obsConnection in ShapeCollector.getI().obsConnections)
+            foreach (Connection obsConnection in ShapeCollector.getI().obsConnections.
+                Where(obsConnection => conn !=null && obsConnection.connectionID == conn.connectionID))
             {
-                if (conn !=null && obsConnection.connectionID == conn.connectionID)
-                    connToRemove = obsConnection;
+                connToRemove = obsConnection;
             }
             if (connToRemove != null) ShapeCollector.getI().obsConnections.Remove(connToRemove);
         }
