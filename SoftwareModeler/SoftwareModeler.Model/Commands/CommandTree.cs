@@ -15,6 +15,7 @@ namespace Area51.SoftwareModeler.Models.Commands
     public class CommandTree : NotifyBase
     {
         public string Name;
+        public int CurrentBranchLayer;
         public BaseCommand Root { get; set; }
         public BaseCommand Active { get; set; }
         public List<BaseCommand> undone { get; set; } = new List<BaseCommand>();
@@ -39,7 +40,8 @@ namespace Area51.SoftwareModeler.Models.Commands
                 
                 //Add child to tree
                 command.Parent = Active;
-                Active.addChild(command);
+                var newLayer = Active.addChild(command, CurrentBranchLayer);
+                if (newLayer > CurrentBranchLayer) CurrentBranchLayer = newLayer;
                 setActive(command);
             }
             ShapeCollector.getI().commands.Add(command);

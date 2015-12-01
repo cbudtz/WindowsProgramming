@@ -29,10 +29,9 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
-            Connection connToremove = null;
             foreach (Connection obsConnection in ShapeCollector.getI().obsConnections)
             {
-                if (connToremove==null && obsConnection.connectionID == connToremove.connectionID)
+                //if (conn!=null && obsConnection.connectionID == conn.connectionID)
                     ShapeCollector.getI().obsConnections.Remove(obsConnection);
             }
         }

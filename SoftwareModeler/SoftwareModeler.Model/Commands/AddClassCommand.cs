@@ -31,7 +31,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         }
         public AddClassCommand(string className, string stereoType, bool isAbstract,Point anchorPoint, Visibility visibility)
         {
-            this.className = (className == null ? "class " + Shape.nextId : className);
+            this.className = (className ?? "class " + Shape.nextId); //null pointer check
             this.stereoType = stereoType;
             this.isAbstract = isAbstract;
             this.anchorPoint = anchorPoint;
