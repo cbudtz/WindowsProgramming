@@ -210,9 +210,11 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void EditClassOk()
         {
-          var methods =   editClassWindow.Methods.Items.OfType<Method>() as List<Method>;
-            var attributes = editClassWindow.Attributes.Items.OfType<Models.Attribute>() as List<Models.Attribute>;
-            execCommand(new UpdateClassInfoCommand(classToEdit, editClassWindow.ClassName.Text,"", editClassWindow.IsAbstract.IsChecked, methods, attributes));
+          var methods =   editClassWindow.Methods.Items.OfType<Method>().ToList<Method>(); ;// as List<Method>;
+
+            var attributes = editClassWindow.Attributes.Items.OfType<Models.Attribute>().ToList<Models.Attribute>();
+
+            execCommand(new UpdateClassInfoCommand(classToEdit, editClassWindow.ClassName.Text, editClassWindow.StereoType.Text, editClassWindow.IsAbstract.IsChecked, methods, attributes));
             
             classToEdit = null;
             selectedShape = null;
@@ -300,11 +302,12 @@ namespace Area51.SoftwareModeler.ViewModels
                 if (selectedShape != null && selectedShape.id == shape.id)
                 {
                     
-                    bool newWind = (editClassWindow == null || editClassWindow.Visibility == Visibility.Collapsed);
+                    bool newWind = (editClassWindow == null || editClassWindow.Visibility == Visibility.Collapsed || editClassWindow.Visibility == Visibility.Hidden);
 
-                    if (newWind)editClassWindow = new EditClassPopupWindow();
+                    if (newWind) editClassWindow = new EditClassPopupWindow();
                     classToEdit = (Class) shape;
                     editClassWindow.ClassName.Text = classToEdit.name;
+                    editClassWindow.StereoType.Text = classToEdit.StereoType;
                     editClassWindow.IsAbstract.IsChecked = classToEdit.IsAbstract;
                     editClassWindow.Methods.ItemsSource = classToEdit.Methods;
                     editClassWindow.Attributes.ItemsSource = classToEdit.Attributes;
