@@ -6,9 +6,10 @@ namespace Area51.SoftwareModeler.Models
 {
     public class Attribute
     {
-        private string type {get; set;}
-        private string name { get; set; }
         private Visibility visibility { get; set; }
+        private string name { get; set; }
+        private string type { get; set; }
+
         private List<Modifier> modifiers { get; set; }
 
         public Attribute()
@@ -33,6 +34,20 @@ namespace Area51.SoftwareModeler.Models
             throw new NotImplementedException();
         }
 
+        public Visibility Visibility
+        {
+            get
+            {
+                return visibility;
+            }
+            set
+            {
+                visibility = value;
+                Console.WriteLine("Visibility:" + HelperFunctions.GetEnumFromDescription(HelperFunctions.GetDescription(visibility), Visibility));
+
+            }
+        }
+
         public string Name
         {
             get
@@ -48,19 +63,7 @@ namespace Area51.SoftwareModeler.Models
 
         public string Type { get { return type; } set { type = value; } }
 
-        public Visibility Visibility
-        {
-            get
-            {
-                return visibility;
-            }
-            set
-            {
-                visibility = value;
-                Console.WriteLine("Visibility:"+ HelperFunctions.GetEnumFromDescription(HelperFunctions.GetDescription(visibility), Visibility));
 
-            }
-        }
 
         public override string ToString()
         {

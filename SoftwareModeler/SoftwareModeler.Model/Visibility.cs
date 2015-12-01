@@ -20,6 +20,7 @@ namespace Area51.SoftwareModeler.Models
         Private 
     }
     
+    
     public enum testMethod
     {
         testCommit, pleasework

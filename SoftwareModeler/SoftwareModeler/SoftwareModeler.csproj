@@ -109,6 +109,9 @@
     <Compile Include="Views\DiagramDrawingWindowUserControl.xaml.cs">
       <DependentUpon>DiagramDrawingWindowUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EditClassPopupWindow.xaml.cs">
+      <DependentUpon>EditClassPopupWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MenuUserControl.xaml.cs">
       <DependentUpon>MenuUserControl.xaml</DependentUpon>
     </Compile>
@@ -116,9 +119,6 @@
     <Compile Include="Views\NodeCoordinateConverter.cs" />
     <Compile Include="Views\ToolboxUserControl.xaml.cs">
       <DependentUpon>ToolboxUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -133,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DiagramDrawingWindowUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditClassPopupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -153,10 +157,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ToolboxUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControl1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

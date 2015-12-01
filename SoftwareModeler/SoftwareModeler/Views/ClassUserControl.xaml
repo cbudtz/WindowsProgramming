@@ -6,7 +6,6 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
-             xmlns:model="clr-namespace:Area51.SoftwareModeler.Models"
              xmlns:models="clr-namespace:Area51.SoftwareModeler.Models;assembly=SoftwareModeler.Model"
              xmlns:helpers="clr-namespace:Area51.SoftwareModeler.Helpers;assembly=SoftwareModeler.Model"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"

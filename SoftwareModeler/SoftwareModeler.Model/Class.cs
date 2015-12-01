@@ -70,9 +70,12 @@ namespace Area51.SoftwareModeler.Models
         public void addMethod(Visibility visibility, string name, string[] parameters)
         {
             Method m = new Method(visibility, name);
+            string param = "";
             for (int i = 0; i < parameters.Length; i++)
-                m.addParameter(parameters[i]);
-            
+                param += parameters + ", ";
+            //m.addParameter(parameters[i]);
+            param = param.Substring(0, param.Length - 1);
+            m.Parameters = param;
             this.methods.Add(m);
         }
 

@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Area51.SoftwareModeler.Views;
 
 namespace Area51.SoftwareModeler.ViewModels
 {
@@ -30,12 +31,13 @@ namespace Area51.SoftwareModeler.ViewModels
     //public enum ConnectionToAdd { NONE, ASSOCIATION, AGGREGATION, COMPOSITION }
     //public enum ClassToAdd { NONE, NORMAL, ABSTRACT, INTERFACE, COMMENT}
     public enum ButtonCommand { NONE, CLASS, ABSTRACT, INTERFACE, COMMENT, ASSOCIATION, AGGREGATION, COMPOSITION}
+    
     public class MainViewModel : ViewModelBase
     {
         private Shape selectedShape = null;
         private bool isResizing = false;
+        public List<String> listOfValues { get; }
 
-        
 
         private ButtonCommand buttonDown = ButtonCommand.NONE;
         //private ConnectionToAdd isAddingConnection = ConnectionToAdd.NONE;
@@ -120,6 +122,9 @@ namespace Area51.SoftwareModeler.ViewModels
         /// </summary>
         public MainViewModel()
         {
+            listOfValues = new List<string>();
+            listOfValues.Add("test1");
+            listOfValues.Add("test2");
             commandController = new CommandTree();
             // The commands are given the methods they should use to execute, and find out if they can execute.
 
@@ -276,6 +281,29 @@ namespace Area51.SoftwareModeler.ViewModels
                 shape.Y = initialShapePosition.Y;
                 double xOffset = mousePosition.X - initialMousePosition.X;
                 double yOffset = mousePosition.Y - initialMousePosition.Y;
+                EditClassPopupWindow wind = new EditClassPopupWindow();
+                
+                wind.Show();
+                List<String> content = new List<String>();
+                Class selected = (Class)shape;
+                //content.Add(Models.Visibility.Default.ToString());
+                //content.Add(Models.Visibility.Private.ToString());
+                //content.Add(Models.Visibility.Protected.ToString());
+                //content.Add(Models.Visibility.Public.ToString());       
+                //wind.attributeVisibilty.ItemsSource = content;
+                //wind.attributeVisibilty.SelectedItem = selected.Methods.get
+                wind.ClassName.Text = selected.name;
+                wind.IsAbstract.IsChecked = selected.IsAbstract;
+                
+                wind.attributes.ItemsSource = selected.Attributes;
+                selected.Methods.Add(new Method(Models.Visibility.Default, ""));
+                wind.methods.ItemsSource = selected.Methods;
+
+                Console.WriteLine("attributes: " + selected.Attributes.Count);
+                Console.WriteLine("methods: " + selected.Methods.Count);
+
+
+                Console.WriteLine("window enabled: " + wind.IsEnabled + ";" + wind.Visibility + ";" + wind.IsVisible + ";text: " + wind.ClassName.Text);
                 if(Math.Abs(xOffset) > 10 || Math.Abs(yOffset) > 10)
                 execCommand(new MoveShapeCommand(shape, xOffset, yOffset));
             }
