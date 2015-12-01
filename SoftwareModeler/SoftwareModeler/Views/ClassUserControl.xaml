@@ -40,12 +40,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Text="{Binding StereoType, StringFormat={}&lt;&lt;{0}&gt;&gt;}" HorizontalAlignment="Stretch" TextAlignment="Center"/>
-            <!--<TextBlock Grid.Row="0"  HorizontalAlignment="Stretch" TextAlignment="Center">
-                <Run Text="&lt;&lt;" />
-                <Run Text="{Binding StereoType}"/>
-                <Run Text="&gt;&gt;"   />
-            </TextBlock>-->
             
             <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Stretch" TextAlignment="Center">
                 <TextBlock.Style>
@@ -59,19 +60,21 @@
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <cmd:EventToCommand Command="{Binding DataContext.EditClassContentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                        </i:EventTrigger>
-		                <local:EventTriggerWithoutPropagation EventName="MouseDown" >
-                            <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
-                        </local:EventTriggerWithoutPropagation>
-                        <local:EventTriggerWithoutPropagation EventName="MouseUp">
-                            <cmd:EventToCommand Command="{Binding DataContext.MouseUpShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
-                        </local:EventTriggerWithoutPropagation>
-                 
-                    </i:Interaction.Triggers>
+                
             </TextBlock>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <cmd:EventToCommand Command="{Binding DataContext.EditClassContentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                    </i:EventTrigger>
+                    <local:EventTriggerWithoutPropagation EventName="MouseDown" >
+                        <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    </local:EventTriggerWithoutPropagation>
+                    <local:EventTriggerWithoutPropagation EventName="MouseUp">
+                        <cmd:EventToCommand Command="{Binding DataContext.MouseUpShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    </local:EventTriggerWithoutPropagation>
+
+                </i:Interaction.Triggers>
+            </Grid>
             <!--<ListView 
                 Grid.Row="1"
                 ItemsSource="{Binding Attributes}"/>
