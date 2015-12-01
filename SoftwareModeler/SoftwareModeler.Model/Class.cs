@@ -11,7 +11,7 @@ namespace Area51.SoftwareModeler.Models
         private string stereotype;
         private bool isAbstract;
         //private Point anchorPoint;
-        private Visibility visibility;
+        //private Visibility visibility;
         private List<Attribute> attributes;
         private List<Method> methods;
 
@@ -25,16 +25,17 @@ namespace Area51.SoftwareModeler.Models
             this.X = anchorPoint.X;
             this.Y = anchorPoint.Y;
             //this.anchorPoint = anchorPoint;
-            this.visibility = visibility;
+            //this.visibility = visibility;
             this.attributes = new List<Attribute>();
             this.methods = new List<Method>();
+
         }
 
         public Class() : base()
         {
         }
 
-        public Class(int? id, String name, String stereotype, Boolean isAbstract, Point anchorPoint, Visibility visibility) : base(id)
+        public Class(int? id, String name, String stereotype, Boolean isAbstract, Point anchorPoint) : base(id)
         {
             this.name = name;
             this.stereotype = stereotype;
@@ -42,18 +43,21 @@ namespace Area51.SoftwareModeler.Models
             this.X = anchorPoint.X;
             this.Y = anchorPoint.Y;
             //this.anchorPoint = anchorPoint;
-            this.visibility = visibility;
+            //this.visibility = visibility;
             this.attributes = new List<Attribute>();
             this.methods = new List<Method>();
+
+
         }
 
         //Getters and setters
-        public String StereoType { get { return stereotype; } set { stereotype = value; } }
-        public Boolean IsAbstract { get { return isAbstract; } set { isAbstract = value; } }
+        public String Name { get { return name;} set { name = value; NotifyPropertyChanged(); } }
+        public String StereoType { get { return stereotype; } set { stereotype = value; NotifyPropertyChanged();} }
+        public Boolean IsAbstract { get { return isAbstract; } set { isAbstract = value; NotifyPropertyChanged();} }
         //public Point AnchorPoint { get { return anchorPoint; } set { anchorPoint = value; } }
-        public Visibility Visibility { get { return visibility; } set { visibility = value; } }
-        public List<Attribute> Attributes { get { return attributes; } set { attributes = value; } }
-        public List<Method> Methods { get { return methods; } set { methods = value; } }
+        //public Visibility Visibility { get { return visibility; } set { visibility = value; NotifyPropertyChanged();} }
+        public List<Attribute> Attributes { get { return attributes; } set { attributes = value; NotifyPropertyChanged();} }
+        public List<Method> Methods { get { return methods; } set { methods = value; NotifyPropertyChanged();} }
 
 
 

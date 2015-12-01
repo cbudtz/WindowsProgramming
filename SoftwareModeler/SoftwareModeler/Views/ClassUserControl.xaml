@@ -11,7 +11,8 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}">
+             Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}"
+             d:DataContext="{d:DesignData }">
 
     <UserControl.Resources>
        <models:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -31,9 +32,9 @@
         <Grid Margin="5,5,5,5" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="1"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -72,13 +73,15 @@
             <ListView 
                 Grid.Row="2"
                 ItemsSource="{Binding Methods}"/>-->
-            <DataGrid
+            <DataGrid 
                 Grid.Row="1" 
                 IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding Attributes}" 
                 AutoGenerateColumns="False" 
                 BorderThickness="0" 
-                HeadersVisibility="None" GridLinesVisibility="None">
+                HeadersVisibility="None" 
+                GridLinesVisibility="None"
+                CanUserAddRows="False">
 
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn 
@@ -88,27 +91,9 @@
                                                 UpdateSourceTrigger=PropertyChanged, 
                                                 Converter={StaticResource VisibilityConverter}}" 
                         />
-                    <!--SelectedItemBinding="{Binding Visibility}" /> -->
-                    <!--<DataGridTextColumn Binding="{Binding ElementName=txtValue, 
-                                          Path=Text, 
-                                          Converter={StaticResource VisibilityConverter}}" />-->
-                    <!--
-                    <DataGridComboBoxColumn ItemsSource="{Binding ElementName=txtValue, 
-                                          Path=Text, 
-                                          Converter={StaticResource VisibilityConverter}}"
-                                            SelectedItemBinding="{Binding ElementName=txtValue, 
-                                          Path=Text, 
-                                          Converter={StaticResource VisibilityConverter}}"/>
-                    -->
-                    <!--
-                        ItemsSource="{Binding Source= model:Visibility}"
-                        SelectedValueBinding="{Binding Visibility}"/>
-                        -->
-                    <!--"{Binding ElementName=txtValue, 
-                                          Path=Text, 
-                                          Converter={StaticResource YesNoToBooleanConverter}}"
-                    -->
-                    <DataGridTextColumn Width="*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                    
+                    <DataGridTextColumn Width="4*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                    <DataGridTextColumn Width="4*" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" />
                 </DataGrid.Columns>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectedCellsChanged">
@@ -117,13 +102,32 @@
                 </i:Interaction.Triggers>
             </DataGrid>
 
-            <Rectangle Grid.Row="2" Width="Auto" StrokeThickness="1"/>
-            <DataGrid
+            <Rectangle Grid.Row="2" Width="Auto" Height="2" StrokeThickness="1" Stroke="Black"/>
+            <DataGrid 
                 Grid.Row="3" 
+                CanUserAddRows="False"
                 ItemsSource="{Binding Methods}" 
-                AutoGenerateColumns="True" 
+                AutoGenerateColumns="False" 
                 BorderThickness="0" 
-                HeadersVisibility="None" GridLinesVisibility="None" >
+                HeadersVisibility="None" 
+                GridLinesVisibility="None" >
+
+
+                <DataGrid.Columns>
+                    <DataGridComboBoxColumn 
+                        ItemsSource="{Binding Source={StaticResource VisibilityEnum}, Mode=OneWay}"
+                        SelectedItemBinding="{Binding Path= Visibility, 
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged, 
+                                                Converter={StaticResource VisibilityConverter}}" 
+                        />
+
+                    <DataGridTextColumn Width="3*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                    <DataGridTextColumn Width="3*" Binding="{Binding Parameters, UpdateSourceTrigger=LostFocus}" />
+                    <DataGridTextColumn Width="3*" Binding="{Binding ReturnType, UpdateSourceTrigger=LostFocus}" />
+                </DataGrid.Columns>
+
+
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="DataContextChanged" >
                         <cmd:EventToCommand Command="{Binding DataContext.EditClassContentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>

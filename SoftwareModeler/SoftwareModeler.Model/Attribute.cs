@@ -6,9 +6,9 @@ namespace Area51.SoftwareModeler.Models
 {
     public class Attribute
     {
-        private Visibility visibility { get; set; }
-        private string name { get; set; }
-        private string type { get; set; }
+        private Visibility visibility; // { get; set; }
+        private string name; // { get; set; }
+        private string type;// { get; set; }
 
         private List<Modifier> modifiers { get; set; }
 
@@ -43,7 +43,7 @@ namespace Area51.SoftwareModeler.Models
             set
             {
                 visibility = value;
-                Console.WriteLine("Visibility:" + HelperFunctions.GetEnumFromDescription(HelperFunctions.GetDescription(visibility), Visibility));
+                //Console.WriteLine("Visibility:" + HelperFunctions.GetEnumFromDescription(HelperFunctions.GetDescription(visibility), Visibility));
 
             }
         }

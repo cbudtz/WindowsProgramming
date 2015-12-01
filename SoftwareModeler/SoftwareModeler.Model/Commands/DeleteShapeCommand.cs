@@ -41,7 +41,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             ShapeSelected = shapeToDelete.IsSelected;
             ShapeStereotype = (shapeToDelete as Class).StereoType;
             ShapeAbstract = (shapeToDelete as Class).IsAbstract;
-            ShapeVisibility = (shapeToDelete as Class).Visibility;
+            
             // if x,y of either of connection endpoint shapes, remove connection // TODO alternatively use id
 
         }
@@ -68,7 +68,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
-            Shape shapeToAdd = new Class(shapeID,ShapeName,ShapeStereotype,ShapeAbstract,new Point(ShapeX,ShapeY),ShapeVisibility );
+            Shape shapeToAdd = new Class(shapeID,ShapeName,ShapeStereotype,ShapeAbstract,new Point(ShapeX,ShapeY));
             //Create new shape and add it!
             ShapeCollector.getI().obsShapes.Add(shapeToAdd);
             connectionsToDelete.ForEach(x => ShapeCollector.getI().obsConnections.Add(x));
