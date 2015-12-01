@@ -139,7 +139,6 @@ namespace Area51.SoftwareModeler.Models.Commands
                 Console.WriteLine("reExecuted " + b.Id);
             }
 
-
         }
 
         private static BaseCommand reParseTree(BaseCommand node, int id)
