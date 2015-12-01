@@ -522,17 +522,11 @@ namespace Area51.SoftwareModeler.ViewModels
             sfd.ShowDialog();
 
             // If the file name is not an empty string open it for saving.
-            if (sfd.FileName != "")
-            {
+            if (sfd.FileName == "") return saved;
+            System.IO.FileStream filestream = (System.IO.FileStream)sfd.OpenFile();
                
-                System.IO.FileStream filestream = (System.IO.FileStream)sfd.OpenFile();
-                using(System.IO.StreamWriter writer = new System.IO.StreamWriter(filestream))
-                {
-                    CommandTree.save(commandController, writer);
-                    saved = true;
-                }
-                filestream.Close();
-            }
+            CommandTree.asyncSave(commandController, filestream);
+            saved = true;
             return saved;
         }
 
