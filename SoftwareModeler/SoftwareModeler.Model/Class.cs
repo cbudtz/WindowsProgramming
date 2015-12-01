@@ -15,7 +15,10 @@ namespace Area51.SoftwareModeler.Models
         private List<Attribute> attributes;
         private List<Method> methods;
 
+        public Class() : base()
+        {
 
+        }
 
         public Class(String name, String stereotype, Boolean isAbstract, Point anchorPoint, Visibility visibility) : base()
         {
@@ -29,10 +32,7 @@ namespace Area51.SoftwareModeler.Models
             this.attributes = new List<Attribute>();
             this.methods = new List<Method>();
 
-        }
 
-        public Class() : base()
-        {
         }
 
         public Class(int? id, String name, String stereotype, Boolean isAbstract, Point anchorPoint) : base(id)
@@ -46,7 +46,6 @@ namespace Area51.SoftwareModeler.Models
             //this.visibility = visibility;
             this.attributes = new List<Attribute>();
             this.methods = new List<Method>();
-
 
         }
 
