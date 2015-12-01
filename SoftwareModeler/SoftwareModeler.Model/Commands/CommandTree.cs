@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows;
@@ -37,7 +38,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             }
             else
             {
-                
+
                 //Add child to tree
                 command.Parent = Active;
                 var newLayer = Active.addChild(command, CurrentBranchLayer);
@@ -46,14 +47,14 @@ namespace Area51.SoftwareModeler.Models.Commands
             }
             ShapeCollector.getI().commands.Add(command);
             NotifyPropertyChanged(() => ShapeCollector.getI().commands);
-            
-     //       foreach (BaseCommand baseCommand in ShapeCollector.getI().commands)
-       //     {
-         //       Console.WriteLine(baseCommand.Id + baseCommand.Color.ToString() + baseCommand.BranchLayer);
-           // }
+
+            //       foreach (BaseCommand baseCommand in ShapeCollector.getI().commands)
+            //     {
+            //       Console.WriteLine(baseCommand.Id + baseCommand.Color.ToString() + baseCommand.BranchLayer);
+            // }
             //ececute new command
             Active.execute();
-            
+
         }
 
         private void setActive(BaseCommand node)
@@ -64,7 +65,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 Active.Color = Colors.Azure;
             }
             Active = node;
-            if(Active != null) Active.Color = Colors.Aquamarine;
+            if (Active != null) Active.Color = Colors.Aquamarine;
         }
 
         public void setActiveCommand(BaseCommand command)
@@ -77,7 +78,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public static void save(CommandTree commandTree, StreamWriter saveWriter)
         {
-            
+
             //Making sure that new shapes will get a new ID when deSerializing
             commandTree.NextShapeId = Shape.nextId;
             //Serialize CommandTree TODO: Add FileSelectBox
@@ -86,9 +87,33 @@ namespace Area51.SoftwareModeler.Models.Commands
                 serializer.Serialize(writer, commandTree);
         }
 
+        public static void save(CommandTree commandTree, FileStream fileStream)
+        {
+
+            //Making sure that new shapes will get a new ID when deSerializing
+            commandTree.NextShapeId = Shape.nextId;
+            //Serialize CommandTree TODO: Add FileSelectBox
+            XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(fileStream))
+            {
+                serializer.Serialize(writer, commandTree);
+            }
+            fileStream.Close();
+        }
+
         public static void save(CommandTree commandTree)
         {
             save(commandTree, new StreamWriter(@"output.xml"));
+        }
+
+        public static async void asyncSave(CommandTree commandTree)
+        {
+            await Task.Run(() => save(commandTree));
+        }
+
+        public static async void asyncSave(CommandTree commandTree, FileStream fileStream)
+        {
+            await Task.Run(() => save(commandTree, fileStream));
         }
 
         public static CommandTree load(StreamReader loadReader)
@@ -102,7 +127,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 restoredTree = serializer.Deserialize(reader) as CommandTree;
             //Make sure that newly Added Shapes get a new ID
             Shape.nextId = restoredTree.NextShapeId;
-            Console.WriteLine("Load: Active node:"+ restoredTree.Active.Id);
+            Console.WriteLine("Load: Active node:" + restoredTree.Active.Id);
             Console.WriteLine("Load: RootNode: " + restoredTree.Root);
             //Reestablishing parents and finding active node
             restoredTree.setActive(CommandTree.reParseTree(restoredTree.Root, restoredTree.Active.Id));
@@ -121,7 +146,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public void reExecute()
         {
-            
+
             //Remove all objects from canvas
             ShapeCollector.getI().reset();
             //Execute all commands on branch to active node.
@@ -147,15 +172,15 @@ namespace Area51.SoftwareModeler.Models.Commands
             Console.WriteLine("Looking at:" + node.Id);
             BaseCommand activeNode = null;
 
-         
-            if(node!=null && node.Id == id)
+
+            if (node != null && node.Id == id)
             {
                 Console.WriteLine("Found active node");
                 activeNode = node;
             }
-            if(!node.Children.Equals(null) && node.Children.Count > 0)
+            if (!node.Children.Equals(null) && node.Children.Count > 0)
             {
-               
+
                 foreach (BaseCommand child in node.Children)
                 {
                     child.Parent = node;
@@ -166,20 +191,20 @@ namespace Area51.SoftwareModeler.Models.Commands
             }
             Console.WriteLine("ReparseTree - Found activeNode: " + activeNode);
             return activeNode;
-            
+
         }
 
         public void undo()
         {
-            if(Active == Root)
+            if (Active == Root)
             {
-                
+
                 return;
             }
             Active.unExecute();
             undone.Add(Active);
             setActive(Active.Parent);
-            
+
         }
 
         public void redo()
