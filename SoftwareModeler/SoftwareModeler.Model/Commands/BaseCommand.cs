@@ -41,10 +41,19 @@ namespace Area51.SoftwareModeler.Models.Commands
         public abstract void execute();
         public abstract void unExecute();
         //Inherited methods
-        public  void addChild(BaseCommand child)
+        public  int addChild(BaseCommand child, int currentBranchLayer)
         {
-            child.BranchLayer += children.Count+ this.BranchLayer;
+            if (children.Count == 0)
+            {
+                child.BranchLayer = this.BranchLayer;
+            }
+            else
+            {
+                child.BranchLayer = ++currentBranchLayer;
+            }
+            Console.WriteLine(currentBranchLayer + "CurrentBranchLayer");
             children.Add(child);
+            return currentBranchLayer;
         }
         public BaseCommand()
         {
