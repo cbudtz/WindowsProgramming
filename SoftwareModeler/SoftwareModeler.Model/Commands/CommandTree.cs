@@ -21,6 +21,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public BaseCommand Active { get; set; }
         public List<BaseCommand> undone { get; set; } = new List<BaseCommand>();
         public int NextShapeId { get; set; }
+        public int NextCommandId { get; set; }
         public ObservableCollection<BaseCommand> Commands1 { get; set; } = ShapeCollector.getI().commands;
 
         public CommandTree()
@@ -92,6 +93,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
             //Making sure that new shapes will get a new ID when deSerializing
             commandTree.NextShapeId = Shape.nextId;
+            commandTree.NextCommandId = BaseCommand.nextid;
             //Serialize CommandTree TODO: Add FileSelectBox
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
             using (System.IO.StreamWriter writer = new System.IO.StreamWriter(fileStream))
@@ -100,6 +102,8 @@ namespace Area51.SoftwareModeler.Models.Commands
             }
             fileStream.Close();
         }
+
+
 
         public static void save(CommandTree commandTree)
         {
@@ -120,6 +124,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             //Empty ShapeCollector Singleton
             ShapeCollector.getI().reset();
+            ShapeCollector.getI().commands.Clear();
             //restore Tree
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
             CommandTree restoredTree;
@@ -127,6 +132,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 restoredTree = serializer.Deserialize(reader) as CommandTree;
             //Make sure that newly Added Shapes get a new ID
             Shape.nextId = restoredTree.NextShapeId;
+            BaseCommand.nextid = restoredTree.NextCommandId;
             Console.WriteLine("Load: Active node:" + restoredTree.Active.Id);
             Console.WriteLine("Load: RootNode: " + restoredTree.Root);
             //Reestablishing parents and finding active node
