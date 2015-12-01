@@ -13,19 +13,33 @@ namespace Area51.SoftwareModeler.Models
     public class Method
     {
         //public string parameterString { get; }
-        private String name;//{ get; set; }
+        private String name { get; set; }
         //private List<String> parameters { get; set; }
-        private String parameters;
-        private String returnType;// { get; set; }
-        private Visibility visibility;//{get; set;}
+        private String parameters { get; set; }
+        private String returnType { get; set; }
+        private Visibility visibility{get; set;}
         private List<Modifier> modifiers { get; set; }
+
 
         public Method(Visibility visibility, string name)
         {
             this.visibility = visibility;
             this.name = name;
-            //this.parameters = new List<string>();
+            //new List<string>();
 
+        }
+        public Method(Visibility visibility, string name, String parameters)
+        {
+            this.visibility = visibility;
+            this.name = name;
+            this.parameters = parameters;
+            //new List<string>();
+
+        }
+
+        public Method()
+        {
+            
         }
 
         public Visibility Visibility { get { return visibility; } set { visibility = value; } }

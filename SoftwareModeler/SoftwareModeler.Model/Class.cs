@@ -28,6 +28,7 @@ namespace Area51.SoftwareModeler.Models
             this.visibility = visibility;
             this.attributes = new List<Attribute>();
             this.methods = new List<Method>();
+
         }
 
         public Class() : base()
@@ -45,6 +46,8 @@ namespace Area51.SoftwareModeler.Models
             this.visibility = visibility;
             this.attributes = new List<Attribute>();
             this.methods = new List<Method>();
+
+
         }
 
         //Getters and setters
