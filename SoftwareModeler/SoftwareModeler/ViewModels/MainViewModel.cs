@@ -44,17 +44,6 @@ namespace Area51.SoftwareModeler.ViewModels
 
 
         private ButtonCommand buttonDown = ButtonCommand.NONE;
-        //private ConnectionToAdd isAddingConnection = ConnectionToAdd.NONE;
-        //private bool isAddingAssociation = false;
-        //private bool isAddingAggregation = false;
-        //private bool isAddingComposition = false;
-
-
-        //private ClassToAdd isAddingClass = ClassToAdd.NONE;
-        //private bool isAddingClass = false;
-        //private bool isAddingAbstract = false;
-        //private bool isAddingInterface = false;
-        //private bool isAddingComment = false;
 
         double initialWidth = 0;
         private double minShapeWidth = 150;
@@ -221,7 +210,9 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void EditClassOk()
         {
-           execCommand(new UpdateClassInfoCommand(classToEdit, editClassWindow.ClassName.Text, "", editClassWindow.IsAbstract.IsChecked, Models.Visibility.Public));
+          var methods =   editClassWindow.methods.Items.OfType<Method>() as List<Method>;
+            var attributes = editClassWindow.attributes.Items.OfType<Models.Attribute>() as List<Models.Attribute>;
+            execCommand(new UpdateClassInfoCommand(classToEdit, editClassWindow.ClassName.Text,"", editClassWindow.IsAbstract.IsChecked, methods, attributes));
             
             classToEdit = null;
             selectedShape = null;
@@ -306,7 +297,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 //wind.Show();
                 //List<String> content = new List<String>();
                 
-                if (selectedShape != null && shape != null && selectedShape.id == shape.id)
+                if (selectedShape != null && selectedShape.id == shape.id)
                 {
                     editClassWindow = new EditClassPopupWindow();
                     classToEdit = (Class) shape;
@@ -319,24 +310,7 @@ namespace Area51.SoftwareModeler.ViewModels
                     editClassWindow.Show();
                 }
                 selectedShape = shape;
-                ////content.Add(Models.Visibility.Default.ToString());
-                ////content.Add(Models.Visibility.Private.ToString());
-                ////content.Add(Models.Visibility.Protected.ToString());
-                ////content.Add(Models.Visibility.Public.ToString());       
-                ////wind.attributeVisibilty.ItemsSource = content;
-                ////wind.attributeVisibilty.SelectedItem = selected.Methods.get
-                //wind.ClassName.Text = selected.name;
-                //wind.IsAbstract.IsChecked = selected.IsAbstract;
-
-                //wind.attributes.ItemsSource = selected.Attributes;
-                //selected.Methods.Add(new Method(Models.Visibility.Default, ""));
-                //wind.methods.ItemsSource = selected.Methods;
-
-                //Console.WriteLine("attributes: " + selected.Attributes.Count);
-                //Console.WriteLine("methods: " + selected.Methods.Count);
-
-
-                //Console.WriteLine("window enabled: " + wind.IsEnabled + ";" + wind.Visibility + ";" + wind.IsVisible + ";text: " + wind.ClassName.Text);
+               
                 if (Math.Abs(xOffset) > 10 || Math.Abs(yOffset) > 10)
                 execCommand(new MoveShapeCommand(shape, xOffset, yOffset));
             }
