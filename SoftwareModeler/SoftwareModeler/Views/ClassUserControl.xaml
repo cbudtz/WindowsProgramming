@@ -90,7 +90,8 @@
                                                 Converter={StaticResource VisibilityConverter}}" 
                         />
                     
-                    <DataGridTextColumn Width="*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                    <DataGridTextColumn Width="4*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                    <DataGridTextColumn Width="4*" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" />
                 </DataGrid.Columns>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectedCellsChanged">
@@ -118,7 +119,9 @@
                                                 Converter={StaticResource VisibilityConverter}}" 
                         />
 
-                    <DataGridTextColumn Width="*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                    <DataGridTextColumn Width="3*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                    <DataGridTextColumn Width="3*" Binding="{Binding Parameters, UpdateSourceTrigger=LostFocus}" />
+                    <DataGridTextColumn Width="3*" Binding="{Binding ReturnType, UpdateSourceTrigger=LostFocus}" />
                 </DataGrid.Columns>
 
 

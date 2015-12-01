@@ -13,11 +13,11 @@ namespace Area51.SoftwareModeler.Models
     public class Method
     {
         //public string parameterString { get; }
-        private String name { get; set; }
+        private String name; // { get; set; }
         //private List<String> parameters { get; set; }
-        private String parameters { get; set; }
-        private String returnType { get; set; }
-        private Visibility visibility{get; set;}
+        private String parameters; // { get; set; }
+        private String returnType; // { get; set; }
+        private Visibility visibility; //{get; set;}
         private List<Modifier> modifiers { get; set; }
 
 
