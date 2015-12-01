@@ -51,12 +51,13 @@ namespace Area51.SoftwareModeler.Models
         }
 
         //Getters and setters
-        public String StereoType { get { return stereotype; } set { stereotype = value; } }
-        public Boolean IsAbstract { get { return isAbstract; } set { isAbstract = value; } }
+        public String Name { get { return name;} set { name = value; NotifyPropertyChanged(); } }
+        public String StereoType { get { return stereotype; } set { stereotype = value; NotifyPropertyChanged();} }
+        public Boolean IsAbstract { get { return isAbstract; } set { isAbstract = value; NotifyPropertyChanged();} }
         //public Point AnchorPoint { get { return anchorPoint; } set { anchorPoint = value; } }
-        public Visibility Visibility { get { return visibility; } set { visibility = value; } }
-        public List<Attribute> Attributes { get { return attributes; } set { attributes = value; } }
-        public List<Method> Methods { get { return methods; } set { methods = value; } }
+        public Visibility Visibility { get { return visibility; } set { visibility = value; NotifyPropertyChanged();} }
+        public List<Attribute> Attributes { get { return attributes; } set { attributes = value; NotifyPropertyChanged();} }
+        public List<Method> Methods { get { return methods; } set { methods = value; NotifyPropertyChanged();} }
 
 
 

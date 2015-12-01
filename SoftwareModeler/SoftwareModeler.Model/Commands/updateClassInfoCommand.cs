@@ -60,7 +60,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public override void execute()
         {
             Class classToUpdate = ShapeCollector.getI().getShapeByID(classID) as Class;
-            if (className != null) classToUpdate.name = className;
+            if (className != null) classToUpdate.Name = className;
             if (stereoType != null) classToUpdate.StereoType = stereoType;
             if (isAbstract != null) classToUpdate.IsAbstract = isAbstract.Value;
             if (visibility != null) classToUpdate.Visibility = visibility.Value;

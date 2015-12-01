@@ -221,7 +221,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void EditClassOk()
         {
-           execCommand(new UpdateClassInfoCommand(classToEdit, classToEdit.name, classToEdit.StereoType, classToEdit.IsAbstract, classToEdit.Visibility));
+           execCommand(new UpdateClassInfoCommand(classToEdit, editClassWindow.ClassName.Text, "", editClassWindow.IsAbstract.IsChecked, Models.Visibility.Public));
+            
             classToEdit = null;
             selectedShape = null;
             editClassWindow.Hide();
