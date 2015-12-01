@@ -48,7 +48,6 @@ namespace Area51.SoftwareModeler.Models.Commands
             this.oldclassName = classToUpdate.name;
             this.oldStereoType = classToUpdate.StereoType;
             this.oldAbstract = classToUpdate.IsAbstract;
-            this.OldVisibility = classToUpdate.Visibility;
             //New variables
             this.className = className;
             this.stereoType = stereoType;
@@ -63,7 +62,6 @@ namespace Area51.SoftwareModeler.Models.Commands
             if (className != null) classToUpdate.Name = className;
             if (stereoType != null) classToUpdate.StereoType = stereoType;
             if (isAbstract != null) classToUpdate.IsAbstract = isAbstract.Value;
-            if (visibility != null) classToUpdate.Visibility = visibility.Value;
         }
 
         public override void unExecute()
@@ -72,7 +70,6 @@ namespace Area51.SoftwareModeler.Models.Commands
             classToUpdate.name = oldclassName;
             classToUpdate.StereoType = oldStereoType;
             classToUpdate.IsAbstract = oldAbstract;
-            classToUpdate.Visibility = OldVisibility;
 
         }
     }
