@@ -10,10 +10,15 @@
              xmlns:models="clr-namespace:Area51.SoftwareModeler.Models;assembly=SoftwareModeler.Model"
              xmlns:helpers="clr-namespace:Area51.SoftwareModeler.Helpers;assembly=SoftwareModeler.Model"
              xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+        xmlns:ViewModel="clr-namespace:Area51.SoftwareModeler.ViewModels"
   
-        Title="WPF Popup With Hyperlink" Height="400" Width="450">
+        Title="WPF Popup With Hyperlink" Height="410" Width="450">
 
+    <!--<Window.DataContext>
+        <ViewModel:MainViewModel />
+    </Window.DataContext>-->
     <Window.Resources>
+        <ViewModel:MainViewModel x:Key="viewModel"></ViewModel:MainViewModel>
         <!--<models:Class x:Key="class"/>
         <models:VisibilityConverter x:Key="VisibilityConverter"/>
         <ObjectDataProvider x:Key="VisibilityEnum"
@@ -31,7 +36,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            
+
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -40,28 +45,37 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
-            
+
         </Grid.ColumnDefinitions>
-        
-            <TextBox Grid.Column="0" IsEnabled="False" >name:</TextBox>
-            <TextBox Grid.Column="1" Name="ClassName"></TextBox>
 
-            <TextBox Grid.Row="1" Grid.Column="0" IsEnabled="False" >IsAbstract:</TextBox>
-            <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10 0 0 0" Name="IsAbstract"></CheckBox>
+        <TextBox Grid.Column="0" IsEnabled="False" >name:</TextBox>
+        <TextBox Grid.Column="1" Name="ClassName"></TextBox>
 
-            <TextBox Grid.Row="2" Grid.Column="0" IsEnabled="False" Text="attributes:" />
+        <TextBox Grid.Row="1" Grid.Column="0" IsEnabled="False" >IsAbstract:</TextBox>
+        <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10 0 0 0" Name="IsAbstract"></CheckBox>
+
+        <TextBox Grid.Row="2" Grid.Column="0" IsEnabled="False" Text="attributes:" />
         <DataGrid Grid.Row="2" Grid.Column="1" Name="attributes" Height="150"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" HeadersVisibility="Column"
                   AutoGenerateColumns="True" CanUserSortColumns="False">
         </DataGrid>
-        
+
         <TextBox Grid.Row="3" Grid.Column="0" IsEnabled="False" Text="methods:" />
-        <Grid Grid.Row="3" Grid.Column="1">
-        <DataGrid Grid.Row="3" Grid.Column="1" Name="methods" Height="150"
+       
+            <DataGrid Grid.Row="3" Grid.Column="1" Name="methods" Height="150"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" HeadersVisibility="Column"
                   AutoGenerateColumns="True" CanUserSortColumns="False">
 
-        </DataGrid>
+            </DataGrid>
+      
+        <Grid Grid.Row="4" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Name="ok" Command="{Binding viewModel.EditClassContentOkCommand}" HorizontalAlignment="Right" Width="50" Margin="5 5 5 5">OK</Button>
+            <Button Grid.Column="2" Name="cancel" Command="{Binding viewModel.EditClassContentCancelCommand}" HorizontalAlignment="Center" Width="50" Margin="5 5 5 5">Cancel</Button>
         </Grid>
     </Grid>
 </Window>

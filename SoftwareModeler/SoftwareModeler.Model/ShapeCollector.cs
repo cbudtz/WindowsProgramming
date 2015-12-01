@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using GalaSoft.MvvmLight;
 
 namespace Area51.SoftwareModeler.Models
 {
@@ -21,6 +22,18 @@ namespace Area51.SoftwareModeler.Models
         public ObservableCollection<Connection> obsConnections { get; set; }
         [XmlIgnore]
         public ObservableCollection<BaseCommand> commands { get; set; }
+
+        [XmlIgnore]
+        public ObservableObject MaxBranchLayer {
+            get
+            {
+                int max = 0;
+                foreach (BaseCommand b in commands)
+                {
+                    if (b.BranchLayer > max) max = b.BranchLayer;
+                }
+                return new ObservableObject();
+            } }
 
 
         private ShapeCollector()  {

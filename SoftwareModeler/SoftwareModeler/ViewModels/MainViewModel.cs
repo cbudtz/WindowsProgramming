@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Area51.SoftwareModeler.Views;
+using Visibility = System.Windows.Visibility;
 
 namespace Area51.SoftwareModeler.ViewModels
 {
@@ -38,6 +39,9 @@ namespace Area51.SoftwareModeler.ViewModels
         private bool isResizing = false;
         public List<String> listOfValues { get; }
 
+        private EditClassPopupWindow editClassWindow = new EditClassPopupWindow();
+        
+
 
         private ButtonCommand buttonDown = ButtonCommand.NONE;
         //private ConnectionToAdd isAddingConnection = ConnectionToAdd.NONE;
@@ -61,11 +65,11 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public string Text { get; set; }
 
-        public int MaxBranchLayer{ get{return getMaxBranchLayer();}}
         #region command variables
         // Commands that the UI can be bound to.
         // Shapes
-        public ICommand EditClassContentCommand { get; }
+        public ICommand EditClassContentCancelCommand { get; }
+        public ICommand EditClassContentOkCommand { get; }
 
         public ICommand MouseDownShapeCommand { get; }
         public ICommand MouseMoveShapeCommand { get; }
@@ -112,6 +116,9 @@ namespace Area51.SoftwareModeler.ViewModels
         public ObservableCollection<BaseCommand> commands { get { return ShapeCollector.getI().commands; } }
         public ObservableCollection<Shape> classes { get { return ShapeCollector.getI().obsShapes; } }
         public ObservableCollection<Connection> connections { get { return ShapeCollector.getI().obsConnections; } }
+        public ObservableObject MaxBranchLayer { get { return ShapeCollector.getI().MaxBranchLayer; } }
+        private Class classToEdit = null;
+
 
         //Dynamic 
         private CommandTree commandController { get; set; }
@@ -129,7 +136,8 @@ namespace Area51.SoftwareModeler.ViewModels
             // The commands are given the methods they should use to execute, and find out if they can execute.
 
             #region initialize commands
-            EditClassContentCommand = new RelayCommand<SelectedCellsChangedEventArgs>(EditClassContent);
+            EditClassContentOkCommand = new RelayCommand(EditClassOk);
+            EditClassContentCancelCommand = new RelayCommand(EditClassCancel);
 
             MouseDownShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownShape);
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
@@ -211,9 +219,19 @@ namespace Area51.SoftwareModeler.ViewModels
             }
         }
 
-        public void EditClassContent(SelectedCellsChangedEventArgs e)
+        public void EditClassOk()
         {
-            Console.WriteLine("test: ");
+           execCommand(new UpdateClassInfoCommand(classToEdit, classToEdit.name, classToEdit.StereoType, classToEdit.IsAbstract, classToEdit.Visibility));
+            classToEdit = null;
+            selectedShape = null;
+            editClassWindow.Hide();
+        }
+
+        public void EditClassCancel()
+        {
+            classToEdit = null;
+            selectedShape = null;
+            editClassWindow.Visibility = Visibility.Collapsed;
         }
         public void MouseMoveShape(MouseEventArgs e)
         {
@@ -281,30 +299,44 @@ namespace Area51.SoftwareModeler.ViewModels
                 shape.Y = initialShapePosition.Y;
                 double xOffset = mousePosition.X - initialMousePosition.X;
                 double yOffset = mousePosition.Y - initialMousePosition.Y;
-                EditClassPopupWindow wind = new EditClassPopupWindow();
+                //EditClassPopupWindow wind = new EditClassPopupWindow();
+
+
+                //wind.Show();
+                //List<String> content = new List<String>();
                 
-                wind.Show();
-                List<String> content = new List<String>();
-                Class selected = (Class)shape;
-                //content.Add(Models.Visibility.Default.ToString());
-                //content.Add(Models.Visibility.Private.ToString());
-                //content.Add(Models.Visibility.Protected.ToString());
-                //content.Add(Models.Visibility.Public.ToString());       
-                //wind.attributeVisibilty.ItemsSource = content;
-                //wind.attributeVisibilty.SelectedItem = selected.Methods.get
-                wind.ClassName.Text = selected.name;
-                wind.IsAbstract.IsChecked = selected.IsAbstract;
-                
-                wind.attributes.ItemsSource = selected.Attributes;
-                selected.Methods.Add(new Method(Models.Visibility.Default, ""));
-                wind.methods.ItemsSource = selected.Methods;
+                if (selectedShape != null && shape != null && selectedShape.id == shape.id)
+                {
+                    editClassWindow = new EditClassPopupWindow();
+                    classToEdit = (Class) shape;
+                    editClassWindow.ClassName.Text = classToEdit.name;
+                    editClassWindow.IsAbstract.IsChecked = classToEdit.IsAbstract;
+                    editClassWindow.methods.ItemsSource = classToEdit.Methods;
+                    editClassWindow.attributes.ItemsSource = classToEdit.Attributes;
+                    editClassWindow.ok.Command = EditClassContentOkCommand;
+                    editClassWindow.cancel.Command = EditClassContentCancelCommand;
+                    editClassWindow.Show();
+                }
+                selectedShape = shape;
+                ////content.Add(Models.Visibility.Default.ToString());
+                ////content.Add(Models.Visibility.Private.ToString());
+                ////content.Add(Models.Visibility.Protected.ToString());
+                ////content.Add(Models.Visibility.Public.ToString());       
+                ////wind.attributeVisibilty.ItemsSource = content;
+                ////wind.attributeVisibilty.SelectedItem = selected.Methods.get
+                //wind.ClassName.Text = selected.name;
+                //wind.IsAbstract.IsChecked = selected.IsAbstract;
 
-                Console.WriteLine("attributes: " + selected.Attributes.Count);
-                Console.WriteLine("methods: " + selected.Methods.Count);
+                //wind.attributes.ItemsSource = selected.Attributes;
+                //selected.Methods.Add(new Method(Models.Visibility.Default, ""));
+                //wind.methods.ItemsSource = selected.Methods;
+
+                //Console.WriteLine("attributes: " + selected.Attributes.Count);
+                //Console.WriteLine("methods: " + selected.Methods.Count);
 
 
-                Console.WriteLine("window enabled: " + wind.IsEnabled + ";" + wind.Visibility + ";" + wind.IsVisible + ";text: " + wind.ClassName.Text);
-                if(Math.Abs(xOffset) > 10 || Math.Abs(yOffset) > 10)
+                //Console.WriteLine("window enabled: " + wind.IsEnabled + ";" + wind.Visibility + ";" + wind.IsVisible + ";text: " + wind.ClassName.Text);
+                if (Math.Abs(xOffset) > 10 || Math.Abs(yOffset) > 10)
                 execCommand(new MoveShapeCommand(shape, xOffset, yOffset));
             }
             // The mouse is released, as the move operation is done, so it can be used by other controls.
@@ -407,14 +439,7 @@ namespace Area51.SoftwareModeler.ViewModels
             commandController.setActiveCommand(cmd);
         }
 
-        private int getMaxBranchLayer()
-        {
-            int max = 0;
-            foreach(BaseCommand b in commands){
-                if (b.BranchLayer > max) max = b.BranchLayer;
-            }
-            return max;
-        }
+        
         public void MouseClicked(MouseEventArgs e)
         {
             
