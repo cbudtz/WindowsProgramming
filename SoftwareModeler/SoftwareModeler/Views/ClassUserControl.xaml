@@ -29,7 +29,7 @@
     </UserControl.Resources>
 
     <Border Name="borderName" BorderBrush="Gray" Background="LightGray" CornerRadius="6" BorderThickness="2,2,5,5">
-        <Grid Margin="5,5,5,5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="Blue">
+        <Grid Margin="5,5,5,5" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -79,7 +79,9 @@
                 ItemsSource="{Binding Attributes}" 
                 AutoGenerateColumns="False" 
                 BorderThickness="0" 
-                HeadersVisibility="None" GridLinesVisibility="None">
+                HeadersVisibility="None" 
+                GridLinesVisibility="None"
+                CanUserAddRows="False">
 
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn 
@@ -103,12 +105,13 @@
             <Rectangle Grid.Row="2" Width="Auto" Height="2" StrokeThickness="1" Stroke="Black"/>
             <DataGrid 
                 Grid.Row="3" 
-                CanUserAddRows="True"
+                CanUserAddRows="False"
                 ItemsSource="{Binding Methods}" 
                 AutoGenerateColumns="False" 
                 BorderThickness="0" 
                 HeadersVisibility="None" 
                 GridLinesVisibility="None" >
+
 
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn 
