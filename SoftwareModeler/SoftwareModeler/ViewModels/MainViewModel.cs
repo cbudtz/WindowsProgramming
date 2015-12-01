@@ -210,8 +210,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void EditClassOk()
         {
-          var methods =   editClassWindow.methods.Items.OfType<Method>() as List<Method>;
-            var attributes = editClassWindow.attributes.Items.OfType<Models.Attribute>() as List<Models.Attribute>;
+          var methods =   editClassWindow.Methods.Items.OfType<Method>() as List<Method>;
+            var attributes = editClassWindow.Attributes.Items.OfType<Models.Attribute>() as List<Models.Attribute>;
             execCommand(new UpdateClassInfoCommand(classToEdit, editClassWindow.ClassName.Text,"", editClassWindow.IsAbstract.IsChecked, methods, attributes));
             
             classToEdit = null;
@@ -299,15 +299,18 @@ namespace Area51.SoftwareModeler.ViewModels
                 
                 if (selectedShape != null && selectedShape.id == shape.id)
                 {
-                    editClassWindow = new EditClassPopupWindow();
+                    
+                    bool newWind = (editClassWindow == null || editClassWindow.Visibility == Visibility.Collapsed);
+
+                    if (newWind)editClassWindow = new EditClassPopupWindow();
                     classToEdit = (Class) shape;
                     editClassWindow.ClassName.Text = classToEdit.name;
                     editClassWindow.IsAbstract.IsChecked = classToEdit.IsAbstract;
-                    editClassWindow.methods.ItemsSource = classToEdit.Methods;
-                    editClassWindow.attributes.ItemsSource = classToEdit.Attributes;
-                    editClassWindow.ok.Command = EditClassContentOkCommand;
-                    editClassWindow.cancel.Command = EditClassContentCancelCommand;
-                    editClassWindow.Show();
+                    editClassWindow.Methods.ItemsSource = classToEdit.Methods;
+                    editClassWindow.Attributes.ItemsSource = classToEdit.Attributes;
+                    editClassWindow.Ok.Command = EditClassContentOkCommand;
+                    editClassWindow.Cancel.Command = EditClassContentCancelCommand;
+                    if(newWind) editClassWindow.Show();
                 }
                 selectedShape = shape;
                
