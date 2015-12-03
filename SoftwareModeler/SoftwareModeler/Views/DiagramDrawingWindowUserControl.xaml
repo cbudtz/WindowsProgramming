@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-    <Canvas IsHitTestVisible="True" Background="White">
+    <Canvas IsHitTestVisible="True" Background="Transparent">
         <ItemsControl ItemsSource="{Binding connections}"/>
         <ItemsControl ItemsSource="{Binding classes}"/>
         <i:Interaction.Triggers>

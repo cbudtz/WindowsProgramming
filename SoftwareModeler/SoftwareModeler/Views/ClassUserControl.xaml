@@ -28,7 +28,19 @@
 
     </UserControl.Resources>
 
-    <Border Name="borderName" BorderBrush="Gray" Background="LightGray" CornerRadius="6" BorderThickness="2,2,5,5">
+    <Border Name="borderName" Background="LightGray" CornerRadius="6" BorderThickness="2,2,5,5">
+        <Border.Style>
+            <Style TargetType="{x:Type Border}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                        <Setter Property="BorderBrush" Value="Red"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsSelected}" Value="False">
+                        <Setter Property="BorderBrush" Value="Gray"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
         <Grid Margin="5,5,5,5" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -46,26 +58,24 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="{Binding StereoType, StringFormat={}&lt;&lt;{0}&gt;&gt;}" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+            <TextBlock Grid.Row="0" Text="{Binding StereoType}" HorizontalAlignment="Stretch" TextAlignment="Center"/>
             
             <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Stretch" TextAlignment="Center">
-                <TextBlock.Style>
-                    
-                    <Style TargetType="{x:Type TextBlock}">
+                    <TextBlock.Style>
 
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsAbstract}" Value="True">
-                                <Setter Property="FontStyle" Value="Italic"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsAbstract}" Value="True">
+                                    <Setter Property="FontStyle" Value="Italic"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 
-            </TextBlock>
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <cmd:EventToCommand Command="{Binding DataContext.EditClassContentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                    </i:EventTrigger>
+                    
                     <local:EventTriggerWithoutPropagation EventName="MouseDown" >
                         <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
                     </local:EventTriggerWithoutPropagation>
@@ -99,15 +109,10 @@
                                                 UpdateSourceTrigger=PropertyChanged, 
                                                 Converter={StaticResource VisibilityConverter}}" 
                         />
-                    
+
                     <DataGridTextColumn Width="4*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
                     <DataGridTextColumn Width="4*" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" />
                 </DataGrid.Columns>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectedCellsChanged">
-                        <cmd:EventToCommand Command="{Binding DataContext.EditClassContentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
             </DataGrid>
 
             <Rectangle Grid.Row="3" Width="Auto" Height="2" StrokeThickness="1" Stroke="Black"/>
@@ -134,46 +139,14 @@
                     <DataGridTextColumn Width="3*" Binding="{Binding Parameters, UpdateSourceTrigger=LostFocus}" />
                     <DataGridTextColumn Width="3*" Binding="{Binding ReturnType, UpdateSourceTrigger=LostFocus}" />
                 </DataGrid.Columns>
-
-
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="DataContextChanged" >
-                        <cmd:EventToCommand Command="{Binding DataContext.EditClassContentCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
             </DataGrid>
-
-
-            <!--<Label Width="5" HorizontalAlignment="Right" Grid.Row="3"/>-->
-
-            <!--<TextBox HorizontalContentAlignment="Center" FontSize="20" Text="{Binding Name}"></TextBox>
-            <DataGrid ColumnHeaderHeight ="0" Name="attributes" ItemsSource="{Binding Attributes}" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Type}"/>
-                    <DataGridTextColumn Binding="{Binding Name}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <DataGrid ColumnHeaderHeight ="0"  Name="Methods" ItemsSource="{Binding Methods}" AutoGenerateColumns="False">
-                <DataGrid.Columns >
-                    -->
-            <!--     <DataGridTextColumn Binding="{Binding Visibility}"/>
-                    <DataGridTextColumn Binding="{Binding Name}"/>
-                    <DataGridTextColumn Binding="{Binding ParameterString}"/>-->
-            <!--
-                    <DataGridTextColumn Binding="{Binding MethodString}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <Grid Name="MethodGrid">
-
-            </Grid>-->
-
         </Grid>
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseDown" >
-                <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeResizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
             </i:EventTrigger>
             <i:EventTrigger EventName="MouseUp" >
-                <cmd:EventToCommand Command="{Binding DataContext.MouseUpShapeResizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                <cmd:EventToCommand Command="{Binding DataContext.MouseUpShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
             </i:EventTrigger>
             <i:EventTrigger EventName="MouseMove" >
                 <cmd:EventToCommand Command="{Binding DataContext.MouseMoveShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>

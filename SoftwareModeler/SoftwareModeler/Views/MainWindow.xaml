@@ -24,5 +24,9 @@
         <i:EventTrigger EventName="KeyDown">
             <cmd:EventToCommand Command="{Binding Path=KeyDownCommand}" PassEventArgsToCommand="True"/>
         </i:EventTrigger>
+        <i:EventTrigger EventName="MouseDown" >
+                <cmd:EventToCommand Command="{Binding Path=ClearSelectionCommand}" />
+            </i:EventTrigger>
+
     </i:Interaction.Triggers>
 </Window>
