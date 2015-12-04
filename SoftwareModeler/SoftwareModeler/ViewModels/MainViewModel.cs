@@ -41,11 +41,11 @@ namespace Area51.SoftwareModeler.ViewModels
 		private double minShapeWidth = 150;
 		private double minShapeHeight = 100;
 		public bool IsEditable { get; set; } = false;
-
+		
 
 	    private Connection NewConnection { get; set; } = null;
 
-	    public string Text { get; set; }
+		public string Text { get; set; }
 
 		#region command variables
 		// Commands that the UI can be bound to.
@@ -92,7 +92,7 @@ namespace Area51.SoftwareModeler.ViewModels
         private bool _multiAdd = false;
         private bool _isResizing = false;
 
-	    // Saves the initial point that the mouse has during a move operation.
+		// Saves the initial point that the mouse has during a move operation.
 		private Point _initialMousePosition;
         // Saves the initial point that the ClassRep has during a move operation.
         private List<Point> _initialClassPosition = new List<Point>();
@@ -100,13 +100,22 @@ namespace Area51.SoftwareModeler.ViewModels
 		private long doubleClickTimeout = 500*10000; // nanosec. is 500msec
 
 		//view access to observables
+		public ObservableCollection<BaseCommand> commands { get { return ShapeCollector.getI().commands; } }
+		public ObservableCollection<Shape> classes { get { return ShapeCollector.getI().obsShapes; } }
+		public ObservableCollection<Connection> connections { get { return ShapeCollector.getI().obsConnections; } }
+
+        //maxbranchlayer added as an observablecollection for now, not a nice fix, but it works (for scroll area).
+		public ObservableCollection<int> MaxBranchLayer { get { return ShapeCollector.getI().MaxBranchLayer; } }
+        //new collection for the lines in the command-tree.
+        public ObservableCollection<Connection> treeArrows { get { return ShapeCollector.getI().treeArrows; } }
+        private Class classToEdit = null;
 		public ObservableCollection<BaseCommand> Commands => ShapeCollector.GetI().Commands;
 	    public ObservableCollection<Class> Classes => ShapeCollector.GetI().ObsShapes;
 	    public ObservableCollection<Connection> Connections => ShapeCollector.GetI().ObsConnections;
 	    public ObservableObject MaxBranchLayer => ShapeCollector.GetI().MaxBranchLayer;
 
 
-	    //Dynamic 
+		//Dynamic 
 		private CommandTree CommandController { get; set; }
 		//private ShapeCollector observables = ShapeCollector.GetI();
 
@@ -203,7 +212,7 @@ namespace Area51.SoftwareModeler.ViewModels
             else if (shiftR > 0 || shiftL > 0)
             {
                 _multiAdd = true;
-            }
+		}
 		}
 
 		public void EditClassContent(Shape shape)
@@ -352,7 +361,7 @@ namespace Area51.SoftwareModeler.ViewModels
         }
 
         public void AddConnection(Class shape)
-        {
+            {
             if (shape != null && NewConnection.StartShapeId != shape.id)
             {
                 NewConnection.EndShapeId = shape.id;
@@ -390,10 +399,10 @@ namespace Area51.SoftwareModeler.ViewModels
         public void MouseMove(MouseEventArgs e)
 		{
 			if (Mouse.Captured == null) return;
-            
+			
 
-            // The Shape is gotten from the mouse event.
-            var shape = TargetShape(e);
+			// The Shape is gotten from the mouse event.
+			var shape = TargetShape(e);
 				
 			// The mouse position relative to the target of the mouse event.
 			var mousePosition = RelativeMousePosition(e);
@@ -423,11 +432,11 @@ namespace Area51.SoftwareModeler.ViewModels
 			// The Shape is gotten from the mouse event.
             e.MouseDevice.Target.ReleaseMouseCapture();
 			var shape = TargetShape(e);
+			
 
 
-
-            // The mouse position relative to the target of the mouse event.
-            var mousePosition = RelativeMousePosition(e);
+			// The mouse position relative to the target of the mouse event.
+			var mousePosition = RelativeMousePosition(e);
             // The mouse is released, as the move operation is done, so it can be used by other controls.
             e.MouseDevice.Target.ReleaseMouseCapture();
 
@@ -449,7 +458,7 @@ namespace Area51.SoftwareModeler.ViewModels
             _doubleClickTimer = DateTime.Now.Ticks;
 
 
-        }
+		}
 
 		public void MouseDown(MouseButtonEventArgs e)
 		{
@@ -513,7 +522,7 @@ namespace Area51.SoftwareModeler.ViewModels
 				execCommand(new AddClassCommand(null, stereoType, isAbstract, anchorpoint));
                 // if shift is down, you can add several classes
                 if (!_multiAdd) ButtonDown = ButtonCommand.None;
-			    
+
 			}
 			
 		}

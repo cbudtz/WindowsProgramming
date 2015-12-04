@@ -24,13 +24,14 @@
         <!--A canvas surrounding the collection of commands, this is here to make sure the scrollviewer updates to the correct size.
         It takes the max number of "command" objects as height, and the max debth of the tree as width.
         The valueconverter is used to match the width of the "command" object-->
-        <Canvas  VerticalAlignment="Top" HorizontalAlignment="Left" Background="Red" 
-                 Height="{Binding Commands.Count, Converter={StaticResource nodeCoordinateConverter}}" 
-                 Width="{Binding  MaxBranchLayer, Converter={StaticResource nodeCoordinateConverter}}">
+        <Canvas  VerticalAlignment="Top" HorizontalAlignment="Left" 
+                 Height="{Binding commands.Count, Converter={StaticResource nodeCoordinateConverter}}" 
+                 Width="{Binding  MaxBranchLayer.Count, Converter={StaticResource nodeCoordinateConverter}}">
             
             <!--The itemcontrol that contains the CommandNodeView-usercontroll-->
-            <ItemsControl ItemsSource="{Binding Commands}" Margin= "{Binding Commands, Converter={StaticResource nodeCoordinateConverter}}"/>
-            
+            <ItemsControl ItemsSource="{Binding commands}" Margin= "{Binding commands, Converter={StaticResource nodeCoordinateConverter}}"/>
+            <!--The itemcontroll that contains the lines, linking command-nodes in the tree. Drawn as simplified connections.-->
+            <ItemsControl ItemsSource="{Binding treeArrows}"/>
         </Canvas>
     </ScrollViewer>
 </UserControl>

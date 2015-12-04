@@ -11,7 +11,7 @@ using GalaSoft.MvvmLight;
 
 namespace Area51.SoftwareModeler.Models
 {
-    public class ShapeCollector
+    public class ShapeCollector : NotifyBase
     {
         //Singleton
         private static ShapeCollector _shapeCollector;
@@ -24,22 +24,25 @@ namespace Area51.SoftwareModeler.Models
         public ObservableCollection<BaseCommand> Commands { get; set; }
 
         [XmlIgnore]
-        public ObservableObject MaxBranchLayer {
-            get
-            {
-                int max = 0;
-                foreach (BaseCommand b in Commands)
-                {
-                    if (b.BranchLayer > max) max = b.BranchLayer;
-                }
-                return new ObservableObject();
-            } }
+        public ObservableCollection<int> MaxBranchLayer { get; set; }
+        [XmlIgnore]
+        public ObservableCollection<Connection> treeArrows { get; set; }
 
 
-        private ShapeCollector()  {
-            ObsShapes = new ObservableCollection<Class>();            
-            ObsConnections = new ObservableCollection<Connection>();
-            Commands = new ObservableCollection<BaseCommand>(); 
+        private ShapeCollector()
+        {
+            obsShapes = new ObservableCollection<Shape>();            
+            obsConnections = new ObservableCollection<Connection>();
+            commands = new ObservableCollection<BaseCommand>();
+
+            //contains the "connections" used to draw lines in the command-tree.
+            treeArrows = new ObservableCollection<Connection>();
+
+            //adding a few extra buffers to the size of the scroll-area. (yes it's an ugly fix)
+            MaxBranchLayer = new ObservableCollection<int>();
+            MaxBranchLayer.Add(1);
+            MaxBranchLayer.Add(2);
+            MaxBranchLayer.Add(3);
         }
         ///<summary>Get instance</summary>
         public static ShapeCollector GetI()
