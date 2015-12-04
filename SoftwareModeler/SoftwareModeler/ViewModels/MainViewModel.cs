@@ -103,7 +103,7 @@ namespace Area51.SoftwareModeler.ViewModels
 		public ObservableCollection<BaseCommand> commands { get { return ShapeCollector.getI().commands; } }
 		public ObservableCollection<Shape> classes { get { return ShapeCollector.getI().obsShapes; } }
 		public ObservableCollection<Connection> connections { get { return ShapeCollector.getI().obsConnections; } }
-		public ObservableObject MaxBranchLayer { get { return ShapeCollector.getI().MaxBranchLayer; } }
+		public ObservableCollection<int> MaxBranchLayer { get { return ShapeCollector.getI().MaxBranchLayer; } }
 		private Class classToEdit = null;
 
 
