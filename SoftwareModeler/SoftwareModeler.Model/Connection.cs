@@ -13,65 +13,84 @@ namespace Area51.SoftwareModeler.Models
     public class Connection : NotifyBase
     {
         //Unique ID
-        public static int nextID = 0;
-        public int? startShapeID;
-        [XmlIgnore]
-        public Shape Start { get { return ShapeCollector.getI().getShapeByID(startShapeID); } set { startShapeID = value.id; updatePoints(); } }
-        [XmlIgnore]
-        public Shape StartTemp { get; set; }
+        public static int NextId = 0;
+        
         //private string startMultiplicity;
         public string StartMultiplicity { get;  set ;  }
         //private string endMultiplicity;
         public string EndMultiplicity { get ;  set ;  }
 
-        public int? endShapeID;
+        private int? _startShapeId;
+        public int? EndShapeId;
+
         [XmlIgnore]
-        public Shape End { get { return ShapeCollector.getI().getShapeByID(endShapeID); } set { endShapeID = value.id; updatePoints(); } }
+        public int? StartShapeId{get { return _startShapeId; } set{_startShapeId = value; Start = ShapeCollector.GetI().GetShapeById(value); }}
+
+        [XmlIgnore]
+        private Shape Start { get { return ShapeCollector.GetI().GetShapeById(StartShapeId); } set { _startShapeId = value.id; updatePoints();}}
+        
+        [XmlIgnore]
+        private Shape End { get { return ShapeCollector.GetI().GetShapeById(EndShapeId); } set { EndShapeId = value.id; updatePoints(); } }
+        [XmlIgnore]
+        public Shape StartTemp { get; set; }
+
         [XmlIgnore]
         public Shape EndTemp { get; set; }
-        private Point startPoint;
-        public Point StartPoint { get { return startPoint; } set { startPoint = value; } }
-        private Point p1;
-        public Point P1 { get { return p1; } set { p1 = value; } }
-        private Point p2;
-        public Point P2 { get { return p2; } set { p2 = value; } }
-        private Point endPoint;
-        public Point EndPoint { get { return endPoint; } set { endPoint = value; } }
-        private PointCollection pointCollection;
-        public PointCollection PointCollection { get { return pointCollection; } set { pointCollection = value; } }
-        private PointCollection polygonPoints;
-        public PointCollection PolygonPoints { get { return polygonPoints; } set { polygonPoints = value; } }
 
-        public ConnectionType type;
+        [XmlIgnore]
+        public Point StartPoint { get; set; }
+
+        [XmlIgnore]
+        private Point _p1;
+
+        [XmlIgnore]
+        public Point P1 { get { return _p1; } set { _p1 = value; } }
+        
+        [XmlIgnore]
+        private Point _p2;
+
+        [XmlIgnore]
+        public Point P2 { get { return _p2; } set { _p2 = value; } }
+
+        [XmlIgnore]
+        public Point EndPoint { get; set; }
+
+        [XmlIgnore]
+        public PointCollection PointCollection { get; set; }
+
+        [XmlIgnore]
+        public PointCollection PolygonPoints { get; set; }
+
+        public ConnectionType Type;
         //Unique identifyer
-        public int connectionID { get; set; }
+        public int ConnectionId { get; set; }
 
         public Connection()
         {
             //Deserialization Constructor - Shapes must be deserialized first!
         }
 
-        public Connection(Shape _start, string _startMultiplicity, Shape _end, string _endMultiplicity, ConnectionType _type)
+        public Connection(int startId, string startMultiplicity, int? endId, string endMultiplicity, ConnectionType type)
         {
-            this.connectionID = nextID++;
-            startShapeID = _start.id; //Saving ID for serialization!
+            this.ConnectionId = NextId++;
+            StartShapeId = startId; //Saving ID for serialization!
 
-            StartMultiplicity = _startMultiplicity;
-            if (_end !=null) endShapeID = _end.id; //Saving ID for serialization
-            EndMultiplicity = _endMultiplicity;
-            type = _type;
+            StartMultiplicity = startMultiplicity;
+            EndShapeId = endId; //Saving ID for serialization
+            EndMultiplicity = endMultiplicity;
+            Type = type;
 
-            startPoint = new Point();
-            p1 = new Point();
-            p2 = new Point();
-            endPoint = new Point();
+            StartPoint = new Point();
+            _p1 = new Point();
+            _p2 = new Point();
+            EndPoint = new Point();
 
             updatePoints();
         }
 
         private class Direction
         {
-            public enum direction {LEFT,RIGHT,UP,DOWN };
+            public enum direction {Left,Right,Up,Down };
         }
         public void updatePoints()
         {
@@ -80,23 +99,30 @@ namespace Area51.SoftwareModeler.Models
         public void updatePoints(Point? tempEndpoint)
         {
             
-            pointCollection = new PointCollection();
+            PointCollection = new PointCollection();
             PolygonPoints = null;
+            Shape End = ShapeCollector.GetI().GetShapeById(EndShapeId);
             if (End == null)
             {
                 // drawing temporary line while dragging
                 if (tempEndpoint == null) return;
                 StartPoint = new Point(Start.CanvasCenterX, Start.CanvasCenterY);
-                pointCollection.Add(StartPoint);
+                PointCollection.Add(StartPoint);
 
-                pointCollection.Add((Point) tempEndpoint);
+                PointCollection.Add((Point) tempEndpoint);
                 NotifyPropertyChanged(() => StartPoint);
                 NotifyPropertyChanged(() => PointCollection);
                 return;
             }
-            if (StartTemp == null) StartTemp = Start;
-            if (EndTemp == null) EndTemp = End;
-            
+            if (Start != null) StartTemp = Start;
+            if (EndShapeId != null && EndTemp != null)
+            {
+                EndTemp = null;
+                NotifyPropertyChanged(() => PointCollection);
+            }
+            EndTemp = End;
+
+
 
             Point[] sP = new Point[] {  new Point(StartTemp.CanvasCenterX + StartTemp.Width / 2, StartTemp.CanvasCenterY),  //0 right
                                         new Point(StartTemp.CanvasCenterX - StartTemp.Width / 2, StartTemp.CanvasCenterY),  //1 left
@@ -110,7 +136,7 @@ namespace Area51.SoftwareModeler.Models
             double dist = -1;
             int sInd = -1;
             int eInd = -1;
-            // finds index of startPoint and endPoint. all possible combinations are created in sP and eP arrays above
+            // finds index of _startPoint and _endPoint. all possible combinations are created in sP and eP arrays above
             for (int i = 0; i < sP.Length; i++)
             {
                 for (int j = 0; j < eP.Length; j++)
@@ -147,19 +173,18 @@ namespace Area51.SoftwareModeler.Models
                         case 1:
                             // right/left -> left/right. right->left is same as left->right. 
                             // left->left and right->right is not possible
-                            p1.X = (EndPoint.X + StartPoint.X) / 2;
-                            p1.Y = StartPoint.Y;
-                            p2.X = p1.X;
-                            p2.Y = EndPoint.Y;
+                            _p1.X = (EndPoint.X + StartPoint.X) / 2;
+                            _p1.Y = StartPoint.Y;
+                            _p2.X = _p1.X;
+                            _p2.Y = EndPoint.Y;
                             break;
                         case 2:
                         case 3:
                             //right/left ->bottom/top. 4 possible combinations. all the same.
-                            p1.X = EndPoint.X;
-                            p1.Y = StartPoint.Y;
-                            p2 = p1;
+                            _p1.X = EndPoint.X;
+                            _p1.Y = StartPoint.Y;
+                            _p2 = _p1;
                             break;
-                        default: break;
                     }
                     break;
                 case 2:
@@ -169,47 +194,46 @@ namespace Area51.SoftwareModeler.Models
                         case 0:
                         case 1:
                             // bottom/top -> right->left. 4 possible combinations. all work the same.
-                            p1.X = EndPoint.X;
-                            p1.Y = StartPoint.Y;
-                            p2 = p1;
+                            _p1.X = EndPoint.X;
+                            _p1.Y = StartPoint.Y;
+                            _p2 = _p1;
                             break;
                         case 2:
                         case 3:
                             // bottom/top -> top/bottom. 2 possible combinations. 
-                            p1.X = StartPoint.X;
-                            p1.Y = (StartPoint.Y + EndPoint.Y) / 2;
-                            p2.X = EndPoint.X;
-                            p2.Y = p1.Y;
+                            _p1.X = StartPoint.X;
+                            _p1.Y = (StartPoint.Y + EndPoint.Y) / 2;
+                            _p2.X = EndPoint.X;
+                            _p2.Y = _p1.Y;
                             break;
-                        default: break;
                     }
                     break;
             }
 
-            pointCollection.Add(p1);
-            pointCollection.Add(p2);
-            pointCollection.Add(endPoint);
+            PointCollection.Add(_p1);
+            PointCollection.Add(_p2);
+            PointCollection.Add(EndPoint);
             Direction.direction d;
-            if (eInd == 0) d = Direction.direction.LEFT;
-            else if (eInd == 1) d = Direction.direction.RIGHT;
-            else if (eInd == 2) d = Direction.direction.UP;
-            else d = Direction.direction.DOWN;
+            if (eInd == 0) d = Direction.direction.Left;
+            else if (eInd == 1) d = Direction.direction.Right;
+            else if (eInd == 2) d = Direction.direction.Up;
+            else d = Direction.direction.Down;
       
            
-            switch (type)
+            switch (Type)
             {
                 case ConnectionType.Aggregation:
-                    drawRhombus(d);
+                    DrawRhombus(d);
                     break;
                 case ConnectionType.Composition:
-                    drawFilledRhombus(d);
+                    DrawFilledRhombus(d);
                     break;
                 case ConnectionType.Association:
-                    drawArrow(d);
+                    DrawArrow(d);
                     break;
                 default:
                     //whats wrong with you? this is off limits!
-                    throw new ArgumentOutOfRangeException("should never happen!? Thats not part of the enum. type was: " + type);
+                    throw new ArgumentOutOfRangeException("should never happen!? Thats not part of the enum. Type was: " + Type);
             }
 
             NotifyPropertyChanged(() => StartPoint);
@@ -218,78 +242,78 @@ namespace Area51.SoftwareModeler.Models
         }
 
         //association
-        private void drawArrow(Direction.direction d)
+        private void DrawArrow(Direction.direction d)
         {
             switch (d)
             {
-                case Direction.direction.DOWN:
-                    pointCollection.Add(new Point(endPoint.X - 2.5, endPoint.Y - 5 ));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X + 2.5, endPoint.Y - 5 ));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
+                case Direction.direction.Down:
+                    PointCollection.Add(new Point(EndPoint.X - 2.5, EndPoint.Y - 5 ));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X + 2.5, EndPoint.Y - 5 ));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     break;
-                case Direction.direction.UP:
-                    pointCollection.Add(new Point(endPoint.X - 2.5, endPoint.Y + 5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X + 2.5, endPoint.Y + 5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
+                case Direction.direction.Up:
+                    PointCollection.Add(new Point(EndPoint.X - 2.5, EndPoint.Y + 5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X + 2.5, EndPoint.Y + 5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     break;
-                case Direction.direction.LEFT:
-                    pointCollection.Add(new Point(endPoint.X + 5, endPoint.Y - 2.5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X + 5, endPoint.Y + 2.5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
+                case Direction.direction.Left:
+                    PointCollection.Add(new Point(EndPoint.X + 5, EndPoint.Y - 2.5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X + 5, EndPoint.Y + 2.5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     break;
-                case Direction.direction.RIGHT:
-                    pointCollection.Add(new Point(endPoint.X - 5, endPoint.Y - 2.5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X - 5, endPoint.Y + 2.5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
+                case Direction.direction.Right:
+                    PointCollection.Add(new Point(EndPoint.X - 5, EndPoint.Y - 2.5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X - 5, EndPoint.Y + 2.5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     break;
             } 
         }
 
         //agregation
-        private void drawRhombus(Direction.direction d)
+        private void DrawRhombus(Direction.direction d)
         {
-            pointCollection.RemoveAt(pointCollection.Count - 1);
+            PointCollection.RemoveAt(PointCollection.Count - 1);
             switch (d)
             {
-                case Direction.direction.DOWN:
+                case Direction.direction.Down:
 
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y - 15));
-                    pointCollection.Add(new Point(endPoint.X + 5, endPoint.Y - 7.5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X - 5, endPoint.Y - 7.5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y - 15));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y - 15));
+                    PointCollection.Add(new Point(EndPoint.X + 5, EndPoint.Y - 7.5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X - 5, EndPoint.Y - 7.5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y - 15));
                     break;
-                case Direction.direction.UP:
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y + 15));
-                    pointCollection.Add(new Point(endPoint.X + 5, endPoint.Y + 7.5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X - 5, endPoint.Y + 7.5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y + 15));
+                case Direction.direction.Up:
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y + 15));
+                    PointCollection.Add(new Point(EndPoint.X + 5, EndPoint.Y + 7.5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X - 5, EndPoint.Y + 7.5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y + 15));
                     break;
-                case Direction.direction.LEFT:
-                    pointCollection.Add(new Point(endPoint.X + 15, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X + 7.5, endPoint.Y + 5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X + 7.5, endPoint.Y - 5));
-                    pointCollection.Add(new Point(endPoint.X + 15, endPoint.Y));
+                case Direction.direction.Left:
+                    PointCollection.Add(new Point(EndPoint.X + 15, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X + 7.5, EndPoint.Y + 5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X + 7.5, EndPoint.Y - 5));
+                    PointCollection.Add(new Point(EndPoint.X + 15, EndPoint.Y));
                     break;
-                case Direction.direction.RIGHT:
-                    pointCollection.Add(new Point(endPoint.X - 15, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X - 7.5, endPoint.Y + 5));
-                    pointCollection.Add(new Point(endPoint.X, endPoint.Y));
-                    pointCollection.Add(new Point(endPoint.X - 7.5, endPoint.Y - 5));
-                    pointCollection.Add(new Point(endPoint.X - 15, endPoint.Y));
+                case Direction.direction.Right:
+                    PointCollection.Add(new Point(EndPoint.X - 15, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X - 7.5, EndPoint.Y + 5));
+                    PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PointCollection.Add(new Point(EndPoint.X - 7.5, EndPoint.Y - 5));
+                    PointCollection.Add(new Point(EndPoint.X - 15, EndPoint.Y));
                     break;
             }
             
         }
 
         //composition
-        private void drawFilledRhombus(Direction.direction d)
+        private void DrawFilledRhombus(Direction.direction d)
         {
             
             PolygonPoints = new PointCollection();
@@ -297,34 +321,34 @@ namespace Area51.SoftwareModeler.Models
             poly.Fill = Brushes.Black;
             switch (d)
             {
-                case Direction.direction.DOWN:
+                case Direction.direction.Down:
 
-                    PolygonPoints.Add(new Point(endPoint.X, endPoint.Y - 15));
-                    PolygonPoints.Add(new Point(endPoint.X + 5, endPoint.Y - 7.5));
-                    PolygonPoints.Add(new Point(endPoint.X, endPoint.Y));
-                    PolygonPoints.Add(new Point(endPoint.X - 5, endPoint.Y - 7.5));
-                    PolygonPoints.Add(new Point(endPoint.X, endPoint.Y - 15));
+                    PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y - 15));
+                    PolygonPoints.Add(new Point(EndPoint.X + 5, EndPoint.Y - 7.5));
+                    PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PolygonPoints.Add(new Point(EndPoint.X - 5, EndPoint.Y - 7.5));
+                    PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y - 15));
                     break;
-                case Direction.direction.UP:
-                    PolygonPoints.Add(new Point(endPoint.X, endPoint.Y + 15));
-                    PolygonPoints.Add(new Point(endPoint.X + 5, endPoint.Y + 7.5));
-                    PolygonPoints.Add(new Point(endPoint.X, endPoint.Y));
-                    PolygonPoints.Add(new Point(endPoint.X - 5, endPoint.Y + 7.5));
-                    PolygonPoints.Add(new Point(endPoint.X, endPoint.Y + 15));
+                case Direction.direction.Up:
+                    PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y + 15));
+                    PolygonPoints.Add(new Point(EndPoint.X + 5, EndPoint.Y + 7.5));
+                    PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PolygonPoints.Add(new Point(EndPoint.X - 5, EndPoint.Y + 7.5));
+                    PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y + 15));
                     break;
-                case Direction.direction.LEFT:
-                    PolygonPoints.Add(new Point(endPoint.X + 15, endPoint.Y));
-                    PolygonPoints.Add(new Point(endPoint.X + 7.5, endPoint.Y + 5));
-                    PolygonPoints.Add(new Point(endPoint.X, endPoint.Y));
-                    PolygonPoints.Add(new Point(endPoint.X + 7.5, endPoint.Y - 5));
-                    PolygonPoints.Add(new Point(endPoint.X + 15, endPoint.Y));
+                case Direction.direction.Left:
+                    PolygonPoints.Add(new Point(EndPoint.X + 15, EndPoint.Y));
+                    PolygonPoints.Add(new Point(EndPoint.X + 7.5, EndPoint.Y + 5));
+                    PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PolygonPoints.Add(new Point(EndPoint.X + 7.5, EndPoint.Y - 5));
+                    PolygonPoints.Add(new Point(EndPoint.X + 15, EndPoint.Y));
                     break;
-                case Direction.direction.RIGHT:
-                    PolygonPoints.Add(new Point(endPoint.X - 15, endPoint.Y));
-                    PolygonPoints.Add(new Point(endPoint.X - 7.5, endPoint.Y + 5));
-                    PolygonPoints.Add(new Point(endPoint.X, endPoint.Y));
-                    PolygonPoints.Add(new Point(endPoint.X - 7.5, endPoint.Y - 5));
-                    PolygonPoints.Add(new Point(endPoint.X - 15, endPoint.Y));
+                case Direction.direction.Right:
+                    PolygonPoints.Add(new Point(EndPoint.X - 15, EndPoint.Y));
+                    PolygonPoints.Add(new Point(EndPoint.X - 7.5, EndPoint.Y + 5));
+                    PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y));
+                    PolygonPoints.Add(new Point(EndPoint.X - 7.5, EndPoint.Y - 5));
+                    PolygonPoints.Add(new Point(EndPoint.X - 15, EndPoint.Y));
                     break;
             }
 

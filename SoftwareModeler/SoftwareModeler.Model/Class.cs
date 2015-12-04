@@ -8,69 +8,63 @@ namespace Area51.SoftwareModeler.Models
     
     public class Class : Shape
     {
-        private string stereotype;
-        private bool isAbstract;
-        //private Point anchorPoint;
+        private string _stereotype;
+        private bool _isAbstract;
+        //private Point AnchorPoint;
         //private Visibility visibility;
-        private List<Attribute> attributes;
-        private List<Method> methods;
+        private List<Attribute> _attributes;
+        private List<Method> _methods;
 
         public Class() : base()
         {
 
         }
 
-        public Class(String name, String stereotype, Boolean isAbstract, Point anchorPoint, Visibility visibility) : base()
+        public Class(string name, string stereotype, bool isAbstract, Point anchorPoint)
         {
             this.name = name;
-            this.stereotype = stereotype;
-            this.isAbstract = isAbstract;
-            this.X = anchorPoint.X;
-            this.Y = anchorPoint.Y;
-            //this.anchorPoint = anchorPoint;
-            //this.visibility = visibility;
-            this.attributes = new List<Attribute>();
-            this.methods = new List<Method>();
+            _stereotype = stereotype;
+            _isAbstract = isAbstract;
+            X = anchorPoint.X;
+            Y = anchorPoint.Y;
+            _attributes = new List<Attribute>();
+            _methods = new List<Method>();
 
 
         }
 
-        public Class(int? id, String name, String stereotype, Boolean isAbstract, Point anchorPoint) : base(id)
+        public Class(int? id, string name, string stereotype, bool isAbstract, Point anchorPoint) : base(id)
         {
             this.name = name;
-            this.stereotype = stereotype;
-            this.isAbstract = isAbstract;
-            this.X = anchorPoint.X;
-            this.Y = anchorPoint.Y;
-            //this.anchorPoint = anchorPoint;
-            //this.visibility = visibility;
-            this.attributes = new List<Attribute>();
-            this.methods = new List<Method>();
+            _stereotype = stereotype;
+            _isAbstract = isAbstract;
+            X = anchorPoint.X;
+            Y = anchorPoint.Y;
+            _attributes = new List<Attribute>();
+            _methods = new List<Method>();
 
         }
 
         //Getters and setters
-        public String Name { get { return name;} set { name = value; NotifyPropertyChanged(); } }
-        public String StereoType { get { return stereotype; } set { stereotype = value; NotifyPropertyChanged();} }
-        public Boolean IsAbstract { get { return isAbstract; } set { isAbstract = value; NotifyPropertyChanged();} }
-        //public Point AnchorPoint { get { return anchorPoint; } set { anchorPoint = value; } }
-        //public Visibility Visibility { get { return visibility; } set { visibility = value; NotifyPropertyChanged();} }
-        public List<Attribute> Attributes { get { return attributes; } set { attributes = value; NotifyPropertyChanged();} }
-        public List<Method> Methods { get { return methods; } set { methods = value; NotifyPropertyChanged();} }
+        public string Name { get { return name;} set { name = value; NotifyPropertyChanged(); } }
+        public string StereoType { get { return _stereotype; } set { _stereotype = value; NotifyPropertyChanged();} }
+        public bool IsAbstract { get { return _isAbstract; } set { _isAbstract = value; NotifyPropertyChanged();} }
+        public List<Attribute> Attributes { get { return _attributes; } set { _attributes = value; NotifyPropertyChanged();} }
+        public List<Method> Methods { get { return _methods; } set { _methods = value; NotifyPropertyChanged();} }
 
 
 
-        public void addAttribute(string type, string name)
+        public void AddAttribute(string type, string name)
         {
-            this.attributes.Add(new Attribute(type, name));
+            _attributes.Add(new Attribute(type, name));
         }
 
-        public void addAttribute(Visibility visibility, string type, string name)
+        public void AddAttribute(Visibility visibility, string type, string name)
         {
-            this.attributes.Add(new Attribute(visibility, type, name));
+            _attributes.Add(new Attribute(visibility, type, name));
         }
 
-        public void addMethod(Visibility visibility, string name, string[] parameters)
+        public void AddMethod(Visibility visibility, string name, string[] parameters)
         {
             Method m = new Method(visibility, name);
             string param = "";
@@ -79,9 +73,10 @@ namespace Area51.SoftwareModeler.Models
             //m.addParameter(parameters[i]);
             param = param.Substring(0, param.Length - 1);
             m.Parameters = param;
-            this.methods.Add(m);
+            _methods.Add(m);
         }
 
+       
         public override string ToString()
         {
             return name;

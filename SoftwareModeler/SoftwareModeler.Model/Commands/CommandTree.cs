@@ -22,7 +22,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public List<BaseCommand> undone { get; set; } = new List<BaseCommand>();
         public int NextShapeId { get; set; }
         public int NextCommandId { get; set; }
-        public ObservableCollection<BaseCommand> Commands1 { get; set; } = ShapeCollector.getI().commands;
+        public ObservableCollection<BaseCommand> Commands1 { get; set; } = ShapeCollector.GetI().Commands;
 
         public CommandTree()
         {
@@ -46,10 +46,10 @@ namespace Area51.SoftwareModeler.Models.Commands
                 if (newLayer > CurrentBranchLayer) CurrentBranchLayer = newLayer;
                 setActive(command);
             }
-            ShapeCollector.getI().commands.Add(command);
-            NotifyPropertyChanged(() => ShapeCollector.getI().commands);
+            ShapeCollector.GetI().Commands.Add(command);
+            NotifyPropertyChanged(() => ShapeCollector.GetI().Commands);
 
-            //       foreach (BaseCommand baseCommand in ShapeCollector.getI().commands)
+            //       foreach (BaseCommand baseCommand in ShapeCollector.GetI().Commands)
             //     {
             //       Console.WriteLine(baseCommand.Id + baseCommand.Color.ToString() + baseCommand.BranchLayer);
             // }
@@ -123,8 +123,8 @@ namespace Area51.SoftwareModeler.Models.Commands
         public static CommandTree load(StreamReader loadReader)
         {
             //Empty ShapeCollector Singleton
-            ShapeCollector.getI().reset();
-            ShapeCollector.getI().commands.Clear();
+            ShapeCollector.GetI().Reset();
+            ShapeCollector.GetI().Commands.Clear();
             //restore Tree
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
             CommandTree restoredTree;
@@ -154,8 +154,8 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
 
             //Remove all objects from canvas
-            ShapeCollector.getI().reset();
-            //Execute all commands on branch to active node.
+            ShapeCollector.GetI().Reset();
+            //Execute all Commands on branch to active node.
             LinkedList<BaseCommand> reExecuteList = new LinkedList<BaseCommand>();
             BaseCommand curCommand = Active;
             while (curCommand != null)

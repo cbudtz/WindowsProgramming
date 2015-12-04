@@ -14,21 +14,21 @@ namespace Area51.SoftwareModeler.Models
     public class ShapeCollector
     {
         //Singleton
-        private static ShapeCollector shapeCollector;
+        private static ShapeCollector _shapeCollector;
         //Objects of interest for ViewModel
         [XmlIgnore]
-        public ObservableCollection<Shape> obsShapes { get; set;   }
+        public ObservableCollection<Class> ObsShapes { get; set;   }
         [XmlIgnore]
-        public ObservableCollection<Connection> obsConnections { get; set; }
+        public ObservableCollection<Connection> ObsConnections { get; set; }
         [XmlIgnore]
-        public ObservableCollection<BaseCommand> commands { get; set; }
+        public ObservableCollection<BaseCommand> Commands { get; set; }
 
         [XmlIgnore]
         public ObservableObject MaxBranchLayer {
             get
             {
                 int max = 0;
-                foreach (BaseCommand b in commands)
+                foreach (BaseCommand b in Commands)
                 {
                     if (b.BranchLayer > max) max = b.BranchLayer;
                 }
@@ -37,34 +37,34 @@ namespace Area51.SoftwareModeler.Models
 
 
         private ShapeCollector()  {
-            obsShapes = new ObservableCollection<Shape>();            
-            obsConnections = new ObservableCollection<Connection>();
-            commands = new ObservableCollection<BaseCommand>(); 
+            ObsShapes = new ObservableCollection<Class>();            
+            ObsConnections = new ObservableCollection<Connection>();
+            Commands = new ObservableCollection<BaseCommand>(); 
         }
         ///<summary>Get instance</summary>
-        public static ShapeCollector getI()
+        public static ShapeCollector GetI()
         {
-            if (shapeCollector== null)
+            if (_shapeCollector== null)
             {
-                shapeCollector = new ShapeCollector();
+                _shapeCollector = new ShapeCollector();
             }
-            return shapeCollector;
+            return _shapeCollector;
         }
-        public static void setI(ShapeCollector shape)
+        public static void SetI(ShapeCollector shape)
         {
-            shapeCollector = shape;
-        }
-
-        internal void reset()
-        {
-            obsShapes.Clear();
-            obsConnections.Clear();
+            _shapeCollector = shape;
         }
 
-        internal Shape getShapeByID(int? shapeId)
+        internal void Reset()
+        {
+            ObsShapes.Clear();
+            ObsConnections.Clear();
+        }
+
+        internal Class GetShapeById(int? shapeId)
         {
 
-            foreach (Shape obsShape in obsShapes)
+            foreach (Class obsShape in ObsShapes)
             {
                 //Console.WriteLine("ShapeCollector - get shapeBy ID:" + obsShape);
                 if (obsShape.id == shapeId) return obsShape;

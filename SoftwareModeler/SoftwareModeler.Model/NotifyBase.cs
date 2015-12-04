@@ -19,7 +19,7 @@ namespace Area51.SoftwareModeler.Models
         // This version of the method takes a lambda expression that has to point to the property that has changed
         protected void NotifyPropertyChanged<T>(Expression<Func<T>> propertyExpression)
         {
-            // This uses 'var' which is an implicit type variable (https://msdn.microsoft.com/en-us/library/bb383973.aspx).
+            // This uses 'var' which is an implicit Type variable (https://msdn.microsoft.com/en-us/library/bb383973.aspx).
             var propertyName = (propertyExpression?.Body as MemberExpression)?.Member?.Name;
             NotifyPropertyChanged(propertyName);
         }

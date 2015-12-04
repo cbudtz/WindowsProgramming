@@ -62,7 +62,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
-            Class classToUpdate = ShapeCollector.getI().getShapeByID(classID) as Class;
+            Class classToUpdate = ShapeCollector.GetI().GetShapeById(classID) as Class;
             if (classToUpdate != null && ClassName != null) classToUpdate.Name = ClassName;
             if (classToUpdate != null && StereoType != null) classToUpdate.StereoType = StereoType;
             if (classToUpdate != null) classToUpdate.IsAbstract = IsAbstract.Value;
@@ -72,7 +72,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
-            Class classToUpdate = ShapeCollector.getI().getShapeByID(classID) as Class;
+            Class classToUpdate = ShapeCollector.GetI().GetShapeById(classID) as Class;
             if (classToUpdate != null)
             {
             

@@ -32,7 +32,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
-            Shape shape = ShapeCollector.getI().getShapeByID(ShapeId);
+            Shape shape = ShapeCollector.GetI().GetShapeById(ShapeId);
 
             Console.WriteLine("Executing ResizeShapeCommand");
             Console.WriteLine("Shape =" + shape);
@@ -42,7 +42,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
-            Shape shape = ShapeCollector.getI().getShapeByID(ShapeId);
+            Shape shape = ShapeCollector.GetI().GetShapeById(ShapeId);
             shape.Width -= xResize;
             shape.Height -= YResize;
         }

@@ -13,8 +13,8 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     public class DeleteShapeCommand : BaseCommand
     {
-        public int? shapeID;
-        private List<Connection> connectionsToDelete = new List<Connection>();
+        public int? ShapeId;
+        private List<Connection> _connectionsToDelete = new List<Connection>();
         public string ShapeName { get; set; }
         public double ShapeX { get; set; }
         public double ShapeY { get; set; }
@@ -32,7 +32,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         
         public DeleteShapeCommand(Shape shapeToDelete)
         {
-            shapeID = shapeToDelete.id;
+            ShapeId = shapeToDelete.id;
             ShapeName = shapeToDelete.name;
             ShapeX = shapeToDelete.X;
             ShapeY = shapeToDelete.Y;
@@ -51,27 +51,27 @@ namespace Area51.SoftwareModeler.Models.Commands
         public override void execute()
         {
             //Aquire shape
-            Shape shapeToDelete = ShapeCollector.getI().getShapeByID(shapeID);
-            connectionsToDelete =
-                ShapeCollector.getI()
-                    .obsConnections.Where(x => x.startShapeID == shapeID || x.endShapeID == shapeID)
+            Class shapeToDelete = ShapeCollector.GetI().GetShapeById(ShapeId);
+            _connectionsToDelete =
+                ShapeCollector.GetI()
+                    .ObsConnections.Where(x => x.StartShapeId == ShapeId || x.EndShapeId == ShapeId)
                     .ToList();
 
-            foreach (Connection connection in connectionsToDelete)
+            foreach (Connection connection in _connectionsToDelete)
             {
-                ShapeCollector.getI().obsConnections.Remove(connection);
+                ShapeCollector.GetI().ObsConnections.Remove(connection);
 
             }
-            connectionsToDelete.ForEach(x => ShapeCollector.getI().obsConnections.Remove(x));
-            ShapeCollector.getI().obsShapes.Remove(shapeToDelete);
+            _connectionsToDelete.ForEach(x => ShapeCollector.GetI().ObsConnections.Remove(x));
+            ShapeCollector.GetI().ObsShapes.Remove(shapeToDelete);
         }
 
         public override void unExecute()
         {
-            Shape shapeToAdd = new Class(shapeID,ShapeName,ShapeStereotype,ShapeAbstract,new Point(ShapeX,ShapeY));
+            Class shapeToAdd = new Class(ShapeId,ShapeName,ShapeStereotype,ShapeAbstract,new Point(ShapeX,ShapeY));
             //Create new shape and add it!
-            ShapeCollector.getI().obsShapes.Add(shapeToAdd);
-            connectionsToDelete.ForEach(x => ShapeCollector.getI().obsConnections.Add(x));
+            ShapeCollector.GetI().ObsShapes.Add(shapeToAdd);
+            _connectionsToDelete.ForEach(x => ShapeCollector.GetI().ObsConnections.Add(x));
         }
     }
 }

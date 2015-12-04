@@ -19,17 +19,17 @@ namespace Area51.SoftwareModeler.Models.Commands
         }
         public override void execute()
         {
-            foreach (Connection obsConnection in ShapeCollector.getI().obsConnections)
+            foreach (Connection obsConnection in ShapeCollector.GetI().ObsConnections)
             {
-                if (obsConnection != null && obsConnection.connectionID == ConnectionToDelete.connectionID)
-                    ShapeCollector.getI().obsConnections.Remove(obsConnection);
+                if (obsConnection != null && obsConnection.ConnectionId == ConnectionToDelete.ConnectionId)
+                    ShapeCollector.GetI().ObsConnections.Remove(obsConnection);
             }
-            ShapeCollector.getI().obsConnections.Remove(ConnectionToDelete);
+            ShapeCollector.GetI().ObsConnections.Remove(ConnectionToDelete);
         }
 
         public override void unExecute()
         {
-            ShapeCollector.getI().obsConnections.Add(ConnectionToDelete);
+            ShapeCollector.GetI().ObsConnections.Add(ConnectionToDelete);
         }
     }
 }

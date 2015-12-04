@@ -58,7 +58,7 @@ namespace Area51.SoftwareModeler.Helpers
             Type type = enumerationValue.GetType();
             if (!type.IsEnum)
             {
-                throw new ArgumentException("EnumerationValue must be of Enum type", "enumerationValue");
+                throw new ArgumentException("EnumerationValue must be of Enum Type", "enumerationValue");
             }
 
             //Tries to find a DescriptionAttribute for a potential friendly name
@@ -103,15 +103,15 @@ namespace Area51.SoftwareModeler.Helpers
 
             //String[] enumDescriptions = new String[System.Enum.GetValues(enumType).Length];
 
-            //Type type = enumerationValue.GetType();
-            //if (!type.IsEnum)
+            //Type Type = enumerationValue.GetType();
+            //if (!Type.IsEnum)
             //{
-            //    throw new ArgumentException("EnumerationValue must be of Enum type", "enumerationValue");
+            //    throw new ArgumentException("EnumerationValue must be of Enum Type", "enumerationValue");
             //}
 
             ////Tries to find a DescriptionAttribute for a potential friendly name
             ////for the enum
-            //MemberInfo[] memberInfo = type.GetMember(enumerationValue.ToString());
+            //MemberInfo[] memberInfo = Type.GetMember(enumerationValue.ToString());
             //if (memberInfo != null && memberInfo.Length > 0)
             //{
             //    object[] attrs = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
@@ -134,7 +134,7 @@ namespace Area51.SoftwareModeler.Helpers
             Type type = myEnum.GetType();
             if (!type.IsEnum)
             {
-                throw new ArgumentException("EnumerationValue must be of Enum type", "enumerationValue");
+                throw new ArgumentException("EnumerationValue must be of Enum Type", "enumerationValue");
             }
 
             //Tries to find a DescriptionAttribute for a potential friendly name

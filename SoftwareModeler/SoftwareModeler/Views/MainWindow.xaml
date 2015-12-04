@@ -22,7 +22,10 @@
     </DockPanel>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="KeyDown">
-            <cmd:EventToCommand Command="{Binding Path=KeyDownCommand}" PassEventArgsToCommand="True"/>
+            <cmd:EventToCommand Command="{Binding Path=KeyEventCommand}" PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="KeyUp">
+            <cmd:EventToCommand Command="{Binding Path=KeyEventCommand}" PassEventArgsToCommand="True"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="MouseDown" >
                 <cmd:EventToCommand Command="{Binding Path=ClearSelectionCommand}" />

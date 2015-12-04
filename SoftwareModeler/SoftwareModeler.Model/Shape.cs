@@ -161,7 +161,7 @@ namespace Area51.SoftwareModeler.Models
             name = "Shape "  + ++nextId;
             id = nextId;
         }
-        //Constructor for deserialized commands
+        //Constructor for deserialized Commands
         public Shape(int? id)
         {
             name = "Shape " + id;

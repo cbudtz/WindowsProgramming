@@ -53,9 +53,9 @@ namespace Area51.SoftwareModeler.Models
         {
             return Name;//MethodString;
         }
-        //public void addParameter(string type)
+        //public void addParameter(string Type)
         //{
-        //    this.parameters.Add(type);
+        //    this.parameters.Add(Type);
         //}
 
 

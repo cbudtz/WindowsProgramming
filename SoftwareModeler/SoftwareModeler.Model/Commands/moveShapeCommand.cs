@@ -13,40 +13,47 @@ namespace Area51.SoftwareModeler.Models.Commands
     public class MoveShapeCommand : BaseCommand
     {
         public int? ShapeId { get; set; }
-        public double xOffset;
-        public double yOffset;
+        public double XOffset;
+        public double YOffset;
 
         public MoveShapeCommand()
         {
             //Deserialization constructor...
         }
 
-        public MoveShapeCommand(Shape _shape, double _xOffset, double _yOffset)
+        public MoveShapeCommand(Shape shape, double xOffset, double yOffset)
         {
             //When first constructed
-            ShapeId = _shape.id;
-            xOffset = _xOffset;
-            yOffset = _yOffset;
+            ShapeId = shape.id;
+            XOffset = xOffset;
+            YOffset = yOffset;
         }
 
 
         public override void execute()
         {
             
-                Shape shape = ShapeCollector.getI().getShapeByID(ShapeId);
+            Shape shape = ShapeCollector.GetI().GetShapeById(ShapeId);
             
-            Console.WriteLine("Executing moveShapeCommand");
-            Console.WriteLine("Shape =" + shape + "Center : " + shape.CanvasCenterX + " ," + shape.CanvasCenterY);
-            shape.CanvasCenterX += xOffset;
-            shape.CanvasCenterY += yOffset;
-            Console.WriteLine("Shape =" + shape + "Center : " + shape.CanvasCenterX + " ," + shape.CanvasCenterY);
+            shape.CanvasCenterX += XOffset;
+            shape.CanvasCenterY += YOffset;
+            foreach (Connection conn in ShapeCollector.GetI().ObsConnections)
+            {
+                if (conn.EndShapeId == ShapeId || conn.StartShapeId == ShapeId) conn.updatePoints();
+
+            }
         }
 
         public override void unExecute()
         {
-            Shape shape = ShapeCollector.getI().getShapeByID(ShapeId);
-            shape.CanvasCenterX -= xOffset;
-            shape.CanvasCenterY -= yOffset;
+            Shape shape = ShapeCollector.GetI().GetShapeById(ShapeId);
+            shape.CanvasCenterX -= XOffset;
+            shape.CanvasCenterY -= YOffset;
+            foreach (Connection conn in ShapeCollector.GetI().ObsConnections)
+            {
+                if (conn.EndShapeId == ShapeId || conn.StartShapeId == ShapeId) conn.updatePoints();
+
+            }
         }
 
     }

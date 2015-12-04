@@ -10,8 +10,8 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
     <Canvas IsHitTestVisible="True" Background="Transparent">
-        <ItemsControl ItemsSource="{Binding connections}"/>
-        <ItemsControl ItemsSource="{Binding classes}"/>
+        <ItemsControl ItemsSource="{Binding Connections}"/>
+        <ItemsControl ItemsSource="{Binding Classes}"/>
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseUp">
                 <cmd:EventToCommand Command="{Binding Path=MouseClickCommand}" PassEventArgsToCommand="True"/>

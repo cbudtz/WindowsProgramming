@@ -25,11 +25,11 @@
         It takes the max number of "command" objects as height, and the max debth of the tree as width.
         The valueconverter is used to match the width of the "command" object-->
         <Canvas  VerticalAlignment="Top" HorizontalAlignment="Left" Background="Red" 
-                 Height="{Binding commands.Count, Converter={StaticResource nodeCoordinateConverter}}" 
+                 Height="{Binding Commands.Count, Converter={StaticResource nodeCoordinateConverter}}" 
                  Width="{Binding  MaxBranchLayer, Converter={StaticResource nodeCoordinateConverter}}">
             
             <!--The itemcontrol that contains the CommandNodeView-usercontroll-->
-            <ItemsControl ItemsSource="{Binding commands}" Margin= "{Binding commands, Converter={StaticResource nodeCoordinateConverter}}"/>
+            <ItemsControl ItemsSource="{Binding Commands}" Margin= "{Binding Commands, Converter={StaticResource nodeCoordinateConverter}}"/>
             
         </Canvas>
     </ScrollViewer>
