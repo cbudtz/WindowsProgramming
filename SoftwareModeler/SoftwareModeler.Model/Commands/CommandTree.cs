@@ -46,12 +46,15 @@ namespace Area51.SoftwareModeler.Models.Commands
                 if (newLayer > CurrentBranchLayer) CurrentBranchLayer = newLayer;
                 setActive(command);
             }
+            //if a parentnode exist, and the current branchlayer is greater than the parents.
             if (Active.Parent != null && Active.Parent.BranchLayer < Active.BranchLayer)
             {
-                Console.WriteLine("-------------------------new child branch-----------------------");
+                //Update scroll area size.
                 ShapeCollector.getI().MaxBranchLayer.Add(CurrentBranchLayer);
                 NotifyPropertyChanged(() => ShapeCollector.getI().MaxBranchLayer);
-                Console.WriteLine("maxbranchLayer = " + ShapeCollector.getI().MaxBranchLayer.Count);
+
+                //Draw new arrow, from parent to child.
+                ShapeCollector.getI().treeArrows.Add(new Connection(Active.Parent, Active));
             }
                 
 

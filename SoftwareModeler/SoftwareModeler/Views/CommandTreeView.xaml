@@ -30,7 +30,8 @@
             
             <!--The itemcontrol that contains the CommandNodeView-usercontroll-->
             <ItemsControl ItemsSource="{Binding commands}" Margin= "{Binding commands, Converter={StaticResource nodeCoordinateConverter}}"/>
-            
+            <!--The itemcontroll that contains the lines, linking command-nodes in the tree. Drawn as simplified connections.-->
+            <ItemsControl ItemsSource="{Binding treeArrows}"/>
         </Canvas>
     </ScrollViewer>
 </UserControl>

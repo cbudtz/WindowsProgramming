@@ -22,15 +22,20 @@ namespace Area51.SoftwareModeler.Models
         public ObservableCollection<Connection> obsConnections { get; set; }
         [XmlIgnore]
         public ObservableCollection<BaseCommand> commands { get; set; }
-
         [XmlIgnore]
         public ObservableCollection<int> MaxBranchLayer { get; set; }
+        [XmlIgnore]
+        public ObservableCollection<Connection> treeArrows { get; set; }
 
 
-        private ShapeCollector()  {
+        private ShapeCollector()
+        {
             obsShapes = new ObservableCollection<Shape>();            
             obsConnections = new ObservableCollection<Connection>();
             commands = new ObservableCollection<BaseCommand>();
+
+            //contains the "connections" used to draw lines in the command-tree.
+            treeArrows = new ObservableCollection<Connection>();
 
             //adding a few extra buffers to the size of the scroll-area. (yes it's an ugly fix)
             MaxBranchLayer = new ObservableCollection<int>();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Area51.SoftwareModeler.Models.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -67,6 +68,23 @@ namespace Area51.SoftwareModeler.Models
             endPoint = new Point();
 
             updatePoints();
+        }
+        //used for adding lines to the command-tree.
+        public Connection(BaseCommand start, BaseCommand end)
+        {
+            //start at 50 out and 15 down, add 25 pr node.
+            StartPoint = new Point(50 + (start.BranchLayer * 25), 15 + (start.Id * 25));
+            PointCollection = new PointCollection();
+            //corner at 40,15 + branchlayer and nodelayer
+            Point p = new Point(40 + (end.BranchLayer * 25), 15 + (start.Id * 25));
+            PointCollection.Add(p);
+            //end and the top of the child node, no offset
+            p.Y = (end.Id * 25);
+            PointCollection.Add(p);
+
+            //notify
+            NotifyPropertyChanged(() => StartPoint);
+            NotifyPropertyChanged(() => PointCollection);
         }
 
         private class Direction

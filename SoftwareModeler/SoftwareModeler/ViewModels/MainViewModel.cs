@@ -103,8 +103,12 @@ namespace Area51.SoftwareModeler.ViewModels
 		public ObservableCollection<BaseCommand> commands { get { return ShapeCollector.getI().commands; } }
 		public ObservableCollection<Shape> classes { get { return ShapeCollector.getI().obsShapes; } }
 		public ObservableCollection<Connection> connections { get { return ShapeCollector.getI().obsConnections; } }
+
+        //maxbranchlayer added as an observablecollection for now, not a nice fix, but it works (for scroll area).
 		public ObservableCollection<int> MaxBranchLayer { get { return ShapeCollector.getI().MaxBranchLayer; } }
-		private Class classToEdit = null;
+        //new collection for the lines in the command-tree.
+        public ObservableCollection<Connection> treeArrows { get { return ShapeCollector.getI().treeArrows; } }
+        private Class classToEdit = null;
 
 
 		//Dynamic 
