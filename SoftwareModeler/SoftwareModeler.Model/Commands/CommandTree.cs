@@ -50,16 +50,16 @@ namespace Area51.SoftwareModeler.Models.Commands
             if (Active.Parent != null && Active.Parent.BranchLayer < Active.BranchLayer)
             {
                 //Update scroll area size.
-                ShapeCollector.getI().MaxBranchLayer.Add(CurrentBranchLayer);
-                NotifyPropertyChanged(() => ShapeCollector.getI().MaxBranchLayer);
+                ShapeCollector.GetI().MaxBranchLayer.Add(CurrentBranchLayer);
+                NotifyPropertyChanged(() => ShapeCollector.GetI().MaxBranchLayer);
 
                 //Draw new arrow, from parent to child.
-                ShapeCollector.getI().treeArrows.Add(new Connection(Active.Parent, Active));
+                ShapeCollector.GetI().treeArrows.Add(new Connection(Active.Parent, Active));
             }
                 
 
-            ShapeCollector.getI().commands.Add(command);
-            NotifyPropertyChanged(() => ShapeCollector.getI().commands);
+            ShapeCollector.GetI().Commands.Add(command);
+            NotifyPropertyChanged(() => ShapeCollector.GetI().Commands);
 
             //       foreach (BaseCommand baseCommand in ShapeCollector.getI().commands)
             //     {

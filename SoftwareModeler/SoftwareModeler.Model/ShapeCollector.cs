@@ -31,9 +31,9 @@ namespace Area51.SoftwareModeler.Models
 
         private ShapeCollector()
         {
-            obsShapes = new ObservableCollection<Shape>();            
-            obsConnections = new ObservableCollection<Connection>();
-            commands = new ObservableCollection<BaseCommand>();
+            ObsShapes = new ObservableCollection<Class>();            
+            ObsConnections = new ObservableCollection<Connection>();
+            Commands = new ObservableCollection<BaseCommand>();
 
             //contains the "connections" used to draw lines in the command-tree.
             treeArrows = new ObservableCollection<Connection>();

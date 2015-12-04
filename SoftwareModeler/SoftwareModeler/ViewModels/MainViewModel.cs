@@ -98,21 +98,16 @@ namespace Area51.SoftwareModeler.ViewModels
         private List<Point> _initialClassPosition = new List<Point>();
 		private long _doubleClickTimer;
 		private long doubleClickTimeout = 500*10000; // nanosec. is 500msec
-
-		//view access to observables
-		public ObservableCollection<BaseCommand> commands { get { return ShapeCollector.getI().commands; } }
-		public ObservableCollection<Shape> classes { get { return ShapeCollector.getI().obsShapes; } }
-		public ObservableCollection<Connection> connections { get { return ShapeCollector.getI().obsConnections; } }
+        
 
         //maxbranchlayer added as an observablecollection for now, not a nice fix, but it works (for scroll area).
-		public ObservableCollection<int> MaxBranchLayer { get { return ShapeCollector.getI().MaxBranchLayer; } }
+		public ObservableCollection<int> MaxBranchLayer { get { return ShapeCollector.GetI().MaxBranchLayer; } }
         //new collection for the lines in the command-tree.
-        public ObservableCollection<Connection> treeArrows { get { return ShapeCollector.getI().treeArrows; } }
+        public ObservableCollection<Connection> treeArrows { get { return ShapeCollector.GetI().treeArrows; } }
         private Class classToEdit = null;
 		public ObservableCollection<BaseCommand> Commands => ShapeCollector.GetI().Commands;
 	    public ObservableCollection<Class> Classes => ShapeCollector.GetI().ObsShapes;
 	    public ObservableCollection<Connection> Connections => ShapeCollector.GetI().ObsConnections;
-	    public ObservableObject MaxBranchLayer => ShapeCollector.GetI().MaxBranchLayer;
 
 
 		//Dynamic 
