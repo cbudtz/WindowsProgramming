@@ -346,6 +346,7 @@ namespace Area51.SoftwareModeler.ViewModels
         {
             if (shape == null || newConnection.Start.Equals(shape))
             {
+                Console.WriteLine("shape: " + shape);
                 connections.Remove(newConnection);
             }
             else
@@ -413,6 +414,7 @@ namespace Area51.SoftwareModeler.ViewModels
         public void MouseUp(MouseButtonEventArgs e)
 		{
 			// The Shape is gotten from the mouse event.
+            e.MouseDevice.Target.ReleaseMouseCapture();
 			var shape = TargetShape(e);
 			
 			// The mouse position relative to the target of the mouse event.
