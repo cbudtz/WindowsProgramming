@@ -19,6 +19,7 @@ namespace Area51.SoftwareModeler.Models.Commands
     [XmlInclude(typeof(DeleteShapeCommand))]
     [XmlInclude(typeof(UpdateClassInfoCommand))]
     [XmlInclude(typeof(AddConnectionCommand))]
+    [XmlInclude(typeof(CopyClassCommand))]
     public abstract class BaseCommand : NotifyBase
     {
         //Static

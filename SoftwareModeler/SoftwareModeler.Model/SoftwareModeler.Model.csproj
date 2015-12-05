@@ -70,6 +70,7 @@
     <Compile Include="Commands\AddCommentCommand.cs" />
     <Compile Include="Commands\AddClassCommand.cs" />
     <Compile Include="Commands\AddConnectionCommand.cs" />
+    <Compile Include="Commands\CopyClassCommand.cs" />
     <Compile Include="Commands\DeleteConnectionCommand.cs" />
     <Compile Include="Commands\DeleteShapeCommand.cs" />
     <Compile Include="Commands\DummyCommand.cs" />

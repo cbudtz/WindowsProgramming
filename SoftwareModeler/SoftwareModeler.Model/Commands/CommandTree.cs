@@ -23,7 +23,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public int NextShapeId { get; set; }
         public int NextCommandId { get; set; }
         public ObservableCollection<BaseCommand> Commands { get; set; } = ShapeCollector.GetI().Commands;
-        public ObservableCollection<Connection> CommandConnections { get; set; } = ShapeCollector.GetI().treeArrows;
+        //public ObservableCollection<Connection> CommandConnections { get; set; } = ShapeCollector.GetI().treeArrows;
 
         public CommandTree()
         {
@@ -211,7 +211,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             //Reestablishing parents and finding active node
             restoredTree.setActive(CommandTree.reParseTree(restoredTree.Root, restoredTree.Active.Id));
             ShapeCollector.GetI().Commands = restoredTree.Commands;
-            ShapeCollector.GetI().treeArrows = restoredTree.CommandConnections;
+            //ShapeCollector.GetI().treeArrows = restoredTree.CommandConnections;
             //Moving diagram to active state
             restoredTree.reExecute();
 

@@ -64,15 +64,15 @@ namespace Area51.SoftwareModeler.Models
             _attributes.Add(new Attribute(visibility, type, name));
         }
 
-        public void AddMethod(Visibility visibility, string name, string[] parameters)
+        public void AddMethod(Visibility visibility, string name, string parameters)
         {
-            Method m = new Method(visibility, name);
-            string param = "";
-            for (int i = 0; i < parameters.Length; i++)
-                param += parameters + ", ";
-            //m.addParameter(parameters[i]);
-            param = param.Substring(0, param.Length - 1);
-            m.Parameters = param;
+            Method m = new Method(visibility, name, parameters);
+            //string param = "";
+            //for (int i = 0; i < parameters.Length; i++)
+            //    param += parameters + ", ";
+            ////m.addParameter(parameters[i]);
+            //param = param.Substring(0, param.Length - 1);
+            //m.Parameters = param;
             _methods.Add(m);
         }
 

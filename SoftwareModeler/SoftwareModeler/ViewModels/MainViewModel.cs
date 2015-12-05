@@ -87,6 +87,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         #endregion
         private List<Class> selectedClasses = new List<Class>();
+        private List<Class> classesCopied = new List<Class>();
         private Class _classToEdit = null;
         private bool _multiSelect = false;
         private bool _multiAdd = false;
@@ -170,6 +171,8 @@ namespace Area51.SoftwareModeler.ViewModels
 			KeyStates del = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.Delete) & KeyStates.Down;
             KeyStates shiftL = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.LeftShift) & KeyStates.Down;
             KeyStates shiftR = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.RightShift) & KeyStates.Down;
+            KeyStates c = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.C) & KeyStates.Down;
+            KeyStates v = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.V) & KeyStates.Down;
 
 
 
@@ -192,7 +195,14 @@ namespace Area51.SoftwareModeler.ViewModels
 				}
 				else if (o > 0){
 					loadFile();
-				}
+				}else if(c > 0)
+                {
+                    classesCopied.Clear();
+                    selectedClasses.ForEach(x => classesCopied.Add(x));
+                }else if(v > 0)
+                {
+                    classesCopied.ForEach(x => execCommand(new CopyClassCommand(x)));
+                }
 			}
 			else if (esc > 0)
 			{
