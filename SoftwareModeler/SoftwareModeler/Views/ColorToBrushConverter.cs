@@ -19,6 +19,7 @@ namespace Area51.SoftwareModeler.Views
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            Console.WriteLine("convert color back");
             throw new Exception("The method or operation is not implemented.");
         }
     }

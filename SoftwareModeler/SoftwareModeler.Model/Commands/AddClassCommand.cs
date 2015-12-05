@@ -49,7 +49,6 @@ namespace Area51.SoftwareModeler.Models.Commands
                 //ReExecuting (either when deserialized or redoing)
                 ClassRep = new Class(ShapeId, ClassName, StereoType, IsAbstract, AnchorPoint);
             }
-            Console.WriteLine("Executing Add Shape Command, Shape with ID: " + ClassRep.id + "Added");
             ShapeCollector.GetI().ObsShapes.Add(ClassRep);
         }
 

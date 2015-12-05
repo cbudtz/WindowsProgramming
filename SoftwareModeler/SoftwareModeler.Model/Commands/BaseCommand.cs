@@ -23,9 +23,13 @@ namespace Area51.SoftwareModeler.Models.Commands
     {
         //Static
         public static int nextid = 0;
+
         public int BranchLayer { get; set; }
-        public Color color = Colors.Azure;
-        public Color Color { get { return color; } set { color = value; NotifyPropertyChanged(); } }
+        [XmlIgnore]
+        //private Color color = Colors.Azure;
+        private SolidColorBrush color = new SolidColorBrush(Colors.Azure);
+        [XmlIgnore]
+        public SolidColorBrush Color { get { return color; } set { color = value; NotifyPropertyChanged(); } }
         //Fields
         protected string parentstr = "hey";
         protected BaseCommand parent = null;
@@ -40,6 +44,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         //Abstract - Command pattern
         public abstract void execute();
         public abstract void unExecute();
+
         //Inherited methods
         public  int addChild(BaseCommand child, int currentBranchLayer)
         {

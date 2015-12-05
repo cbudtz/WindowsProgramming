@@ -221,7 +221,10 @@ namespace Area51.SoftwareModeler.ViewModels
             EditClassWindow = new EditClassPopupWindow();
             _classToEdit = (Class)shape;
             EditClassWindow.ClassName.Text = _classToEdit.name;
-            EditClassWindow.StereoType.Text = _classToEdit.StereoType;
+            string stereoType = _classToEdit.StereoType;
+            stereoType = stereoType == null || stereoType.Length < 4? "" : stereoType.Remove(0, 2);
+            stereoType = stereoType == null || stereoType.Length < 2? "" : stereoType.Remove(stereoType.Length - 2, 2);
+            EditClassWindow.StereoType.Text = stereoType;
             EditClassWindow.IsAbstract.IsChecked = _classToEdit.IsAbstract;
             EditClassWindow.Methods.ItemsSource = _classToEdit.Methods;
             EditClassWindow.Attributes.ItemsSource = _classToEdit.Attributes;
@@ -568,7 +571,7 @@ namespace Area51.SoftwareModeler.ViewModels
 				System.IO.Stream fileStream = ofd.OpenFile();
 				using (System.IO.StreamReader reader = new System.IO.StreamReader(fileStream))
 				{
-					CommandTree.load(reader);
+					CommandController = CommandTree.load(reader);
 				}
 				fileStream.Close();
 			}

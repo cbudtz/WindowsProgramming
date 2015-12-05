@@ -37,7 +37,7 @@
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle" HorizontalContentAlignment="Left" Command="{Binding Path=AddAssociationCommand}" Margin="0,5,0,1">
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
-                            <Image Source="/association_icon.png" Width="15"/>
+                            <Image Source="/Images/association_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Association</TextBlock>
                     </TextBlock>
@@ -45,7 +45,7 @@
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle" Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=AddAggregationCommand}" Margin="0,1">
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
-                            <Image Source="/aggregation_icon.png" Width="15"/>
+                            <Image Source="/Images/aggregation_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Aggregation</TextBlock>
                     </TextBlock>
@@ -53,7 +53,7 @@
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle" Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=AddCompositionCommand}" Margin="0,1">
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
-                            <Image Source="/composition_icon.png" Width="15"/>
+                            <Image Source="/Images/composition_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Composition</TextBlock>
                     </TextBlock>
@@ -71,7 +71,7 @@
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle"  HorizontalContentAlignment="Left" Command="{Binding Path=NewClassCommand}" Margin="0,5,0,1">
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
-                            <Image Source="/class_icon.png" Width="15"/>
+                            <Image Source="/Images/class_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Add Class</TextBlock>
                     </TextBlock>
@@ -79,7 +79,7 @@
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle"  Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=NewAbstractCommand}" Margin="0,1">
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
-                            <Image Source="/class_abstract_icon.png" Width="15"/>
+                            <Image Source="/Images/class_abstract_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Add Abstract Class</TextBlock>
                     </TextBlock>
@@ -87,7 +87,7 @@
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle"  Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=NewInterfaceCommand}" Margin="0,1">
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
-                            <Image Source="/class_interface_icon.png" Width="15"/>
+                            <Image Source="/Images/class_interface_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Add Interface</TextBlock>
                     </TextBlock>
@@ -103,7 +103,7 @@
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle"  HorizontalContentAlignment="Left" Command="{Binding NewCommentCommand}" Margin="0,5,0,1">
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
-                            <Image Source="/comment_icon.png" Width="15"/>
+                            <Image Source="/Images/comment_icon.png" Width="15"/>
                         </TextBlock>
                         <TextBlock Margin="5,-2,0,0"> Add Comment</TextBlock>
                     </TextBlock>

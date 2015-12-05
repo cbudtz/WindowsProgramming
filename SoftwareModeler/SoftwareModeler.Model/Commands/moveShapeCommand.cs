@@ -32,6 +32,8 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
+
+            Console.WriteLine("searching for: " + ShapeId + " count: " + ShapeCollector.GetI().ObsShapes.Count);
             
             Shape shape = ShapeCollector.GetI().GetShapeById(ShapeId);
             

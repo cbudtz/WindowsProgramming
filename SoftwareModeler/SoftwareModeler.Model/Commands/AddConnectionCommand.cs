@@ -34,7 +34,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 }
         public override void execute()
         {
-            Console.WriteLine("connection added");
+            //Console.WriteLine("connection added");
             if(Conn == null) Conn = new Connection(FromId, FromMult, ToId, ToMult, Type);
             ShapeCollector.GetI().ObsConnections.Add(Conn);
         }

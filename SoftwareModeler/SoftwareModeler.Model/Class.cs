@@ -47,7 +47,7 @@ namespace Area51.SoftwareModeler.Models
 
         //Getters and setters
         public string Name { get { return name;} set { name = value; NotifyPropertyChanged(); } }
-        public string StereoType { get { return _stereotype; } set { _stereotype = value; NotifyPropertyChanged();} }
+        public string StereoType { get { return ( _stereotype==null || _stereotype.Equals("") ? "" : "<<"+_stereotype+">>"); } set { _stereotype = value; NotifyPropertyChanged();} }
         public bool IsAbstract { get { return _isAbstract; } set { _isAbstract = value; NotifyPropertyChanged();} }
         public List<Attribute> Attributes { get { return _attributes; } set { _attributes = value; NotifyPropertyChanged();} }
         public List<Method> Methods { get { return _methods; } set { _methods = value; NotifyPropertyChanged();} }

@@ -14,8 +14,9 @@ namespace Area51.SoftwareModeler.Models
     public class Connection : NotifyBase
     {
         //Unique ID
+        [XmlIgnore]
         public static int NextId = 0;
-        
+
         //private string startMultiplicity;
         public string StartMultiplicity { get;  set ;  }
         //private string endMultiplicity;
@@ -24,42 +25,36 @@ namespace Area51.SoftwareModeler.Models
         private int? _startShapeId;
         public int? EndShapeId;
 
-        [XmlIgnore]
+         
         public int? StartShapeId{get { return _startShapeId; } set{_startShapeId = value; Start = ShapeCollector.GetI().GetShapeById(value); }}
 
         [XmlIgnore]
-        private Shape Start { get { return ShapeCollector.GetI().GetShapeById(StartShapeId); } set { _startShapeId = value.id; updatePoints();}}
-        
+        private Shape Start { get { return ShapeCollector.GetI().GetShapeById(StartShapeId); } set { _startShapeId = value.id; updatePoints();}}       
         [XmlIgnore]
         private Shape End { get { return ShapeCollector.GetI().GetShapeById(EndShapeId); } set { EndShapeId = value.id; updatePoints(); } }
-        [XmlIgnore]
-        public Shape StartTemp { get; set; }
 
-        [XmlIgnore]
+         
+        public Shape StartTemp { get; set; }
+         
         public Shape EndTemp { get; set; }
 
-        [XmlIgnore]
+         
         public Point StartPoint { get; set; }
-
-        [XmlIgnore]
-        private Point _p1;
-
-        [XmlIgnore]
-        public Point P1 { get { return _p1; } set { _p1 = value; } }
-        
-        [XmlIgnore]
-        private Point _p2;
-
-        [XmlIgnore]
-        public Point P2 { get { return _p2; } set { _p2 = value; } }
-
-        [XmlIgnore]
+         
         public Point EndPoint { get; set; }
 
-        [XmlIgnore]
+         
+        private Point _p1;
+         
+        public Point P1 { get { return _p1; } set { _p1 = value; } }      
+         
+        private Point _p2;
+         
+        public Point P2 { get { return _p2; } set { _p2 = value; } }
+             
+         
         public PointCollection PointCollection { get; set; }
-
-        [XmlIgnore]
+         
         public PointCollection PolygonPoints { get; set; }
 
         public ConnectionType Type;

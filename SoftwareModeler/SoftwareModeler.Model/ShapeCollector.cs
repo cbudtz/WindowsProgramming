@@ -22,7 +22,6 @@ namespace Area51.SoftwareModeler.Models
         public ObservableCollection<Connection> ObsConnections { get; set; }
         [XmlIgnore]
         public ObservableCollection<BaseCommand> Commands { get; set; }
-
         [XmlIgnore]
         public ObservableCollection<int> MaxBranchLayer { get; set; }
         [XmlIgnore]
