@@ -109,6 +109,17 @@ namespace Area51.SoftwareModeler.Models.Commands
             //Console.WriteLine("ReExecuting " + reExecuteList.Count + " Commands");
             foreach (BaseCommand b in reExecuteList)
             {
+
+                if (b.Parent != null && b.Parent.BranchLayer != b.BranchLayer)
+                {
+                    //Update scroll area size.
+                    ShapeCollector.GetI().MaxBranchLayer.Add(b.BranchLayer);
+                    NotifyPropertyChanged(() => ShapeCollector.GetI().MaxBranchLayer);
+
+                    //Draw new arrow, from parent to child.
+                    ShapeCollector.GetI().treeArrows.Add(new Connection(b.Parent, b));
+                }
+
                 b.execute();
                 //Console.WriteLine("reExecuted " + b.Id);
             }
@@ -195,6 +206,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             ShapeCollector.GetI().Reset();
             ShapeCollector.GetI().Commands.Clear();
             ShapeCollector.GetI().treeArrows.Clear();
+            ShapeCollector.GetI().MaxBranchLayer.Clear();
             //restore Tree
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
             CommandTree restoredTree;

@@ -563,6 +563,8 @@ namespace Area51.SoftwareModeler.ViewModels
 				ShapeCollector.GetI().ObsConnections.Clear();
 				ShapeCollector.GetI().ObsShapes.Clear();
 				ShapeCollector.GetI().Commands.Clear();
+                ShapeCollector.GetI().treeArrows.Clear();
+                ShapeCollector.GetI().MaxBranchLayer.Clear();
 			}
 		}
 
