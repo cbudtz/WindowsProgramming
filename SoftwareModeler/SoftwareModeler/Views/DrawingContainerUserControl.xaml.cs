@@ -18,9 +18,9 @@ namespace Area51.SoftwareModeler.Views
     /// <summary>
     /// Interaction logic for DiagramDrawingWindowUserControl.xaml
     /// </summary>
-    public partial class DiagramDrawingWindowUserControl : UserControl
+    public partial class DrawingContainerUserControl : UserControl
     {
-        public DiagramDrawingWindowUserControl()
+        public DrawingContainerUserControl()
         {
             InitializeComponent();
         }

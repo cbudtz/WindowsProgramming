@@ -18,7 +18,7 @@
     <DockPanel >
         <Views:ToolboxUserControl DockPanel.Dock="Left"/>
         <Views:CommandTreeView DockPanel.Dock="Right" Width="300" HorizontalAlignment="Right"/>    
-        <Views:DiagramDrawingWindowUserControl HorizontalAlignment="Stretch"/>
+        <Views:DrawingContainerUserControl HorizontalAlignment="Stretch"/>
     </DockPanel>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="KeyDown">

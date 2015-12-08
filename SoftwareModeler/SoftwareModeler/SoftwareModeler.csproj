@@ -111,8 +111,8 @@
     <Compile Include="Views\ConnectionUserControl.xaml.cs">
       <DependentUpon>ConnectionUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DiagramDrawingWindowUserControl.xaml.cs">
-      <DependentUpon>DiagramDrawingWindowUserControl.xaml</DependentUpon>
+    <Compile Include="Views\DrawingContainerUserControl.xaml.cs">
+      <DependentUpon>DrawingContainerUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditClassPopupWindow.xaml.cs">
       <DependentUpon>EditClassPopupWindow.xaml</DependentUpon>
@@ -137,7 +137,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DiagramDrawingWindowUserControl.xaml">
+    <Page Include="Views\DrawingContainerUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
