@@ -74,6 +74,7 @@ namespace Area51.SoftwareModeler.ViewModels
 		public ICommand LoadCommand { get; }
 		public ICommand TeamCommand { get; }
 		public ICommand NewCommand { get; }
+        public ICommand HelpCommand { get; }
 
 		public ICommand AddAssociationCommand { get; }
 		public ICommand AddAggregationCommand { get; }
@@ -147,6 +148,7 @@ namespace Area51.SoftwareModeler.ViewModels
 			LoadCommand = new RelayCommand(loadFile);
 			NewCommand = new RelayCommand(StartNewProject);
 			TeamCommand = new RelayCommand(StartTeamProject);
+            HelpCommand = new RelayCommand(Help);
 
 			AddAggregationCommand = new RelayCommand(AddAggregation);
 			AddAssociationCommand = new RelayCommand(AddAssociation);
@@ -607,6 +609,24 @@ namespace Area51.SoftwareModeler.ViewModels
 			saved = true;
 			return saved;
 		}
+
+        private void Help()
+        {
+
+            string msg =      "CTRL+S : save file\n"
+                            + "CTRL+O : load file\n"
+                            + "CTRL+Z : undo\n"
+                            + "CTRL+Y : redo\n"
+                            + "CTRL+Right click : select multiple classes\n"
+                            + "CTRL+C : copy selected objects. Connections not included\n"
+                            + "CTRL+V : paste the copied objects\n"
+                            + "LSHIFT/RSHIFT : allows to add multiple classes/connections without selecting inbetween in the toolbox\n"
+                            + "ESC : clear selections\n"
+                            + "DEL : delete selected objects. Connections can only be deleted by deleting one of the classes connected to it\n"
+                            + "Double click : edit content of class\n"
+                            + "Click on number in command tree to browse history";
+            MessageBox.Show(msg, "available shortcuts");
+        }
 
 		private void AddComposition()
 		{
