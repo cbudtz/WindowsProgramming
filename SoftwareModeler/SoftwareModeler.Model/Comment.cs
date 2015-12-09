@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Area51.SoftwareModeler.Models
 {
+    [Obsolete("can be used on a later point to give comments a unique appearence")]
     class Comment : Shape
     {
         private string commentString { get; set; }

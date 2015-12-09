@@ -12,26 +12,21 @@
              Canvas.Left="{Binding BranchLayer, Converter={StaticResource nodeCoordinateConverter}}" 
              Canvas.Top="{Binding Id, Converter={StaticResource nodeCoordinateConverter}}"
              >
-    <Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-        
-         <Grid.RowDefinitions>
-             <RowDefinition   />
-             
-         </Grid.RowDefinitions>
+    <Grid Background="Transparent">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="30"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Ellipse Grid.Row="0" Grid.Column="0" Width="20" Height="20" Stroke="{Binding Color}" StrokeThickness="3"/> <!--, Converter={StaticResource ColorToBrushConverter}-->
-        <Border Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="{Binding Color}" CornerRadius="4" >
-            <TextBlock Background="LightGray"  Padding="2" Height="20" HorizontalAlignment="Left" Text="{Binding Path=Id}"></TextBlock>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseUp" >
-                    <cmd:EventToCommand Command="{Binding DataContext.CherryPickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+        <Ellipse Grid.Row="0" Grid.Column="0" Width="20" Height="20" Stroke="{Binding Color}" StrokeThickness="3"/>
+            <Border Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="{Binding Color}" CornerRadius="4" >
+            <TextBlock Background="LightGray"  Padding="2" Height="20" HorizontalAlignment="Left" Text="{Binding Path=CommandType}"></TextBlock>
+            
         </Border>
-        
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="MouseUp" >
+                <cmd:EventToCommand Command="{Binding DataContext.CherryPickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
     </Grid>
     
 </UserControl>
