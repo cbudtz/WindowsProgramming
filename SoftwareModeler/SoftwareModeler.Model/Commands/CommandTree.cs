@@ -19,7 +19,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public int CurrentBranchLayer;
         public BaseCommand Root { get; set; }
         public BaseCommand Active { get; set; }
-        public List<BaseCommand> undone { get; set; } = new List<BaseCommand>();
+        public List<BaseCommand> RedoList { get; set; } = new List<BaseCommand>();
         public int NextShapeId { get; set; }
         public int NextCommandId { get; set; }
         public ObservableCollection<BaseCommand> Commands { get; set; } = ShapeCollector.GetI().Commands;
@@ -90,7 +90,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             //Update activeCommand
             BaseCommand newActiveNode = reParseTree(Root, command.Id);
-            undone.Clear();
+            RedoList.Clear();
             setActive(newActiveNode);
             reExecute();
         }
@@ -239,17 +239,17 @@ namespace Area51.SoftwareModeler.Models.Commands
                 return;
             }
             Active.unExecute();
-            undone.Add(Active);
+            RedoList.Add(Active);
             setActive(Active.Parent);
 
         }
 
         public void redo()
         {
-            if (undone == null || undone.Count == 0) return;
-            BaseCommand reDoCommand = undone.Last();
+            if (RedoList == null || RedoList.Count == 0) return;
+            BaseCommand reDoCommand = RedoList.Last();
             reDoCommand.execute();
-            undone.Remove(reDoCommand);
+            RedoList.Remove(reDoCommand);
             setActive(reDoCommand);
         }
 
