@@ -10,6 +10,7 @@
         xmlns:ViewModel="clr-namespace:Area51.SoftwareModeler.ViewModels"
         xmlns:Views="clr-namespace:Area51.SoftwareModeler.Views"
         Title="MainWindow" Height="600" Width="1000"
+        Icon="../Images/icon.png"
         >
     <Window.DataContext>
         <ViewModel:MainViewModel />
