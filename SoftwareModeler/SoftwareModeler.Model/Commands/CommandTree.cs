@@ -19,7 +19,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public int CurrentBranchLayer;
         public BaseCommand Root { get; set; }
         public BaseCommand Active { get; set; }
-        public List<BaseCommand> undone { get; set; } = new List<BaseCommand>();
+        public List<BaseCommand> RedoList { get; set; } = new List<BaseCommand>();
         public int NextShapeId { get; set; }
         public int NextCommandId { get; set; }
         public ObservableCollection<BaseCommand> Commands { get; set; } = ShapeCollector.GetI().Commands;
@@ -36,7 +36,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             {
                 //Root node - serialization starts here...
                 Root = command;
-                setActive(Root);
+                ColorActiveNode(Root);
             }
             else
             {
@@ -44,7 +44,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 command.Parent = Active;
                 var newLayer = Active.addChild(command, CurrentBranchLayer);
                 if (newLayer > CurrentBranchLayer) CurrentBranchLayer = newLayer;
-                setActive(command);
+                ColorActiveNode(command);
             }
             //if a parentnode exist, and the current branchlayer is greater than the parents.
             if (Active.Parent != null && Active.Parent.BranchLayer < Active.BranchLayer)
@@ -70,7 +70,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         }
 
-        private void setActive(BaseCommand node)
+        private void ColorActiveNode(BaseCommand node)
         {
             Console.WriteLine("set color: " + node);
             if (Active != null)
@@ -90,8 +90,8 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             //Update activeCommand
             BaseCommand newActiveNode = reParseTree(Root, command.Id);
-            undone.Clear();
-            setActive(newActiveNode);
+            RedoList.Clear();
+            ColorActiveNode(newActiveNode);
             reExecute();
         }
 
@@ -222,7 +222,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             Console.WriteLine("Load: Active node:" + restoredTree.Active.Id);
             Console.WriteLine("Load: RootNode: " + restoredTree.Root);
             //Reestablishing parents and finding active node
-            restoredTree.setActive(CommandTree.reParseTree(restoredTree.Root, restoredTree.Active.Id));
+            restoredTree.ColorActiveNode(CommandTree.reParseTree(restoredTree.Root, restoredTree.Active.Id));
             ShapeCollector.GetI().Commands = restoredTree.Commands;
             //ShapeCollector.GetI().treeArrows = restoredTree.CommandConnections;
             //Moving diagram to active state
@@ -239,18 +239,18 @@ namespace Area51.SoftwareModeler.Models.Commands
                 return;
             }
             Active.unExecute();
-            undone.Add(Active);
-            setActive(Active.Parent);
+            RedoList.Add(Active);
+            ColorActiveNode(Active.Parent);
 
         }
 
         public void redo()
         {
-            if (undone == null || undone.Count == 0) return;
-            BaseCommand reDoCommand = undone.Last();
+            if (RedoList == null || RedoList.Count == 0) return;
+            BaseCommand reDoCommand = RedoList.Last();
             reDoCommand.execute();
-            undone.Remove(reDoCommand);
-            setActive(reDoCommand);
+            RedoList.Remove(reDoCommand);
+            ColorActiveNode(reDoCommand);
         }
 
     }
