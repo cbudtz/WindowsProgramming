@@ -90,7 +90,6 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             //Update activeCommand
             BaseCommand newActiveNode = reParseTree(Root, command.Id);
-            undone.Clear();
             setActive(newActiveNode);
             reExecute();
         }
