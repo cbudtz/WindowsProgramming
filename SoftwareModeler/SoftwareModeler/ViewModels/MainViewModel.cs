@@ -273,6 +273,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
 		public void SelectShape(Class s)
 		{
+
 			if (s == null) return;
 			if (selectedClasses == null) selectedClasses = new List<Class>();
 			
@@ -288,7 +289,8 @@ namespace Area51.SoftwareModeler.ViewModels
 
 		public void MoveShape(Point mousePosition)
 		{
-            for(int i = 0; i < selectedClasses.Count; i++) {
+            Console.WriteLine("moving shape...");
+            for (int i = 0; i < selectedClasses.Count; i++) {
                 selectedClasses.ElementAt(i).X = _initialClassPosition.ElementAt(i).X + (mousePosition.X - _initialMousePosition.X);
                 selectedClasses.ElementAt(i).Y = _initialClassPosition.ElementAt(i).Y + (mousePosition.Y - _initialMousePosition.Y);
 
@@ -300,7 +302,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MoveShapeDone(Point mousePosition)
         {
-           
+            Console.WriteLine("move shape done");
             double xOffset = mousePosition.X - _initialMousePosition.X;
             double yOffset = mousePosition.Y - _initialMousePosition.Y;
 
@@ -321,14 +323,12 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void ResizeShapeInit(Shape shape, MouseButtonEventArgs e)
         {
-            if (shape == null) return;
-            double borderX = shape.X + shape.Width;
-            double borderY = shape.Y + shape.Height;
+            Console.WriteLine("resize init");
 
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
 
-            if (Math.Abs(mousePosition.X - borderX) < 5 && Math.Abs(mousePosition.Y - borderY) < 5) return;
+            _isResizing = true;
 
             var border = e.MouseDevice.Target as Border;
             if (border == null) return;
@@ -337,14 +337,15 @@ namespace Area51.SoftwareModeler.ViewModels
 
             InitialWidth = border.ActualWidth;
 
-            _isResizing = true;
+            
 
             
         }
 
 		public void ResizeShape(Shape shape, Point mousePosition)
 		{
-			shape.Width = mousePosition.X - shape.X;
+            Console.WriteLine("resizing...");
+            shape.Width = mousePosition.X - shape.X;
 			shape.Height = mousePosition.Y - shape.Y;
 			if (Math.Abs(shape.Width) < minShapeWidth) shape.Width = minShapeWidth;
 			if (Math.Abs(shape.Height) < minShapeHeight) shape.Height = minShapeHeight;
@@ -352,6 +353,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void ResizeShapeDone(Shape shape, Point mousePosition)
         {
+            Console.WriteLine("resize done");
             if (!_isResizing) return;          
             if (shape == null) return;
            
@@ -372,6 +374,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void AddConnection(Class shape)
             {
+            Console.WriteLine("addConnection...");
             if (shape != null && NewConnection.StartShapeId != shape.id)
             {
                 NewConnection.EndShapeId = shape.id;
@@ -385,6 +388,7 @@ namespace Area51.SoftwareModeler.ViewModels
       
         public void AddConnectionInit(Class shape, Point mousePosition)
         {
+            Console.WriteLine("addConnection init");
             ConnectionType type = ConnectionType.Association;
             switch (ButtonDown)
             {
@@ -440,7 +444,7 @@ namespace Area51.SoftwareModeler.ViewModels
         public void MouseUp(MouseButtonEventArgs e)
 		{
 			// The Shape is gotten from the mouse event.
-            e.MouseDevice.Target.ReleaseMouseCapture();
+            
 			var shape = TargetShape(e);
 			
 
@@ -466,13 +470,16 @@ namespace Area51.SoftwareModeler.ViewModels
 			}
             //if(ButtonDown.Equals(ButtonCommand.None) && shape != null) SelectShape(shape);
             _doubleClickTimer = DateTime.Now.Ticks;
-
+            _isResizing = false;
 
 		}
 
 		public void MouseDown(MouseButtonEventArgs e)
 		{
-			var shape = TargetShape(e);
+		    _isResizing = false;
+            
+            e.MouseDevice.Target.CaptureMouse();
+            var shape = TargetShape(e);
 			if (shape == null) return;
 
             SelectShape(shape);
@@ -486,12 +493,17 @@ namespace Area51.SoftwareModeler.ViewModels
                 AddConnectionInit(shape, mousePosition);
             } else
             {
-                ResizeShapeInit(shape, e);
+                double borderX = shape.X + shape.Width;
+                double borderY = shape.Y + shape.Height;
+                if (Math.Abs(mousePosition.X - borderX) < 5 || Math.Abs(mousePosition.Y - borderY) < 5)
+                {
+                    ResizeShapeInit(shape, e);
+                }
             }
 
 			_initialMousePosition = mousePosition;
 
-            e.MouseDevice.Target.CaptureMouse();
+            
         }
 
 		public void CherryPick(MouseEventArgs e)
