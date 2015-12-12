@@ -52,10 +52,6 @@ namespace Area51.SoftwareModeler.Models
             }
             return _shapeCollector;
         }
-        public static void SetI(ShapeCollector shape)
-        {
-            _shapeCollector = shape;
-        }
 
         internal void Reset()
         {
