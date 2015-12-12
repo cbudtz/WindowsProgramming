@@ -65,7 +65,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             Class classToUpdate = ShapeCollector.GetI().GetShapeById(classID) as Class;
             if (classToUpdate != null && ClassName != null) classToUpdate.Name = ClassName;
             if (classToUpdate != null && StereoType != null) classToUpdate.StereoType = StereoType;
-            if (classToUpdate != null) classToUpdate.IsAbstract = IsAbstract.Value;
+            if (classToUpdate != null && IsAbstract != null) classToUpdate.IsAbstract = IsAbstract.Value;
             if (classToUpdate != null) classToUpdate.Methods = Methods;
             if(classToUpdate != null) classToUpdate.Attributes = Attributes;
         }
@@ -73,16 +73,12 @@ namespace Area51.SoftwareModeler.Models.Commands
         public override void unExecute()
         {
             Class classToUpdate = ShapeCollector.GetI().GetShapeById(classID) as Class;
-            if (classToUpdate != null)
-            {
-            
-                classToUpdate.name = OldclassName;
-                classToUpdate.StereoType = OldStereoType;
-                classToUpdate.IsAbstract = OldAbstract;
-                classToUpdate.Methods = OldMethods;
-                classToUpdate.Attributes = OldAttributes;
-            }
-
-    }
+            if (classToUpdate == null) return;
+            classToUpdate.name = OldclassName;
+            classToUpdate.StereoType = OldStereoType;
+            classToUpdate.IsAbstract = OldAbstract;
+            classToUpdate.Methods = OldMethods;
+            classToUpdate.Attributes = OldAttributes;
+        }
     }
 }
