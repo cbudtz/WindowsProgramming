@@ -93,7 +93,7 @@ namespace SoftwareModelerTest
         }
 
         [TestMethod]
-        public void TestRemoveClassCommand()
+        public void TestConnectionRemoved()
         {
             if (sc.ObsShapes.Count < 5) AddClasses(10);
             int ind1 = r.Next(0, sc.ObsShapes.Count-1);

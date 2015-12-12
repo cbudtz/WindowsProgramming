@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models
 {
+    public enum Direction { Left, Right, Up, Down };
     public class Connection : NotifyBase
     {
         //Unique ID
@@ -101,10 +102,9 @@ namespace Area51.SoftwareModeler.Models
             NotifyPropertyChanged(() => PointCollection);
         }
 
-        private class Direction
-        {
-            public enum direction {Left,Right,Up,Down };
-        }
+        
+            
+        
         public void updatePoints()
         {
             updatePoints(null);
@@ -226,11 +226,11 @@ namespace Area51.SoftwareModeler.Models
             PointCollection.Add(_p1);
             PointCollection.Add(_p2);
             PointCollection.Add(EndPoint);
-            Direction.direction d;
-            if (eInd == 0) d = Direction.direction.Left;
-            else if (eInd == 1) d = Direction.direction.Right;
-            else if (eInd == 2) d = Direction.direction.Up;
-            else d = Direction.direction.Down;
+            Direction d;
+            if (eInd == 0) d = Direction.Left;
+            else if (eInd == 1) d = Direction.Right;
+            else if (eInd == 2) d = Direction.Up;
+            else d = Direction.Down;
       
            
             switch (Type)
@@ -255,29 +255,29 @@ namespace Area51.SoftwareModeler.Models
         }
 
         //association
-        private void DrawArrow(Direction.direction d)
+        private void DrawArrow(Direction d)
         {
             switch (d)
             {
-                case Direction.direction.Down:
+                case Direction.Down:
                     PointCollection.Add(new Point(EndPoint.X - 2.5, EndPoint.Y - 5 ));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     PointCollection.Add(new Point(EndPoint.X + 2.5, EndPoint.Y - 5 ));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     break;
-                case Direction.direction.Up:
+                case Direction.Up:
                     PointCollection.Add(new Point(EndPoint.X - 2.5, EndPoint.Y + 5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     PointCollection.Add(new Point(EndPoint.X + 2.5, EndPoint.Y + 5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     break;
-                case Direction.direction.Left:
+                case Direction.Left:
                     PointCollection.Add(new Point(EndPoint.X + 5, EndPoint.Y - 2.5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     PointCollection.Add(new Point(EndPoint.X + 5, EndPoint.Y + 2.5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     break;
-                case Direction.direction.Right:
+                case Direction.Right:
                     PointCollection.Add(new Point(EndPoint.X - 5, EndPoint.Y - 2.5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     PointCollection.Add(new Point(EndPoint.X - 5, EndPoint.Y + 2.5));
@@ -287,12 +287,12 @@ namespace Area51.SoftwareModeler.Models
         }
 
         //agregation
-        private void DrawRhombus(Direction.direction d)
+        private void DrawRhombus(Direction d)
         {
             PointCollection.RemoveAt(PointCollection.Count - 1);
             switch (d)
             {
-                case Direction.direction.Down:
+                case Direction.Down:
 
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y - 15));
                     PointCollection.Add(new Point(EndPoint.X + 5, EndPoint.Y - 7.5));
@@ -300,21 +300,21 @@ namespace Area51.SoftwareModeler.Models
                     PointCollection.Add(new Point(EndPoint.X - 5, EndPoint.Y - 7.5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y - 15));
                     break;
-                case Direction.direction.Up:
+                case Direction.Up:
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y + 15));
                     PointCollection.Add(new Point(EndPoint.X + 5, EndPoint.Y + 7.5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     PointCollection.Add(new Point(EndPoint.X - 5, EndPoint.Y + 7.5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y + 15));
                     break;
-                case Direction.direction.Left:
+                case Direction.Left:
                     PointCollection.Add(new Point(EndPoint.X + 15, EndPoint.Y));
                     PointCollection.Add(new Point(EndPoint.X + 7.5, EndPoint.Y + 5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
                     PointCollection.Add(new Point(EndPoint.X + 7.5, EndPoint.Y - 5));
                     PointCollection.Add(new Point(EndPoint.X + 15, EndPoint.Y));
                     break;
-                case Direction.direction.Right:
+                case Direction.Right:
                     PointCollection.Add(new Point(EndPoint.X - 15, EndPoint.Y));
                     PointCollection.Add(new Point(EndPoint.X - 7.5, EndPoint.Y + 5));
                     PointCollection.Add(new Point(EndPoint.X, EndPoint.Y));
@@ -326,7 +326,7 @@ namespace Area51.SoftwareModeler.Models
         }
 
         //composition
-        private void DrawFilledRhombus(Direction.direction d)
+        private void DrawFilledRhombus(Direction d)
         {
             
             PolygonPoints = new PointCollection();
@@ -334,7 +334,7 @@ namespace Area51.SoftwareModeler.Models
             poly.Fill = Brushes.Black;
             switch (d)
             {
-                case Direction.direction.Down:
+                case Direction.Down:
 
                     PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y - 15));
                     PolygonPoints.Add(new Point(EndPoint.X + 5, EndPoint.Y - 7.5));
@@ -342,21 +342,21 @@ namespace Area51.SoftwareModeler.Models
                     PolygonPoints.Add(new Point(EndPoint.X - 5, EndPoint.Y - 7.5));
                     PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y - 15));
                     break;
-                case Direction.direction.Up:
+                case Direction.Up:
                     PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y + 15));
                     PolygonPoints.Add(new Point(EndPoint.X + 5, EndPoint.Y + 7.5));
                     PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y));
                     PolygonPoints.Add(new Point(EndPoint.X - 5, EndPoint.Y + 7.5));
                     PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y + 15));
                     break;
-                case Direction.direction.Left:
+                case Direction.Left:
                     PolygonPoints.Add(new Point(EndPoint.X + 15, EndPoint.Y));
                     PolygonPoints.Add(new Point(EndPoint.X + 7.5, EndPoint.Y + 5));
                     PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y));
                     PolygonPoints.Add(new Point(EndPoint.X + 7.5, EndPoint.Y - 5));
                     PolygonPoints.Add(new Point(EndPoint.X + 15, EndPoint.Y));
                     break;
-                case Direction.direction.Right:
+                case Direction.Right:
                     PolygonPoints.Add(new Point(EndPoint.X - 15, EndPoint.Y));
                     PolygonPoints.Add(new Point(EndPoint.X - 7.5, EndPoint.Y + 5));
                     PolygonPoints.Add(new Point(EndPoint.X, EndPoint.Y));
