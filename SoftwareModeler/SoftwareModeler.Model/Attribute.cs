@@ -7,8 +7,6 @@ namespace Area51.SoftwareModeler.Models
     public class Attribute
     {
         private Visibility visibility; // { get; set; }
-        private string name; // { get; set; }
-        private string type;// { get; set; }
 
         private List<Modifier> modifiers { get; set; }
 
@@ -18,15 +16,15 @@ namespace Area51.SoftwareModeler.Models
         }
         public Attribute(string type, string name)
         {
-            this.type = type;
-            this.name = name;
+            this.Type = type;
+            this.Name = name;
         }
 
         public Attribute(Visibility visibility, string type, string name)
         {
             this.visibility = visibility;
-            this.type = type;
-            this.name = name;
+            this.Type = type;
+            this.Name = name;
         }
 
         public static implicit operator List<object>(Attribute v)
@@ -48,21 +46,9 @@ namespace Area51.SoftwareModeler.Models
             }
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-                //Console.WriteLine("Attributename:"+value.ToString());
-            }
-        }
+        public string Name { get; set; }
 
-        public string Type { get { return type; } set { type = value; } }
-
+        public string Type { get; set; }
 
 
         public override string ToString()
