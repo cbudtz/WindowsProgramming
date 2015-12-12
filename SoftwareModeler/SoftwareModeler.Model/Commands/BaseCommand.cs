@@ -70,6 +70,6 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             return nextid++;
         }
-        public String CommandType { get { return this.GetType().Name.Substring(0, 1); } }
+        public String CommandType => this.GetType().Name.Substring(0, 1);
     }
 }

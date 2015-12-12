@@ -38,23 +38,13 @@ namespace Area51.SoftwareModeler.Models
             treeArrows = new ObservableCollection<Connection>();
 
             //adding a few extra buffers to the size of the scroll-area. (yes it's an ugly fix)
-            MaxBranchLayer = new ObservableCollection<int>();
-            MaxBranchLayer.Add(1);
-            MaxBranchLayer.Add(2);
-            MaxBranchLayer.Add(3);
+            MaxBranchLayer = new ObservableCollection<int> {1, 2, 3};
         }
         ///<summary>Get instance</summary>
         public static ShapeCollector GetI()
         {
-            if (_shapeCollector== null)
-            {
-                _shapeCollector = new ShapeCollector();
-            }
-            return _shapeCollector;
-        }
-        public static void SetI(ShapeCollector shape)
-        {
-            _shapeCollector = shape;
+            //lazy loading
+            return _shapeCollector ?? (_shapeCollector = new ShapeCollector());
         }
 
         internal void Reset()
@@ -65,14 +55,8 @@ namespace Area51.SoftwareModeler.Models
 
         internal Class GetShapeById(int? shapeId)
         {
-
-            foreach (Class obsShape in ObsShapes)
-            {
-                //Console.WriteLine("ShapeCollector - get shapeBy ID:" + obsShape);
-                if (obsShape.id == shapeId) return obsShape;
-
-            }
-            return null;
+            //LINQ
+            return ObsShapes.FirstOrDefault(obsShape => obsShape.id == shapeId);
         }
     }
 }
