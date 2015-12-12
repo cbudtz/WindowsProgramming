@@ -13,26 +13,22 @@ namespace Area51.SoftwareModeler.Models
     public class Method
     {
         //public string parameterString { get; }
-        private String name; // { get; set; }
         //private List<String> parameters { get; set; }
-        private String parameters; // { get; set; }
-        private String returnType; // { get; set; }
-        private Visibility visibility; //{get; set;}
         private List<Modifier> modifiers { get; set; }
 
 
         public Method(Visibility visibility, string name)
         {
-            this.visibility = visibility;
-            this.name = name;
+            this.Visibility = visibility;
+            this.Name = name;
             //new List<string>();
 
         }
         public Method(Visibility visibility, string name, String parameters)
         {
-            this.visibility = visibility;
-            this.name = name;
-            this.parameters = parameters;
+            this.Visibility = visibility;
+            this.Name = name;
+            this.Parameters = parameters;
             //new List<string>();
 
         }
@@ -42,12 +38,14 @@ namespace Area51.SoftwareModeler.Models
             
         }
 
-        public Visibility Visibility { get { return visibility; } set { visibility = value; } }
-        public string Name { get { return name; } set { name = value; } }
-        
+        public Visibility Visibility { get; set; }
+
+        public string Name { get; set; }
+
         //public List<string> Parameters { get { return parameters; } set { parameters = value; } }
-        public string Parameters { get { return parameters; } set { parameters = value; } }
-        public string ReturnType { get { return returnType; } set { returnType = value; } }
+        public string Parameters { get; set; }
+
+        public string ReturnType { get; set; }
 
         public override string ToString()
         {
