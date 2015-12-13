@@ -374,7 +374,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void AddConnection(Class shape)
             {
-            //Console.WriteLine("addConnection...");
+            Console.WriteLine("addConnection...");
             if (shape != null && NewConnection.StartShapeId != shape.id)
             {
                 NewConnection.EndShapeId = shape.id;
@@ -388,7 +388,7 @@ namespace Area51.SoftwareModeler.ViewModels
       
         public void AddConnectionInit(Class shape, Point mousePosition)
         {
-            //Console.WriteLine("addConnection init");
+            Console.WriteLine("addConnection init");
             ConnectionType type = ConnectionType.Association;
             switch (ButtonDown)
             {
@@ -443,16 +443,16 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MouseUp(MouseButtonEventArgs e)
 		{
-			// The Shape is gotten from the mouse event.
-            
-			var shape = TargetShape(e);
+            // The Shape is gotten from the mouse event.
+            e.MouseDevice.Target.ReleaseMouseCapture();
+            var shape = TargetShape(e);
 			
 
 
 			// The mouse position relative to the target of the mouse event.
 			var mousePosition = RelativeMousePosition(e);
             // The mouse is released, as the move operation is done, so it can be used by other controls.
-            e.MouseDevice.Target.ReleaseMouseCapture();
+           
 
             if (!ButtonDown.Equals(ButtonCommand.None) && NewConnection != null)
 			{
