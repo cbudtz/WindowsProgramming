@@ -289,7 +289,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
 		public void MoveShape(Point mousePosition)
 		{
-            Console.WriteLine("moving shape...");
+            //Console.WriteLine("moving shape...");
             for (int i = 0; i < selectedClasses.Count; i++) {
                 selectedClasses.ElementAt(i).X = _initialClassPosition.ElementAt(i).X + (mousePosition.X - _initialMousePosition.X);
                 selectedClasses.ElementAt(i).Y = _initialClassPosition.ElementAt(i).Y + (mousePosition.Y - _initialMousePosition.Y);
@@ -302,7 +302,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void MoveShapeDone(Point mousePosition)
         {
-            Console.WriteLine("move shape done");
+            //Console.WriteLine("move shape done");
             double xOffset = mousePosition.X - _initialMousePosition.X;
             double yOffset = mousePosition.Y - _initialMousePosition.Y;
 
@@ -314,7 +314,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 selectedClasses.ElementAt(i).Y = _initialClassPosition.ElementAt(i).Y;              
                 
                 //_initialClassPosition.Insert(i, new Point(selectedClasses.ElementAt(i).X + XOffset, selectedClasses.ElementAt(i).Y + YOffset));
-                Console.WriteLine("moved done: " + new Point(selectedClasses.ElementAt(i).X + xOffset, selectedClasses.ElementAt(i).Y + yOffset));
+                //Console.WriteLine("moved done: " + new Point(selectedClasses.ElementAt(i).X + xOffset, selectedClasses.ElementAt(i).Y + yOffset));
               
                 execCommand(new MoveShapeCommand(selectedClasses.ElementAt(i), xOffset, yOffset));
             }
@@ -323,7 +323,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void ResizeShapeInit(Shape shape, MouseButtonEventArgs e)
         {
-            Console.WriteLine("resize init");
+            //Console.WriteLine("resize init");
 
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
@@ -344,7 +344,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
 		public void ResizeShape(Shape shape, Point mousePosition)
 		{
-            Console.WriteLine("resizing...");
+            //Console.WriteLine("resizing...");
             shape.Width = mousePosition.X - shape.X;
 			shape.Height = mousePosition.Y - shape.Y;
 			if (Math.Abs(shape.Width) < minShapeWidth) shape.Width = minShapeWidth;
@@ -353,7 +353,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void ResizeShapeDone(Shape shape, Point mousePosition)
         {
-            Console.WriteLine("resize done");
+            //Console.WriteLine("resize done");
             if (!_isResizing) return;          
             if (shape == null) return;
            
@@ -374,7 +374,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void AddConnection(Class shape)
             {
-            Console.WriteLine("addConnection...");
+            //Console.WriteLine("addConnection...");
             if (shape != null && NewConnection.StartShapeId != shape.id)
             {
                 NewConnection.EndShapeId = shape.id;
@@ -388,7 +388,7 @@ namespace Area51.SoftwareModeler.ViewModels
       
         public void AddConnectionInit(Class shape, Point mousePosition)
         {
-            Console.WriteLine("addConnection init");
+            //Console.WriteLine("addConnection init");
             ConnectionType type = ConnectionType.Association;
             switch (ButtonDown)
             {

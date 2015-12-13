@@ -42,7 +42,7 @@ namespace SoftwareModelerTest
         {
             AddClasses(r.Next(10,20));
             int num = sc.ObsShapes.Count;
-            int del = r.Next(0, num-1);
+            int del = r.Next(1, num-1);
             int numCmd = sc.Commands.Count;
             DeleteClasses(del);
             Assert.AreEqual(num-del, sc.ObsShapes.Count, "checking number of shapes");
@@ -111,9 +111,7 @@ namespace SoftwareModelerTest
 
         public static List<Method> getMethods()
         {
-            List<Method> l = new List<Method>();
-            l.Add(new Method());
-            return l;
+            return new List<Method> {new Method()};
         }
 
         public void AddConnection(int id1, int id2)
