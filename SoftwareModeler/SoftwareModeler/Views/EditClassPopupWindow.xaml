@@ -4,10 +4,20 @@
         
         xmlns:ViewModel="clr-namespace:Area51.SoftwareModeler.ViewModels"
   
-        Title="Edit Class" Height="430" Width="450">
+        Title="Edit ClassData" Height="430" Width="450">
 
     <Window.Resources>
         <ViewModel:MainViewModel x:Key="viewModel"></ViewModel:MainViewModel>
+
+        <Style TargetType="{x:Type DataGridRow}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
+                    <Setter Property="Background" Value="Yellow"/>
+                    <Setter Property="TextBox.Text" Value="col 1"/>
+                    <!--<Setter Property="DataGridTextColumn"  TargetName="Attributes.Name" Value="test"></Setter>-->
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Grid Margin="5,5,5,5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -41,7 +51,19 @@
                   CanUserReorderColumns="False" CanUserResizeColumns="False" HeadersVisibility="Column"
                   AutoGenerateColumns="True" CanUserSortColumns="False">
         </DataGrid>
-
+        <!--<Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+        </Grid>-->
         <TextBox Grid.Row="4" Grid.Column="0" IsEnabled="False" Text="methods:" />
        
             <DataGrid Grid.Row="4" Grid.Column="1" Name="Methods" Height="150"

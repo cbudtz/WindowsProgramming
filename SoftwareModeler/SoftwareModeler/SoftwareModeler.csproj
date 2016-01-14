@@ -108,6 +108,9 @@
     <Compile Include="Views\CommandTreeView.xaml.cs">
       <DependentUpon>CommandTreeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CommentUserControl.xaml.cs">
+      <DependentUpon>CommentUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ConnectionUserControl.xaml.cs">
       <DependentUpon>ConnectionUserControl.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,9 @@
     </Compile>
     <Compile Include="Views\EditClassPopupWindow.xaml.cs">
       <DependentUpon>EditClassPopupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LineCommandTreeUserControl.xaml.cs">
+      <DependentUpon>LineCommandTreeUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MenuUserControl.xaml.cs">
       <DependentUpon>MenuUserControl.xaml</DependentUpon>
@@ -137,11 +143,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CommentUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DrawingContainerUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EditClassPopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LineCommandTreeUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

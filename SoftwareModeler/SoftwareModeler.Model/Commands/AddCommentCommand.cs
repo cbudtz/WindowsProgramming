@@ -6,23 +6,30 @@ using System.Threading.Tasks;
 using Area51.SoftwareModeler.Models;
 using Area51.SoftwareModeler.Models.Commands;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
-    class AddCommentCommand : BaseCommand
+    public class AddCommentCommand : BaseCommand
     {
-        protected AddCommentCommand()
+        public Point Position;
+        public AddCommentCommand()
         {
+
         }
 
+        public AddCommentCommand(Point position)
+        {
+            Position = position;
+        }
         public override void execute()
         {
-            throw new NotImplementedException();
+            ShapeCollector.GetI().ObsComments.Add(new Comment(Position, null));
         }
 
         public override void unExecute()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -9,7 +9,7 @@
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:ViewModel="clr-namespace:Area51.SoftwareModeler.ViewModels"
         xmlns:Views="clr-namespace:Area51.SoftwareModeler.Views"
-        Title="MainWindow" Height="600" Width="1000"
+        Title="MainWindow" Height="800" Width="1600"
         >
     <Window.DataContext>
         <ViewModel:MainViewModel />

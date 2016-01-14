@@ -21,7 +21,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             //Deserialization constructor...
         }
 
-        public MoveShapeCommand(Shape shape, double xOffset, double yOffset)
+        public MoveShapeCommand(ClassView shape, double xOffset, double yOffset)
         {
             //When first constructed
             ShapeId = shape.id;
@@ -35,11 +35,12 @@ namespace Area51.SoftwareModeler.Models.Commands
 
             Console.WriteLine("searching for: " + ShapeId + " count: " + ShapeCollector.GetI().ObsShapes.Count);
             
-            Shape shape = ShapeCollector.GetI().GetShapeById(ShapeId);
+            ClassView classView = ShapeCollector.GetI().GetShapeById(ShapeId);
+            if (classView == null) classView = ShapeCollector.GetI().GetCommentById(ShapeId);
             
-            shape.CanvasCenterX += XOffset;
-            shape.CanvasCenterY += YOffset;
-            foreach (Connection conn in ShapeCollector.GetI().ObsConnections)
+            classView.CanvasCenterX += XOffset;
+            classView.CanvasCenterY += YOffset;
+            foreach (ConnectionData conn in ShapeCollector.GetI().ObsConnections)
             {
                 if (conn.EndShapeId == ShapeId || conn.StartShapeId == ShapeId) conn.updatePoints();
 
@@ -48,10 +49,12 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
-            Shape shape = ShapeCollector.GetI().GetShapeById(ShapeId);
-            shape.CanvasCenterX -= XOffset;
-            shape.CanvasCenterY -= YOffset;
-            foreach (Connection conn in ShapeCollector.GetI().ObsConnections)
+            ClassView classView = ShapeCollector.GetI().GetShapeById(ShapeId);
+            if (classView == null) classView = ShapeCollector.GetI().GetCommentById(ShapeId);
+
+            classView.CanvasCenterX -= XOffset;
+            classView.CanvasCenterY -= YOffset;
+            foreach (ConnectionData conn in ShapeCollector.GetI().ObsConnections)
             {
                 if (conn.EndShapeId == ShapeId || conn.StartShapeId == ShapeId) conn.updatePoints();
 

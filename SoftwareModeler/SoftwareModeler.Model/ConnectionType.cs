@@ -8,6 +8,6 @@ namespace Area51.SoftwareModeler.Models
 {
     public enum ConnectionType
     {
-        Aggregation,Composition,Association
+        Aggregation,Composition,Association, Inheritance
     }
 }

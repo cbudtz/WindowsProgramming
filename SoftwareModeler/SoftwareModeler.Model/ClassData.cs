@@ -6,36 +6,40 @@ using System.Windows;
 namespace Area51.SoftwareModeler.Models
 {
     
-    public class Class : Shape
+    public class ClassData : ClassView
     {
         private string _stereotype;
         private bool _isAbstract;
-        //private Point AnchorPoint;
-        //private Visibility visibility;
         private List<Attribute> _attributes;
         private List<Method> _methods;
 
-        public Class() : base()
+        public string name { get; set; }
+        
+
+        public ClassData() : base()
+        {
+           
+
+            name = "ClassView " + ++nextId;
+            id = nextId;
+       
+            name = "ClassView " + id;
+            this.id = id;
+            if (id > nextId) nextId = (int)id++;
+        
+    }
+
+        public ClassData(string name, string stereotype, bool isAbstract, Point anchorPoint) 
+            : this(null, name, stereotype, isAbstract, anchorPoint)
         {
 
         }
 
-        public Class(string name, string stereotype, bool isAbstract, Point anchorPoint)
+        public ClassData(int? id, string name, string stereotype, bool isAbstract, Point anchorPoint)
         {
-            this.name = name;
-            _stereotype = stereotype;
-            _isAbstract = isAbstract;
-            X = anchorPoint.X;
-            Y = anchorPoint.Y;
-            _attributes = new List<Attribute>();
-            _methods = new List<Method>();
-
-
-        }
-
-        public Class(int? id, string name, string stereotype, bool isAbstract, Point anchorPoint) : base(id)
-        {
-            this.name = name;
+            this.id = id ?? nextId;
+            nextId = (id ?? nextId) + 1;
+            this.name = name ?? "class" + id;
             _stereotype = stereotype;
             _isAbstract = isAbstract;
             X = anchorPoint.X;

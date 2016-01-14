@@ -6,30 +6,49 @@ using System.Threading.Tasks;
 using Area51.SoftwareModeler.Models.Commands;
 using Area51.SoftwareModeler.Models;
 using System.Collections.ObjectModel;
+using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models.Commands
 {
-    class DeleteConnectionCommand : BaseCommand
+    public class DeleteConnectionCommand : BaseCommand
     {
-        public Connection ConnectionToDelete { get; set; }
-       
-        public DeleteConnectionCommand(Connection _connectionToDelete)
+        [XmlIgnore]
+        public ConnectionData ConnectionDataToDelete;
+        public int ConnId;
+        //public int? EndId;
+        //public int? StartId;
+        //public ConnectionType ConnType;
+        //public string StartMult;
+        //public string EndMult;
+
+        public DeleteConnectionCommand()
         {
-            ConnectionToDelete = _connectionToDelete;
+            // serializing constructor
+        }
+       
+        public DeleteConnectionCommand(ConnectionData connToDel)
+        {
+            ConnectionDataToDelete = connToDel;     
+            ConnId = connToDel.ConnectionId;
+            //EndId = connToDel.EndShapeId;
+            //StartId = connToDel.StartShapeId;
+            //ConnType = connToDel.Type;
+            //StartMult = connToDel.StartMultiplicity;
+            //EndMult = connToDel.EndMultiplicity;
         }
         public override void execute()
         {
-            foreach (Connection obsConnection in ShapeCollector.GetI().ObsConnections)
-            {
-                if (obsConnection != null && obsConnection.ConnectionId == ConnectionToDelete.ConnectionId)
-                    ShapeCollector.GetI().ObsConnections.Remove(obsConnection);
-            }
-            ShapeCollector.GetI().ObsConnections.Remove(ConnectionToDelete);
+            if (ConnectionDataToDelete == null)
+                ConnectionDataToDelete = ShapeCollector.GetI().GetConnectionById(ConnId);
+             
+            Console.WriteLine("deleting connection: " + ConnId);   
+            ShapeCollector.GetI().ObsConnections.Remove(ConnectionDataToDelete);
         }
 
         public override void unExecute()
         {
-            ShapeCollector.GetI().ObsConnections.Add(ConnectionToDelete);
+            
+            ShapeCollector.GetI().ObsConnections.Add(ConnectionDataToDelete);
         }
     }
 }

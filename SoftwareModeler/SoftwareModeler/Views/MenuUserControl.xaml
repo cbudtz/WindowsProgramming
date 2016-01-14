@@ -11,6 +11,7 @@
             <RowDefinition />
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -21,7 +22,8 @@
         <Button Command="{Binding Path=LoadCommand}" Grid.Column="1" Grid.Row="0">Load</Button>
         <Button Command="{Binding Path=SaveCommand}" Grid.Column="1" Grid.Row="1">Save</Button>
         <Button Command="{Binding Path=TeamCommand}" Grid.Column="0" Grid.Row="1">Team</Button>
-        <Button Command="{Binding Path=HelpCommand}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">Help</Button>
+        <Button Command="{Binding Path=GenerateCodeCommand}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">Generate Code</Button>
+        <Button Command="{Binding Path=HelpCommand}" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">Help</Button>
 
     </Grid>
 </UserControl>

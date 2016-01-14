@@ -3,25 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
 namespace Area51.SoftwareModeler.Models
 {
-    [XmlInclude(typeof(Class))]
+    [XmlInclude(typeof(ClassData))]
     [XmlInclude(typeof(Comment))]
-    public abstract class Shape : NotifyBase
+    public abstract class ClassView : NotifyBase
     {
 
-        // For a description of the Getter/Setter Property syntax ("{ get { ... } set { ... } }") see the Line class.
-        // The static integer counter field is used to set the integer Number property to a unique number for each Shape object.
+        public int? id { get; set; }
         public static int nextId { get; set; } = 0;
 
-        // The Number integer property holds a unique integer for each Shape object to identify them in the View (GUI) layer.
-        // The "{ get; }" syntax describes that a private field 
-        //  and default getter method should be generated.
-        public string name { get; set; }
-        public int? id { get; set; } //TODO find alternative. probably not necessary - Rúni
+        public Point InitialPosition { get; set; }
 
         private double x = 200;
         // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
@@ -40,7 +36,12 @@ namespace Area51.SoftwareModeler.Models
         //    NotifyPropertyChanged();
         //    NotifyPropertyChanged("CanvasCenterX");
         //  }
-        public double X { get { return x; } set { x = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => CanvasCenterX); } }
+        //public Thickness Position => new Thickness(X,Y,-X,-Y);
+        public Thickness Position => new Thickness(X, Y, 0, 0);
+
+        //public Point PositionPoint { get
+
+        public double X { get { return x; } set { x = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => CanvasCenterX); NotifyPropertyChanged(() => Position); } }
 
         private double y = 200;
         // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
@@ -59,7 +60,7 @@ namespace Area51.SoftwareModeler.Models
         //    NotifyPropertyChanged();
         //    NotifyPropertyChanged("CanvasCenterY");
         //  }
-        public double Y { get { return y; } set { y = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => CanvasCenterY); } }
+        public double Y { get { return y; } set { y = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => CanvasCenterY); NotifyPropertyChanged(() => Position);} }
 
         private double width = 150;
         // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
@@ -105,10 +106,10 @@ namespace Area51.SoftwareModeler.Models
         // Corresponds to making a Getter method in Java (for instance 'public int GetCenterX()'), 
         //  that does not have its own private field, but is calculated from other fields and properties. } }
         // The CanvasCenterX and CanvasCenterY derived properties are used by the Line class, 
-        //  so it can be drawn from the center of one Shape to the center of another Shape.
+        //  so it can be drawn from the center of one ClassView to the center of another ClassView.
         // NOTE: In the 02350SuperSimpleDemo these derived properties are called CenterX and CenterY, 
-        //        but in this demo we need both these and derived properties for the coordinates of the Shape, 
-        //        relative to the upper left corner of the Shape. This is an example of a breaking change, 
+        //        but in this demo we need both these and derived properties for the coordinates of the ClassView, 
+        //        relative to the upper left corner of the ClassView. This is an example of a breaking change, 
         //        that is changed during the lifetime of an application, because the requirements change.
 
         // A lambda expression can be given, because the 'NotifyPropertyChanged' method can get the property name from it.
@@ -117,8 +118,8 @@ namespace Area51.SoftwareModeler.Models
         // A lambda expression can be given, because the 'NotifyPropertyChanged' method can get the property name from it.
         public double CanvasCenterY { get { return Y + Height / 2; } set { Y = value - Height / 2; NotifyPropertyChanged(() => Y); } }
 
-        // The CenterX and CenterY properties are used by the Shape animation to define the point of rotation.
-        // NOTE: These derived properties are diffent from the Shape properties with the same names, 
+        // The CenterX and CenterY properties are used by the ClassView animation to define the point of rotation.
+        // NOTE: These derived properties are diffent from the ClassView properties with the same names, 
         //        from the 02350SuperSimpleDemo, see above for an explanation.
         // This method uses an expression-bodied member (http://www.informit.com/articles/article.aspx?p=2414582) to simplify a method that only returns a value;
         // Java:
@@ -138,7 +139,7 @@ namespace Area51.SoftwareModeler.Models
         // These properties should be in the ViewModel layer, but it is easier for the demo to put them here, 
         //  to avoid unnecessary complexity.
         // NOTE: This breaks the seperation of layers of the MVVM architecture pattern.
-        //       To avoid this a ShapeViewModel class should be created that wraps all Shape objects, 
+        //       To avoid this a ShapeViewModel class should be created that wraps all ClassView objects, 
         //        but it adds to the complexity of the ViewModel layer and this demo and a simpler solution was chosen for the demo.
         //        (this also adds a reference to the PresentationCore class library which is part of .NET, 
         //         but should not be used in the Model layer, creating an unnecessary dependency for the Model layer class library).
@@ -153,26 +154,7 @@ namespace Area51.SoftwareModeler.Models
         // This method uses an expression-bodied member (http://www.informit.com/articles/article.aspx?p=2414582) to simplify a method that only returns a value;
         public Brush SelectedColor => IsSelected ? Brushes.Red : Brushes.Yellow;
 
-        // Constructor.
-        // The constructor is in this case used to set the default values for the properties.
-        public Shape()
-        {
-            
-            name = "Shape "  + ++nextId;
-            id = nextId;
-        }
-        //Constructor for deserialized Commands
-        public Shape(int? id)
-        {
-            name = "Shape " + id;
-            this.id = id;
-            if (id > nextId) nextId = (int)id++;
-        }
+   
 
-        // By overwriting the ToString() method, the default representation of the class is changed from the full namespace (Java: package) name, 
-        //  to the value of the Number integer property, which is meant to be unique for each Shape object.
-        // The ToString() method is inheritied from the Object class, that all classes inherit from.
-        // This method uses an expression-bodied member (http://www.informit.com/articles/article.aspx?p=2414582) to simplify a method that only returns a value;
-        public override string ToString() => name;
     }
 }

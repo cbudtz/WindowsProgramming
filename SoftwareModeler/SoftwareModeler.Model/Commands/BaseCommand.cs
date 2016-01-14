@@ -17,6 +17,7 @@ namespace Area51.SoftwareModeler.Models.Commands
     [XmlInclude(typeof(MoveShapeCommand))]
     [XmlInclude(typeof(ResizeShapeCommand))]
     [XmlInclude(typeof(DeleteShapeCommand))]
+    [XmlInclude(typeof(DeleteConnectionCommand))]
     [XmlInclude(typeof(UpdateClassInfoCommand))]
     [XmlInclude(typeof(AddConnectionCommand))]
     [XmlInclude(typeof(CopyClassCommand))]
@@ -26,6 +27,8 @@ namespace Area51.SoftwareModeler.Models.Commands
         public static int nextid = 0;
 
         public int BranchLayer { get; set; }
+        [XmlIgnore]
+        public LineCommandTree LineToParent { get; set; }
         [XmlIgnore]
         //private Color color = Colors.Azure;
         private SolidColorBrush color = new SolidColorBrush(Colors.Azure);

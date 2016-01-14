@@ -12,16 +12,24 @@
 
       <View:NodeCoordinateConverter x:Key="nodeCoordinateConverter"/>
       <View:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
-        <DataTemplate DataType="{x:Type Model:Connection}">
+        <DataTemplate DataType="{x:Type Model:ConnectionData}">
             <Canvas>
                 <View:ConnectionUserControl/>
             </Canvas>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type Model:Class}">
-            <Canvas>
-                <View:ClassUserControl/>
-            </Canvas>
+      <DataTemplate DataType="{x:Type Model:LineCommandTree}">
+          <Canvas>
+              <View:LineCommandTreeUserControl/>
+          </Canvas>
+      </DataTemplate>
+        <DataTemplate DataType="{x:Type Model:ClassData}">
+            <View:ClassUserControl/>
         </DataTemplate>
+      <DataTemplate DataType="{x:Type Model:Comment}">
+          <Canvas>
+              <View:CommentUserControl/>
+          </Canvas>
+      </DataTemplate>
       <DataTemplate DataType="{x:Type CommandModel:BaseCommand}">
           <Canvas>
               <View:CommandNodeView/>

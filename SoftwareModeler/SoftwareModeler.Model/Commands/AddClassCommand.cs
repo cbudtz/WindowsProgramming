@@ -16,7 +16,7 @@ namespace Area51.SoftwareModeler.Models.Commands
     {
         //reference to created class
         [XmlIgnore] //Only data needed for recreation of object is stored
-        public Class ClassRep { get; set; } //Representation object of Class
+        public ClassData ClassDataRep { get; set; } //Representation object of ClassData
 
         public int? ShapeId {get; set;} //Id For recreation of object
         //Parameters for ClassGeneration
@@ -31,7 +31,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         }
         public AddClassCommand(string className, string stereoType, bool isAbstract,Point anchorPoint)
         {
-            ClassName = (className ?? "class " + Shape.nextId); //null pointer check
+            ClassName = (className ?? "class " + ClassData.nextId); //null pointer check
             StereoType = stereoType;
             IsAbstract = isAbstract;
             AnchorPoint = anchorPoint;
@@ -42,23 +42,23 @@ namespace Area51.SoftwareModeler.Models.Commands
             //First time the ShapeID will be null;
             if (ShapeId == null)
             {
-                ClassRep = new Class(ClassName, StereoType, IsAbstract, AnchorPoint);
-                ShapeId = ClassRep.id;
+                ClassDataRep = new ClassData(ClassName, StereoType, IsAbstract, AnchorPoint);
+                ShapeId = ClassDataRep.id;
             } else
             {
                 //ReExecuting (either when deserialized or redoing)
-                ClassRep = new Class(ShapeId, ClassName, StereoType, IsAbstract, AnchorPoint);
+                ClassDataRep = new ClassData(ShapeId, ClassName, StereoType, IsAbstract, AnchorPoint);
             }
-            ShapeCollector.GetI().ObsShapes.Add(ClassRep);
+            ShapeCollector.GetI().ObsShapes.Add(ClassDataRep);
         }
 
 
         public override void unExecute()
         {
-            //Shape is removed and garbage collected - a new shape with the same ID 
+            //ClassView is removed and garbage collected - a new shape with the same ID 
             //will be instantiated if the command is excecuted again
-            ShapeCollector.GetI().ObsShapes.Remove(ClassRep);
-            ClassRep = null;
+            ShapeCollector.GetI().ObsShapes.Remove(ClassDataRep);
+            ClassDataRep = null;
         }
 
     }

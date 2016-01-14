@@ -14,13 +14,13 @@ namespace Area51.SoftwareModeler.Models.Commands
         public int? toCopyId;
 
         [XmlIgnore]
-        public Class copy;
+        public ClassData copy;
 
         public CopyClassCommand()
         {
             // for deserializing
         }
-        public CopyClassCommand(Class toCopy)
+        public CopyClassCommand(ClassData toCopy)
         {
             Copy(toCopy);
         }
@@ -38,12 +38,12 @@ namespace Area51.SoftwareModeler.Models.Commands
             if (copy != null) ShapeCollector.GetI().ObsShapes.Remove(copy);
         }
 
-        public void Copy(Class toCopy)
+        public void Copy(ClassData toCopy)
         {
             if (toCopy == null) return;
             toCopyId = toCopy.id;
-            //Class shapeToCopy = ShapeCollector.GetI().GetShapeById(copyId);
-            copy = new Class(toCopy.name, toCopy.StereoType, toCopy.IsAbstract, new Point(toCopy.X + 30, toCopy.Y + 30));
+            //ClassData shapeToCopy = ShapeCollector.GetI().GetShapeById(copyId);
+            copy = new ClassData(toCopy.name, toCopy.StereoType, toCopy.IsAbstract, new Point(toCopy.X + 30, toCopy.Y + 30));
             toCopy.Methods.ForEach(x => copy.AddMethod(x.Visibility, x.Name, x.Parameters));
             toCopy.Attributes.ForEach(x => copy.AddAttribute(x.Type, x.Name));
             copyId = copy.id;

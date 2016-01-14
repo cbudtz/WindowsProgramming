@@ -8,15 +8,16 @@
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-    <Canvas IsHitTestVisible="True" Background="Transparent">
+    <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+    <Grid Name="MainGrid" ZIndex="2" IsHitTestVisible="True" Background="yellow" >
         <ItemsControl ItemsSource="{Binding Connections}"/>
+        <ItemsControl ItemsSource="{Binding Comments}"/>
         <ItemsControl ItemsSource="{Binding Classes}"/>
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseUp">
                 <cmd:EventToCommand Command="{Binding Path=MouseClickCommand}" PassEventArgsToCommand="True"/>
             </i:EventTrigger>
         </i:Interaction.Triggers>
-    </Canvas>
+    </Grid>
     </ScrollViewer>
 </UserControl>

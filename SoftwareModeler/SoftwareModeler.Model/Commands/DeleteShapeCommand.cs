@@ -14,7 +14,7 @@ namespace Area51.SoftwareModeler.Models.Commands
     public class DeleteShapeCommand : BaseCommand
     {
         public int? ShapeId;
-        private List<Connection> _connectionsToDelete = new List<Connection>();
+        private List<ConnectionData> _connectionsToDelete = new List<ConnectionData>();
         public string ShapeName { get; set; }
         public double ShapeX { get; set; }
         public double ShapeY { get; set; }
@@ -30,7 +30,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             //Deserialization Constructor.
         }
         
-        public DeleteShapeCommand(Shape shapeToDelete)
+        public DeleteShapeCommand(ClassData shapeToDelete)
         {
             ShapeId = shapeToDelete.id;
             ShapeName = shapeToDelete.name;
@@ -39,8 +39,8 @@ namespace Area51.SoftwareModeler.Models.Commands
             Shapewidth = shapeToDelete.Width;
             Shapeheight = shapeToDelete.Height;
             ShapeSelected = shapeToDelete.IsSelected;
-            ShapeStereotype = (shapeToDelete as Class).StereoType;
-            ShapeAbstract = (shapeToDelete as Class).IsAbstract;
+            ShapeStereotype = (shapeToDelete as ClassData).StereoType;
+            ShapeAbstract = (shapeToDelete as ClassData).IsAbstract;
             
             // if x,y of either of connection endpoint shapes, remove connection // TODO alternatively use id
 
@@ -51,13 +51,13 @@ namespace Area51.SoftwareModeler.Models.Commands
         public override void execute()
         {
             //Aquire shape
-            Class shapeToDelete = ShapeCollector.GetI().GetShapeById(ShapeId);
+            ClassData shapeToDelete = ShapeCollector.GetI().GetShapeById(ShapeId);
             _connectionsToDelete =
                 ShapeCollector.GetI()
                     .ObsConnections.Where(x => x.StartShapeId == ShapeId || x.EndShapeId == ShapeId)
                     .ToList();
 
-            foreach (Connection connection in _connectionsToDelete)
+            foreach (ConnectionData connection in _connectionsToDelete)
             {
                 ShapeCollector.GetI().ObsConnections.Remove(connection);
 
@@ -68,7 +68,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void unExecute()
         {
-            Class shapeToAdd = new Class(ShapeId,ShapeName,ShapeStereotype,ShapeAbstract,new Point(ShapeX,ShapeY));
+            ClassData shapeToAdd = new ClassData(ShapeId,ShapeName,ShapeStereotype,ShapeAbstract,new Point(ShapeX,ShapeY));
             //Create new shape and add it!
             ShapeCollector.GetI().ObsShapes.Add(shapeToAdd);
             _connectionsToDelete.ForEach(x => ShapeCollector.GetI().ObsConnections.Add(x));

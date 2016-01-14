@@ -10,88 +10,91 @@
              xmlns:helpers="clr-namespace:Area51.SoftwareModeler.Helpers;assembly=SoftwareModeler.Model"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
+             Background="Green"             
              d:DesignHeight="300" d:DesignWidth="300"
-             Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}"
              d:DataContext="{d:DesignData }">
 
     <UserControl.Resources>
-       <models:VisibilityConverter x:Key="VisibilityConverter"/>
+        <models:VisibilityConverter x:Key="VisibilityConverter"/>
         <ObjectDataProvider x:Key="VisibilityEnum"
                 MethodName="GetDescriptions" 
                 ObjectType="{x:Type helpers:HelperFunctions}">
-            
+
             <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="models:Visibility" />
+                <x:Type TypeName="models:Visibility" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
 
     </UserControl.Resources>
+    <Canvas Name="CanvasTest" ZIndex="2" Background="Red">
+        <!--<Grid   Width="{Binding Width}" Height="{Binding Height}" Background="Blue">-->
+        <Grid Name="GridTest" ZIndex="3" Width="{Binding Width}" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Height="{Binding Height}" Background="Blue">
+            <!--<Grid Background="Blue">-->
+            <Border Name="borderName" Background="LightGray" CornerRadius="6" BorderThickness="2,2,5,5">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter Property="BorderBrush" Value="Red"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="False">
+                                <Setter Property="BorderBrush" Value="Gray"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid Margin="5,5,5,5" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-    <Border Name="borderName" Background="LightGray" CornerRadius="6" BorderThickness="2,2,5,5">
-        <Border.Style>
-            <Style TargetType="{x:Type Border}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                        <Setter Property="BorderBrush" Value="Red"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding IsSelected}" Value="False">
-                        <Setter Property="BorderBrush" Value="Gray"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Border.Style>
-        <Grid Margin="5,5,5,5" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="{Binding StereoType}" HorizontalAlignment="Stretch" TextAlignment="Center"/>
-            
-            <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Stretch" TextAlignment="Center">
-                    <TextBlock.Style>
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="{Binding StereoType}" HorizontalAlignment="Stretch" TextAlignment="Center"/>
 
-                        <Style TargetType="{x:Type TextBlock}">
+                        <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Stretch" TextAlignment="Center">
+                            <TextBlock.Style>
 
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsAbstract}" Value="True">
-                                    <Setter Property="FontStyle" Value="Italic"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                
-                <i:Interaction.Triggers>
+                                <Style TargetType="{x:Type TextBlock}">
+
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsAbstract}" Value="True">
+                                            <Setter Property="FontStyle" Value="Italic"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!--<i:Interaction.Triggers>
                     
                     <local:EventTriggerWithoutPropagation EventName="MouseDown" >
-                        <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                        <cmd:EventToCommand Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
                     </local:EventTriggerWithoutPropagation>
                     <local:EventTriggerWithoutPropagation EventName="MouseUp">
-                        <cmd:EventToCommand Command="{Binding DataContext.MouseUpShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                        <cmd:EventToCommand Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
                     </local:EventTriggerWithoutPropagation>
 
-                </i:Interaction.Triggers>
-            </Grid>
-            <!--<ListView 
+                </i:Interaction.Triggers>-->
+                    </Grid>
+                    <!--<ListView 
                 Grid.Row="1"
                 ItemsSource="{Binding Attributes}"/>
             <ListView 
                 Grid.Row="2"
                 ItemsSource="{Binding Methods}"/>-->
-            <DataGrid 
+                    <DataGrid 
                 Grid.Row="2" 
                 IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding Attributes}" 
@@ -101,8 +104,8 @@
                 GridLinesVisibility="None"
                 CanUserAddRows="False">
 
-                <DataGrid.Columns>
-                    <DataGridComboBoxColumn 
+                        <DataGrid.Columns>
+                            <DataGridComboBoxColumn 
                         ItemsSource="{Binding Source={StaticResource VisibilityEnum}, Mode=OneWay}"
                         SelectedItemBinding="{Binding Path= Visibility, 
                                                 Mode=TwoWay,
@@ -110,13 +113,13 @@
                                                 Converter={StaticResource VisibilityConverter}}" 
                         />
 
-                    <DataGridTextColumn Width="4*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
-                    <DataGridTextColumn Width="4*" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" />
-                </DataGrid.Columns>
-            </DataGrid>
+                            <DataGridTextColumn Width="4*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                            <DataGridTextColumn Width="4*" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-            <Rectangle Grid.Row="3" Width="Auto" Height="2" StrokeThickness="1" Stroke="Black"/>
-            <DataGrid 
+                    <Rectangle Grid.Row="3" Width="Auto" Height="2" StrokeThickness="1" Stroke="Black"/>
+                    <DataGrid 
                 Grid.Row="4" 
                 CanUserAddRows="False"
                 ItemsSource="{Binding Methods}" 
@@ -126,8 +129,8 @@
                 GridLinesVisibility="None" >
 
 
-                <DataGrid.Columns>
-                    <DataGridComboBoxColumn 
+                        <DataGrid.Columns>
+                            <DataGridComboBoxColumn 
                         ItemsSource="{Binding Source={StaticResource VisibilityEnum}, Mode=OneWay}"
                         SelectedItemBinding="{Binding Path= Visibility, 
                                                 Mode=TwoWay,
@@ -135,22 +138,24 @@
                                                 Converter={StaticResource VisibilityConverter}}" 
                         />
 
-                    <DataGridTextColumn Width="3*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
-                    <DataGridTextColumn Width="3*" Binding="{Binding Parameters, UpdateSourceTrigger=LostFocus}" />
-                    <DataGridTextColumn Width="3*" Binding="{Binding ReturnType, UpdateSourceTrigger=LostFocus}" />
-                </DataGrid.Columns>
-            </DataGrid>
+                            <DataGridTextColumn Width="3*" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+                            <DataGridTextColumn Width="3*" Binding="{Binding Parameters, UpdateSourceTrigger=LostFocus}" />
+                            <DataGridTextColumn Width="3*" Binding="{Binding ReturnType, UpdateSourceTrigger=LostFocus}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown" >
+                        <cmd:EventToCommand Command="{Binding DataContext.MouseDownClassCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseUp" >
+                        <cmd:EventToCommand Command="{Binding DataContext.MouseUpClassCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseMove" >
+                        <cmd:EventToCommand Command="{Binding DataContext.MouseMoveClassCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Border>
         </Grid>
-        <i:Interaction.Triggers>
-            <i:EventTrigger EventName="MouseDown" >
-                <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
-            </i:EventTrigger>
-            <i:EventTrigger EventName="MouseUp" >
-                <cmd:EventToCommand Command="{Binding DataContext.MouseUpShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
-            </i:EventTrigger>
-            <i:EventTrigger EventName="MouseMove" >
-                <cmd:EventToCommand Command="{Binding DataContext.MouseMoveShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
-            </i:EventTrigger>
-        </i:Interaction.Triggers>
-    </Border>
+    </Canvas>
 </UserControl>

@@ -17,25 +17,28 @@ namespace Area51.SoftwareModeler.Models
         private static ShapeCollector _shapeCollector;
         //Objects of interest for ViewModel
         [XmlIgnore]
-        public ObservableCollection<Class> ObsShapes { get; set;   }
+        public ObservableCollection<ClassData> ObsShapes { get; set;   }
         [XmlIgnore]
-        public ObservableCollection<Connection> ObsConnections { get; set; }
+        public ObservableCollection<Comment> ObsComments { get; set; }
+        [XmlIgnore]
+        public ObservableCollection<ConnectionData> ObsConnections { get; set; }
         [XmlIgnore]
         public ObservableCollection<BaseCommand> Commands { get; set; }
         [XmlIgnore]
         public ObservableCollection<int> MaxBranchLayer { get; set; }
         [XmlIgnore]
-        public ObservableCollection<Connection> treeArrows { get; set; }
+        public ObservableCollection<LineCommandTree> treeArrows { get; set; }
 
 
         private ShapeCollector()
         {
-            ObsShapes = new ObservableCollection<Class>();            
-            ObsConnections = new ObservableCollection<Connection>();
+            ObsShapes = new ObservableCollection<ClassData>();   
+            ObsComments = new ObservableCollection<Comment>();         
+            ObsConnections = new ObservableCollection<ConnectionData>();
             Commands = new ObservableCollection<BaseCommand>();
 
             //contains the "connections" used to draw lines in the command-tree.
-            treeArrows = new ObservableCollection<Connection>();
+            treeArrows = new ObservableCollection<LineCommandTree>();
 
             //adding a few extra buffers to the size of the scroll-area. (yes it's an ugly fix)
             MaxBranchLayer = new ObservableCollection<int>();
@@ -46,12 +49,9 @@ namespace Area51.SoftwareModeler.Models
         ///<summary>Get instance</summary>
         public static ShapeCollector GetI()
         {
-            if (_shapeCollector== null)
-            {
-                _shapeCollector = new ShapeCollector();
-            }
-            return _shapeCollector;
+            return _shapeCollector ?? (_shapeCollector = new ShapeCollector());
         }
+
         public static void SetI(ShapeCollector shape)
         {
             _shapeCollector = shape;
@@ -63,16 +63,10 @@ namespace Area51.SoftwareModeler.Models
             ObsConnections.Clear();
         }
 
-        internal Class GetShapeById(int? shapeId)
-        {
+        internal ConnectionData GetConnectionById(int id) => ObsConnections.FirstOrDefault(x => x.ConnectionId == id);
 
-            foreach (Class obsShape in ObsShapes)
-            {
-                //Console.WriteLine("ShapeCollector - get shapeBy ID:" + obsShape);
-                if (obsShape.id == shapeId) return obsShape;
+        internal ClassData GetShapeById(int? shapeId) => ObsShapes.FirstOrDefault(x => x.id == shapeId);
 
-            }
-            return null;
-        }
+        internal Comment GetCommentById(int? id) => ObsComments.FirstOrDefault(x => x.id == id);
     }
 }

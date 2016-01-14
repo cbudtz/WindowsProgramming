@@ -12,7 +12,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     public class UpdateClassInfoCommand : BaseCommand
     {
-        //Class reference
+        //ClassData reference
         public int? classID;
 
         //Update parameters - new values
@@ -34,23 +34,23 @@ namespace Area51.SoftwareModeler.Models.Commands
         }
 
         /// <summary>
-        /// Updates Class information. If parameters are null, they are not updated
+        /// Updates ClassData information. If parameters are null, they are not updated
         /// </summary>
-        /// <param name="classToUpdate">required class</param>
+        /// <param name="classDataToUpdate">required class</param>
         /// <param name="className"></param>
         /// <param name="stereoType"></param>
         /// <param name="isAbstract"></param>
         /// <param name="methods"></param>
         /// <param name="attributes"></param>
-        public UpdateClassInfoCommand(Class classToUpdate, string className, string stereoType, bool? isAbstract, List<Method> methods, List<Attribute> attributes  )
+        public UpdateClassInfoCommand(ClassData classDataToUpdate, string className, string stereoType, bool? isAbstract, List<Method> methods, List<Attribute> attributes  )
         {
             //ClassInstance
-            this.classID = classToUpdate.id;
-            this.OldclassName = classToUpdate.name;
-            this.OldStereoType = classToUpdate.StereoType;
-            this.OldAbstract = classToUpdate.IsAbstract;
-            this.OldAttributes = classToUpdate.Attributes;
-            this.OldMethods = classToUpdate.Methods;
+            this.classID = classDataToUpdate.id;
+            this.OldclassName = classDataToUpdate.name;
+            this.OldStereoType = classDataToUpdate.StereoType;
+            this.OldAbstract = classDataToUpdate.IsAbstract;
+            this.OldAttributes = classDataToUpdate.Attributes;
+            this.OldMethods = classDataToUpdate.Methods;
             //New variables
             this.ClassName = className;
             this.StereoType = stereoType;
@@ -62,25 +62,25 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
-            Class classToUpdate = ShapeCollector.GetI().GetShapeById(classID) as Class;
-            if (classToUpdate != null && ClassName != null) classToUpdate.Name = ClassName;
-            if (classToUpdate != null && StereoType != null) classToUpdate.StereoType = StereoType;
-            if (classToUpdate != null) classToUpdate.IsAbstract = IsAbstract.Value;
-            if (classToUpdate != null) classToUpdate.Methods = Methods;
-            if(classToUpdate != null) classToUpdate.Attributes = Attributes;
+            ClassData classDataToUpdate = ShapeCollector.GetI().GetShapeById(classID) as ClassData;
+            if (classDataToUpdate != null && ClassName != null) classDataToUpdate.Name = ClassName;
+            if (classDataToUpdate != null && StereoType != null) classDataToUpdate.StereoType = StereoType;
+            if (classDataToUpdate != null) classDataToUpdate.IsAbstract = IsAbstract.Value;
+            if (classDataToUpdate != null) classDataToUpdate.Methods = Methods;
+            if(classDataToUpdate != null) classDataToUpdate.Attributes = Attributes;
         }
 
         public override void unExecute()
         {
-            Class classToUpdate = ShapeCollector.GetI().GetShapeById(classID) as Class;
-            if (classToUpdate != null)
+            ClassData classDataToUpdate = ShapeCollector.GetI().GetShapeById(classID) as ClassData;
+            if (classDataToUpdate != null)
             {
             
-                classToUpdate.name = OldclassName;
-                classToUpdate.StereoType = OldStereoType;
-                classToUpdate.IsAbstract = OldAbstract;
-                classToUpdate.Methods = OldMethods;
-                classToUpdate.Attributes = OldAttributes;
+                classDataToUpdate.name = OldclassName;
+                classDataToUpdate.StereoType = OldStereoType;
+                classDataToUpdate.IsAbstract = OldAbstract;
+                classDataToUpdate.Methods = OldMethods;
+                classDataToUpdate.Attributes = OldAttributes;
             }
 
     }

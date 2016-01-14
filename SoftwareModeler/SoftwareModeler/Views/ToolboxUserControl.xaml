@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="300">
    
-    <StackPanel Width="240">
+    <StackPanel Width="150">
         
         <StackPanel.Background>
             <LinearGradientBrush StartPoint="0.5,0">
@@ -22,6 +22,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <GroupBox Grid.Row ="0" Header="Menu" Foreground="Black" Margin="4" >
                 <!--LOAD MenuUserControl-->
@@ -33,6 +34,7 @@
                         <RowDefinition />
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle" HorizontalContentAlignment="Left" Command="{Binding Path=AddAssociationCommand}" Margin="0,5,0,1">
                         <TextBlock>
@@ -42,7 +44,15 @@
                         <TextBlock Margin="5,-2,0,0"> Association</TextBlock>
                     </TextBlock>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle" Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=AddAggregationCommand}" Margin="0,1">
+                    <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle" Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=AddInheritanceCommand}" Margin="0,1">
+                        <TextBlock>
+                        <TextBlock Margin="2,2,0,0">
+                            <Image Source="/Images/association_icon.png" Width="15"/>
+                        </TextBlock>
+                        <TextBlock Margin="5,-2,0,0"> Inheritance</TextBlock>
+                    </TextBlock>
+                    </RadioButton>
+                    <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle" Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=AddAggregationCommand}" Margin="0,1">
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/Images/aggregation_icon.png" Width="15"/>
@@ -50,7 +60,7 @@
                         <TextBlock Margin="5,-2,0,0"> Aggregation</TextBlock>
                     </TextBlock>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle" Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=AddCompositionCommand}" Margin="0,1">
+                    <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle" Grid.Row="3" HorizontalContentAlignment="Left" Command="{Binding Path=AddCompositionCommand}" Margin="0,1">
                         <TextBlock>
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/Images/composition_icon.png" Width="15"/>
@@ -73,7 +83,7 @@
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/Images/class_icon.png" Width="15"/>
                         </TextBlock>
-                        <TextBlock Margin="5,-2,0,0"> Add Class</TextBlock>
+                        <TextBlock Margin="5,-2,0,0"> Class</TextBlock>
                     </TextBlock>
                     </RadioButton>
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle"  Grid.Row="1" HorizontalContentAlignment="Left" Command="{Binding Path=NewAbstractCommand}" Margin="0,1">
@@ -81,7 +91,7 @@
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/Images/class_abstract_icon.png" Width="15"/>
                         </TextBlock>
-                        <TextBlock Margin="5,-2,0,0"> Add Abstract Class</TextBlock>
+                        <TextBlock Margin="5,-2,0,0">Abstract Class</TextBlock>
                     </TextBlock>
                     </RadioButton>
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="toggle"  Grid.Row="2" HorizontalContentAlignment="Left" Command="{Binding Path=NewInterfaceCommand}" Margin="0,1">
@@ -89,7 +99,7 @@
                         <TextBlock Margin="2,2,0,0">
                             <Image Source="/Images/class_interface_icon.png" Width="15"/>
                         </TextBlock>
-                        <TextBlock Margin="5,-2,0,0"> Add Interface</TextBlock>
+                        <TextBlock Margin="5,-2,0,0">Interface</TextBlock>
                     </TextBlock>
                     </RadioButton>
                 </Grid>

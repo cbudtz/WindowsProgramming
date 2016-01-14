@@ -21,7 +21,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             //Deserialization constructor...
         }
 
-        public ResizeShapeCommand(Shape _shape, double _xResize, double _yResize)
+        public ResizeShapeCommand(ClassView _shape, double _xResize, double _yResize)
         {
             //When first constructed
             ShapeId = _shape.id;
@@ -32,19 +32,21 @@ namespace Area51.SoftwareModeler.Models.Commands
 
         public override void execute()
         {
-            Shape shape = ShapeCollector.GetI().GetShapeById(ShapeId);
+            ClassView classView = ShapeCollector.GetI().GetShapeById(ShapeId);
+            if (classView == null) classView = ShapeCollector.GetI().GetCommentById(ShapeId);
 
             Console.WriteLine("Executing ResizeShapeCommand");
-            Console.WriteLine("Shape =" + shape);
-            shape.Width += xResize;
-            shape.Height += YResize;
+            Console.WriteLine("ClassView =" + classView);
+            classView.Width += xResize;
+            classView.Height += YResize;
         }
 
         public override void unExecute()
         {
-            Shape shape = ShapeCollector.GetI().GetShapeById(ShapeId);
-            shape.Width -= xResize;
-            shape.Height -= YResize;
+            ClassView classView = ShapeCollector.GetI().GetShapeById(ShapeId);
+            if (classView == null) classView = ShapeCollector.GetI().GetCommentById(ShapeId);
+            classView.Width -= xResize;
+            classView.Height -= YResize;
         }
 
     }
