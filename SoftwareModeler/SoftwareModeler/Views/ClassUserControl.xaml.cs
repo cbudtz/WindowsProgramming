@@ -25,15 +25,7 @@ namespace Area51.SoftwareModeler.Views
             InitializeComponent();
         }
 
-        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
-        {
-
-        }
-
-        private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-
-        }
+    
 
         protected override void OnChildDesiredSizeChanged(UIElement child)
         {
@@ -47,15 +39,15 @@ namespace Area51.SoftwareModeler.Views
             return base.ArrangeOverride(arrangeBounds);
         }
 
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            //Console.WriteLine("test3");
-            Canvas c = VisualParent as Canvas;
-            //Console.WriteLine("type: " + ));
-            //this.
-            if(c != null)c.Width = Width + GridTest.Width;
-            base.OnMouseMove(e);
-        }
+        //protected override void OnMouseMove(MouseEventArgs e)
+        //{
+        //    //Console.WriteLine("test3");
+        //    Canvas c = VisualParent as Canvas;
+        //    //Console.WriteLine("type: " + ));
+        //    //this.
+        //    if(c != null)c.Width = Width + GridTest.Width;
+        //    base.OnMouseMove(e);
+        //}
 
         protected override void OnRender(DrawingContext drawingContext)
         {
@@ -64,30 +56,30 @@ namespace Area51.SoftwareModeler.Views
             
         }
 
-        protected override Size MeasureOverride(Size constraint)
-        {
-            Size availableSize = new Size(double.PositiveInfinity, double.PositiveInfinity);
-            double minX = 900000; //some dummy high number
-            double minY = 900000; //some dummy high number
-            double maxX = 0;
-            double maxY = 0;
+        //protected override Size MeasureOverride(Size constraint)
+        //{
+        //    Size availableSize = new Size(double.PositiveInfinity, double.PositiveInfinity);
+        //    double minX = 900000; //some dummy high number
+        //    double minY = 900000; //some dummy high number
+        //    double maxX = 0;
+        //    double maxY = 0;
             
-            foreach (UIElement element in this.GridTest.Children)
-            {
-                element.Measure(availableSize);
+        //    foreach (UIElement element in this.GridTest.Children)
+        //    {
+        //        element.Measure(availableSize);
 
-                Rect box = GetDimension(element);
-                if (minX > box.X) minX = box.X;
-                if (minY > box.Y) minY = box.Y;
-                if (maxX < box.X + box.Width) maxX = box.X + box.Width;
-                if (maxY < box.Y + box.Height) maxY = box.Y + box.Height;
-            }
+        //        Rect box = GetDimension(element);
+        //        if (minX > box.X) minX = box.X;
+        //        if (minY > box.Y) minY = box.Y;
+        //        if (maxX < box.X + box.Width) maxX = box.X + box.Width;
+        //        if (maxY < box.Y + box.Height) maxY = box.Y + box.Height;
+        //    }
 
-            if (minX == 900000) minX = 0;
-            if (minY == 900000) minY = 0;
-            Console.WriteLine("test");
-            return new Size { Width = maxX - minX, Height = maxY - minY };
-        }
+        //    if (minX == 900000) minX = 0;
+        //    if (minY == 900000) minY = 0;
+        //    Console.WriteLine("test");
+        //    return new Size { Width = maxX - minX, Height = maxY - minY };
+        //}
 
         public static Rect GetDimension(UIElement element)
         {

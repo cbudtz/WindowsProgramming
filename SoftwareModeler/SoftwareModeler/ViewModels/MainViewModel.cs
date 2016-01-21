@@ -74,13 +74,12 @@ namespace Area51.SoftwareModeler.ViewModels
 
 	    public ButtonCommand ButtonDown { get; private set; } = ButtonCommand.None;
 
-	    protected double InitialWidth = 0;
-		private double minShapeWidth = 150;
-		private double minShapeHeight = 100;
-		private bool IsEditable { get; set; } = false;
+	    protected double InitialWidth;
+        private const double MinShapeWidth = 150;
+        private const double MinShapeHeight = 100;
 		
 
-	    private ConnectionData NewConnectionData { get; set; } = null;
+	    private ConnectionData NewConnectionData { get; set; }
 
 		public string Text { get; set; }
 
@@ -101,6 +100,7 @@ namespace Area51.SoftwareModeler.ViewModels
         public ICommand MouseUpCommentCommand { get; }
 
         public ICommand CherryPickCommand { get; }
+        public ICommand CollapseNodeCommand { get; }
 
         // Connections
         public ICommand MouseDownConnectionCommand { get; }
@@ -129,19 +129,22 @@ namespace Area51.SoftwareModeler.ViewModels
 		public ICommand NewInterfaceCommand { get; }
 		public ICommand NewCommentCommand { get; }
 
+        public ICommand ResizeCommandTreeWindowCommand { get; }
+
+
 
         #endregion
-        private List<ClassData> SelectedClasses = new List<ClassData>();
-        private List<Comment> SelectedComments = new List<Comment>(); 
-        private List<ConnectionData> SelectedConnections = new List<ConnectionData>(); 
-        private List<ClassData> CopiedClasses = new List<ClassData>();
-        private List<Comment> copiedComments = new List<Comment>();
-	    private List<ConnectionData> CopiedConnection = new List<ConnectionData>();
+        private List<ClassData> _selectedClasses = new List<ClassData>();
+        private List<Comment> _selectedComments = new List<Comment>(); 
+        private List<ConnectionData> _selectedConnections = new List<ConnectionData>(); 
+        private readonly List<ClassData> _copiedClasses = new List<ClassData>();
+        public List<Comment> CopiedComments { get; }
+        public List<ConnectionData> CopiedConnection { get; }
 
-        private ClassData _classDataToEdit = null;
-        private bool _multiSelect = false;
-        private bool _multiAdd = false;
-        private Action action = Action.Nothing;
+        private ClassData _classDataToEdit;
+        private bool _multiSelect;
+        private bool _multiAdd;
+        private Action _action = Action.Nothing;
 
 		// Saves the initial point that the mouse has during a move operation.
 		private Point _initialMousePosition;
@@ -152,9 +155,9 @@ namespace Area51.SoftwareModeler.ViewModels
         
 
         //maxbranchlayer added as an observablecollection for now, not a nice fix, but it works (for scroll area).
-		public ObservableCollection<int> MaxBranchLayer { get { return ShapeCollector.GetI().MaxBranchLayer; } }
+		public ObservableCollection<int> MaxBranchLayer => ShapeCollector.GetI().MaxBranchLayer;
         //new collection for the lines in the command-tree.
-        public ObservableCollection<LineCommandTree> treeArrows { get { return ShapeCollector.GetI().treeArrows; } }
+        public ObservableCollection<LineCommandTree> TreeArrows => ShapeCollector.GetI().treeArrows;
         //private ClassData _classDataToEdit = null;
 		public ObservableCollection<BaseCommand> Commands => ShapeCollector.GetI().Commands;
 	    public ObservableCollection<ClassData> Classes => ShapeCollector.GetI().ObsShapes;
@@ -164,17 +167,18 @@ namespace Area51.SoftwareModeler.ViewModels
 
 		//Dynamic 
 		private CommandTree CommandController { get; set; }
-		//private ShapeCollector observables = ShapeCollector.GetI();
 
 		/// <summary>
 		/// Initializes a new instance of the MainViewModel class.
 		/// </summary>
 		public MainViewModel()
 		{
+		    CopiedComments = new List<Comment>();
+		    CopiedConnection = new List<ConnectionData>();
 
-			CommandController = new CommandTree();
+		    CommandController = new CommandTree();
+
 			// The Commands are given the methods they should use to execute, and find out if they can execute.
-
 			#region initialize Commands
 			ClearSelectionCommand = new RelayCommand(ClearSelectedShapes);
 			EditClassContentOkCommand = new RelayCommand(EditClassOk);
@@ -193,15 +197,16 @@ namespace Area51.SoftwareModeler.ViewModels
             MouseUpConnectionCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpConnection);
 
             CherryPickCommand = new RelayCommand<MouseEventArgs>(CherryPick);
+            CollapseNodeCommand = new RelayCommand<MouseEventArgs>(CollapseNode);
 
             KeyEventCommand = new RelayCommand<KeyEventArgs>(KeyEvent);
 			MouseClickCommand = new RelayCommand<MouseEventArgs>(MouseClicked);
 
-			SaveCommand = new RelayCommand(saveFileCmd);
-			LoadCommand = new RelayCommand(loadFile);
+			SaveCommand = new RelayCommand(SaveFileCmd);
+			LoadCommand = new RelayCommand(LoadFile);
 			NewCommand = new RelayCommand(StartNewProject);
 			TeamCommand = new RelayCommand(StartTeamProject);
-            GenerateCodeCommand = new RelayCommand(generateCode);
+            GenerateCodeCommand = new RelayCommand(GenerateCode);
             HelpCommand = new RelayCommand(Help);
 
             AddInheritanceCommand = new RelayCommand(AddInheritance);
@@ -230,8 +235,7 @@ namespace Area51.SoftwareModeler.ViewModels
             KeyStates shiftR = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.RightShift) & KeyStates.Down;
             KeyStates c = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.C) & KeyStates.Down;
             KeyStates v = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.V) & KeyStates.Down;
-
-
+            KeyStates a = e.KeyStates & e.KeyboardDevice.GetKeyStates(Key.A) & KeyStates.Down;
 
             _multiSelect = false;
             _multiAdd = false;
@@ -248,17 +252,20 @@ namespace Area51.SoftwareModeler.ViewModels
 				}
 				else if (s > 0)
 				{
-					saveFile();
+					SaveFile();
 				}
 				else if (o > 0){
-					loadFile();
+					LoadFile();
 				}else if(c > 0)
                 {
-                    CopiedClasses.Clear();
-                    SelectedClasses.ForEach(x => CopiedClasses.Add(x));
+                    _copiedClasses.Clear();
+                    _selectedClasses.ForEach(x => _copiedClasses.Add(x));
                 }else if(v > 0)
                 {
-                    CopiedClasses.ForEach(x => execCommand(new CopyClassCommand(x)));
+                    _copiedClasses.ForEach(x => ExecCommand(new CopyClassCommand(x)));
+                }else if (a > 0)
+                {
+                    SelectAll();
                 }
 			}
 			else if (esc > 0)
@@ -266,10 +273,10 @@ namespace Area51.SoftwareModeler.ViewModels
 				ClearSelectedShapes();
 				ButtonDown = ButtonCommand.None;
 			}
-			else if(del > 0 && SelectedClasses != null)
+			else if(del > 0 && _selectedClasses != null)
 			{
-				SelectedClasses.ForEach(x => execCommand(new DeleteShapeCommand(x)));
-                SelectedConnections.ForEach(x => execCommand(new DeleteConnectionCommand(x)));
+				_selectedClasses.ForEach(x => ExecCommand(new DeleteShapeCommand(x)));
+                _selectedConnections.ForEach(x => ExecCommand(new DeleteConnectionCommand(x)));
 				ClearSelectedShapes();
 			}
             else if (shiftR > 0 || shiftL > 0)
@@ -280,18 +287,15 @@ namespace Area51.SoftwareModeler.ViewModels
 
 		public void EditClassContent(ClassView classView)
 		{
-            bool newWind = (EditClassWindow == null ||
-                                    EditClassWindow.Visibility == Visibility.Collapsed ||
-                                    EditClassWindow.Visibility == Visibility.Hidden ||
-                                    !EditClassWindow.IsEnabled);
-            if (EditClassWindow != null) EditClassWindow.Close();
+          
+		    EditClassWindow?.Close();
 
-            EditClassWindow = new EditClassPopupWindow();
+		    EditClassWindow = new EditClassPopupWindow();
             _classDataToEdit = (ClassData)classView;
             EditClassWindow.ClassName.Text = _classDataToEdit.name;
             string stereoType = _classDataToEdit.StereoType;
             stereoType = stereoType == null || stereoType.Length < 4? "" : stereoType.Remove(0, 2);
-            stereoType = stereoType == null || stereoType.Length < 2? "" : stereoType.Remove(stereoType.Length - 2, 2);
+            stereoType = stereoType.Length < 2? "" : stereoType.Remove(stereoType.Length - 2, 2);
             EditClassWindow.StereoType.Text = stereoType;
             EditClassWindow.IsAbstract.IsChecked = _classDataToEdit.IsAbstract;
             EditClassWindow.Methods.ItemsSource = _classDataToEdit.Methods;
@@ -303,11 +307,11 @@ namespace Area51.SoftwareModeler.ViewModels
 
 		public void EditClassOk()
 		{
-		  var methods =   EditClassWindow.Methods.Items.OfType<Method>().ToList<Method>(); ;// as List<Method>;
+		  var methods =   EditClassWindow.Methods.Items.OfType<Method>().ToList(); // as List<Method>;
 
-			var attributes = EditClassWindow.Attributes.Items.OfType<Models.Attribute>().ToList<Models.Attribute>();
+			var attributes = EditClassWindow.Attributes.Items.OfType<Models.Attribute>().ToList();
 
-			execCommand(new UpdateClassInfoCommand(_classDataToEdit, EditClassWindow.ClassName.Text, EditClassWindow.StereoType.Text, EditClassWindow.IsAbstract.IsChecked, methods, attributes));
+			ExecCommand(new UpdateClassInfoCommand(_classDataToEdit, EditClassWindow.ClassName.Text, EditClassWindow.StereoType.Text, EditClassWindow.IsAbstract.IsChecked, methods, attributes));
 			
 			_classDataToEdit = null;
 			ClearSelectedShapes();
@@ -320,104 +324,138 @@ namespace Area51.SoftwareModeler.ViewModels
             EditClassWindow.Visibility = Visibility.Collapsed;
         }
 
+        #region select and deselect
+
+
+        public void SelectAll()
+        {
+            ClearSelectedShapes();
+            foreach (var classData in Classes)
+            {
+                SelectShape(classData);
+            }
+            foreach (var comment in Comments)
+            {
+                SelectComment(comment); 
+            }
+            foreach (var connectionData in Connections)
+            {
+                SelectConnection(connectionData);
+            }
+        }
+
         public void ClearSelectedShapes()
 		{
-			SelectedClasses.ForEach(x => x.IsSelected = false);
-            SelectedComments.ForEach(x => x.IsSelected = false);
-            SelectedConnections.ForEach(x => x.IsSelected = false);
+			_selectedClasses.ForEach(x => x.IsSelected = false);
+            _selectedComments.ForEach(x => x.IsSelected = false);
+            _selectedConnections.ForEach(x => x.IsSelected = false);
             
-			SelectedClasses.Clear();
-            SelectedComments.Clear();
-            SelectedConnections.Clear();
+			_selectedClasses.Clear();
+            _selectedComments.Clear();
+            _selectedConnections.Clear();
 		}
 
         public void SelectComment(Comment c)
         {
-            Console.WriteLine("selecting comment: " + c);
             if (c == null) return;
-            if (SelectedComments == null) SelectedComments = new List<Comment>();
+            if (_selectedComments == null) _selectedComments = new List<Comment>();
 
             if (!_multiSelect) ClearSelectedShapes();
 
-            if (!SelectedComments.Contains(c))
+            if (!_selectedComments.Contains(c))
             {
                 c.IsSelected = true;
-                SelectedComments.Add(c);
+                _selectedComments.Add(c);
 
                 c.InitialPosition = new Point(c.X, c.Y);
             }
             else
             {
                 c.IsSelected = false;
-                SelectedComments.Remove(c);
+                _selectedComments.Remove(c);
             }
         }
 
+        public void DeSelectComment(Comment c)
+        {
+            if (c == null || _selectedComments == null) return;
+
+            if (!_multiSelect) ClearSelectedShapes();
+
+            if (!_selectedComments.Contains(c))
+            {
+                c.IsSelected = true;
+                _selectedComments.Add(c);
+
+                c.InitialPosition = new Point(c.X, c.Y);
+            }
+        }
 		public void SelectShape(ClassData s)
 		{
 			if (s == null) return;
-			if (SelectedClasses == null) SelectedClasses = new List<ClassData>();
+			if (_selectedClasses == null) _selectedClasses = new List<ClassData>();
 			
 			if (!_multiSelect) ClearSelectedShapes();
 
-		    if (!SelectedClasses.Contains(s))
+		    if (!_selectedClasses.Contains(s))
 		    {
 		        s.IsSelected = true;
-		        SelectedClasses.Add(s);
+		        _selectedClasses.Add(s);
 
 		        s.InitialPosition = new Point(s.X, s.Y);
 		    }
-		    else
-		    {
-		        s.IsSelected = false;
-		        SelectedClasses.Remove(s);
-		    }
-		}
+            else
+            {
+                s.IsSelected = false;
+                _selectedClasses.Remove(s);
+            }
+        }
 
 	    public void SelectConnection(ConnectionData c)
 	    {
 	        if (c == null) return;
-            if(SelectedConnections == null) SelectedConnections = new List<ConnectionData>();
+            if(_selectedConnections == null) _selectedConnections = new List<ConnectionData>();
 
             if(!_multiSelect) ClearSelectedShapes();
 
-	        if (!SelectedConnections.Contains(c))
+	        if (!_selectedConnections.Contains(c))
 	        {
 	            c.IsSelected = true;
-	            SelectedConnections.Add(c);
+	            _selectedConnections.Add(c);
 	        }
-	        else
-	        {
-	            c.IsSelected = false;
-	            SelectedConnections.Remove(c);
-	        }
-	    }
+            else
+            {
+                c.IsSelected = false;
+                _selectedConnections.Remove(c);
+            }
+        }
+        #endregion
 
-		public void MoveShape(Point mousePosition)
+        public void MoveShape(Point mousePosition)
 		{
 
 		    double xOffset = (mousePosition.X - _initialMousePosition.X);
 		    double yOffset = (mousePosition.Y - _initialMousePosition.Y);
-            if(xOffset + yOffset > 0) action = Action.Moving;
-            for (int i = 0; i < SelectedClasses.Count; i++) {
+            if(xOffset + yOffset > 0) _action = Action.Moving;
+            for (int i = 0; i < _selectedClasses.Count; i++) {
 
-                SelectedClasses.ElementAt(i).X = SelectedClasses.ElementAt(i).InitialPosition.X + xOffset;
-                SelectedClasses.ElementAt(i).Y = SelectedClasses.ElementAt(i).InitialPosition.Y + yOffset;
+                _selectedClasses.ElementAt(i).X = _selectedClasses.ElementAt(i).InitialPosition.X + xOffset;
+                _selectedClasses.ElementAt(i).Y = _selectedClasses.ElementAt(i).InitialPosition.Y + yOffset;
 
                 // lambda expr. update all Connections. first Connections where end ClassDataRep is the moving ClassDataRep then where start ClassDataRep is moving ClassDataRep
-                Connections.Where(x => x.EndShapeId == SelectedClasses.ElementAt(i).id).ToList().ForEach(x => x.updatePoints());
-                Connections.Where(x => x.StartShapeId == SelectedClasses.ElementAt(i).id).ToList().ForEach(x => x.updatePoints());
+                Connections.Where(x => x.EndShapeId == _selectedClasses.ElementAt(i).id).ToList().ForEach(x => x.updatePoints());
+                Connections.Where(x => x.StartShapeId == _selectedClasses.ElementAt(i).id).ToList().ForEach(x => x.updatePoints());
             }
 
-            for (int i = 0; i < SelectedComments.Count; i++)
+            for (int i = 0; i < _selectedComments.Count; i++)
             {
 
-                SelectedComments.ElementAt(i).X = SelectedComments.ElementAt(i).InitialPosition.X + xOffset;
-                SelectedComments.ElementAt(i).Y = SelectedComments.ElementAt(i).InitialPosition.Y + yOffset;
+                _selectedComments.ElementAt(i).X = _selectedComments.ElementAt(i).InitialPosition.X + xOffset;
+                _selectedComments.ElementAt(i).Y = _selectedComments.ElementAt(i).InitialPosition.Y + yOffset;
 
                 // lambda expr. update all Connections. first Connections where end ClassDataRep is the moving ClassDataRep then where start ClassDataRep is moving ClassDataRep
-                Connections.Where(x => x.EndShapeId == SelectedComments.ElementAt(i).id).ToList().ForEach(x => x.updatePoints());
-                Connections.Where(x => x.StartShapeId == SelectedComments.ElementAt(i).id).ToList().ForEach(x => x.updatePoints());
+                Connections.Where(x => x.EndShapeId == _selectedComments.ElementAt(i).id).ToList().ForEach(x => x.updatePoints());
+                Connections.Where(x => x.StartShapeId == _selectedComments.ElementAt(i).id).ToList().ForEach(x => x.updatePoints());
             }
         }
 
@@ -429,35 +467,35 @@ namespace Area51.SoftwareModeler.ViewModels
 
             if (Math.Abs(xOffset) < 10 && Math.Abs(yOffset) < 10) return;
 
-            for (int i = 0; i < SelectedClasses.Count; i++) {
+            for (int i = 0; i < _selectedClasses.Count; i++) {
                 // The ClassView is moved back to its original position, so the offset given to the move command works.
-                double X = SelectedClasses.ElementAt(i).InitialPosition.X;
-                double Y = SelectedClasses.ElementAt(i).InitialPosition.Y;
-                SelectedClasses.ElementAt(i).X = X;
-                SelectedClasses.ElementAt(i).Y = Y;
+                double x = _selectedClasses.ElementAt(i).InitialPosition.X;
+                double y = _selectedClasses.ElementAt(i).InitialPosition.Y;
+                _selectedClasses.ElementAt(i).X = x;
+                _selectedClasses.ElementAt(i).Y = y;
 
-                SelectedClasses.ElementAt(i).InitialPosition = new Point(X + xOffset, Y+yOffset);            
-              
-                execCommand(new MoveShapeCommand(SelectedClasses.ElementAt(i), xOffset, yOffset));
+                _selectedClasses.ElementAt(i).InitialPosition = new Point(x + xOffset, y+yOffset);
+
+                ExecCommand(new MoveShapeCommand(_selectedClasses.ElementAt(i), xOffset, yOffset));
             }
 
             if (Math.Abs(xOffset) < 10 && Math.Abs(yOffset) < 10) return;
 
-            for (int i = 0; i < SelectedComments.Count; i++)
+            for (int i = 0; i < _selectedComments.Count; i++)
             {
                 // The ClassView is moved back to its original position, so the offset given to the move command works.
-                double X = SelectedComments.ElementAt(i).InitialPosition.X;
-                double Y = SelectedComments.ElementAt(i).InitialPosition.Y;
-                SelectedComments.ElementAt(i).X = X;
-                SelectedComments.ElementAt(i).Y = Y;
+                double x = _selectedComments.ElementAt(i).InitialPosition.X;
+                double y = _selectedComments.ElementAt(i).InitialPosition.Y;
+                _selectedComments.ElementAt(i).X = x;
+                _selectedComments.ElementAt(i).Y = y;
 
-                SelectedComments.ElementAt(i).InitialPosition = new Point(X + xOffset, Y + yOffset);
+                _selectedComments.ElementAt(i).InitialPosition = new Point(x + xOffset, y + yOffset);
 
-                execCommand(new MoveShapeCommand(SelectedComments.ElementAt(i), xOffset, yOffset));
+                ExecCommand(new MoveShapeCommand(_selectedComments.ElementAt(i), xOffset, yOffset));
             }
 
         }
-
+        #region resizing
         public bool ResizeShapeInit(ClassView @class, MouseButtonEventArgs e)
         {
             if (@class == null) return false;
@@ -466,33 +504,29 @@ namespace Area51.SoftwareModeler.ViewModels
 
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
+            if (Math.Abs(mousePosition.X - borderX) > 5 && Math.Abs(mousePosition.Y - borderY) > 5) return false;
 
-            if (Math.Abs(mousePosition.X - borderX) < 5 && Math.Abs(mousePosition.Y - borderY) < 5) return false;
-
-            var border = e.MouseDevice.Target as Border;
-            if (border == null) return false;
+            var shape = TargetShape(e);
+            if (shape == null) return false;
 
             _initialMousePosition = mousePosition;
 
-            InitialWidth = border.ActualWidth;
-
+            InitialWidth = shape.Width;
+            ClearSelectedShapes();
             return true;
-
-
         }
 
 		public void ResizeShape(ClassView classView, Point mousePosition)
 		{
-            ClearSelectedShapes();
             classView.Width = mousePosition.X - classView.X;
 			classView.Height = mousePosition.Y - classView.Y;
-			if (Math.Abs(classView.Width) < minShapeWidth) classView.Width = minShapeWidth;
-			if (Math.Abs(classView.Height) < minShapeHeight) classView.Height = minShapeHeight;
+			if (Math.Abs(classView.Width) < MinShapeWidth) classView.Width = MinShapeWidth;
+			if (Math.Abs(classView.Height) < MinShapeHeight) classView.Height = MinShapeHeight;
 		}
 
         public void ResizeShapeDone(ClassView shape, Point mousePosition)
         {
-            if (action != Action.Resizing) return;          
+            if (_action != Action.Resizing) return;          
             if (shape == null) return;
            
             // The ClassView is moved back to its original position, so the offset given to the move command works.
@@ -502,20 +536,20 @@ namespace Area51.SoftwareModeler.ViewModels
             double xOffset = mousePosition.X - _initialMousePosition.X;
             double yOffset = mousePosition.Y - _initialMousePosition.Y;
 
-            if (Math.Abs(shape.Width + xOffset) < minShapeWidth) xOffset = minShapeWidth - shape.Width;
-            if (Math.Abs(shape.Height + yOffset) < minShapeHeight) yOffset = minShapeHeight - shape.Height;
+            if (Math.Abs(shape.Width + xOffset) < MinShapeWidth) xOffset = MinShapeWidth - shape.Width;
+            if (Math.Abs(shape.Height + yOffset) < MinShapeHeight) yOffset = MinShapeHeight - shape.Height;
 
-            execCommand(new ResizeShapeCommand(shape, xOffset, yOffset));
-
-     
+            ExecCommand(new ResizeShapeCommand(shape, xOffset, yOffset));
         }
+        #endregion
 
+        #region addconnection
         public void AddConnection(ClassData shape)
             {
             if (shape != null && NewConnectionData.StartShapeId != shape.id)
             {
                 NewConnectionData.EndShapeId = shape.id;
-                    execCommand(new AddConnectionCommand(NewConnectionData.ConnectionId, NewConnectionData.StartShapeId, "", shape.id ?? 0, "", NewConnectionData.Type));
+                    ExecCommand(new AddConnectionCommand(NewConnectionData.ConnectionId, NewConnectionData.StartShapeId, "", shape.id ?? 0, "", NewConnectionData.Type));
                 if (!_multiAdd) ButtonDown = ButtonCommand.None;
 
             }
@@ -525,7 +559,7 @@ namespace Area51.SoftwareModeler.ViewModels
       
         public void AddConnectionInit(ClassData shape, Point mousePosition)
         {
-            ConnectionType type = ConnectionType.Association;
+            ConnectionType type;
             switch (ButtonDown)
             {
                 case ButtonCommand.Aggregation:
@@ -543,12 +577,14 @@ namespace Area51.SoftwareModeler.ViewModels
                 default:
                     return;
             }
-            
-            NewConnectionData = new ConnectionData(shape.id ?? 0, "", null, "", type);
-            NewConnectionData.EndPoint = mousePosition;
+
+            NewConnectionData = new ConnectionData(shape.id ?? 0, "", null, "", type) {EndPoint = mousePosition};
             Connections.Add(NewConnectionData);
         }
+        #endregion
 
+        
+        #region mouse down
         public void MouseDownClass(MouseButtonEventArgs e)
         {
             var classObj = TargetShape(e);
@@ -558,7 +594,7 @@ namespace Area51.SoftwareModeler.ViewModels
             if ((ButtonDown & ButtonCommand.Connection) > 0)
             {
                 AddConnectionInit(classObj, mousePosition);
-                action = action | Action.AddingConnection;
+                _action = Action.AddingConnection | Action.NoSelecting;
             }
             else
             {
@@ -566,13 +602,14 @@ namespace Area51.SoftwareModeler.ViewModels
                 // therefore resize and move is not set at the same time 
                 if (ResizeShapeInit(classObj, e))
                 {
-                    action = action | Action.Resizing;
+                    _action = Action.Resizing | Action.NoSelecting;
                 }
                 else
                 {
-                    action = action | Action.MovingClass; // can only move class at the moment
+                    _action = Action.MovingClass | Action.Selecting; // can only move class at the moment
                 }
             }
+    
             e.MouseDevice.Target.CaptureMouse();
         }
 
@@ -586,23 +623,29 @@ namespace Area51.SoftwareModeler.ViewModels
             // therefore resize and move is not set at the same time 
             if (ResizeShapeInit(comment, e))
             {
-                action = action | Action.Resizing;
+                _action = Action.Resizing | Action.NoSelecting;
             }
             else
             {
-                action = action | Action.MovingComment;
-                action = action | Action.Selecting;
+                _action = Action.MovingComment | Action.Selecting;
             }
             e.MouseDevice.Target.CaptureMouse();
         }
-        public void MouseDownConnection(MouseButtonEventArgs e) { }
+
+        public void MouseDownConnection(MouseButtonEventArgs e)
+        {
+            var conn = TargetConnection(e);
+            if (conn == null) return;
+
+            SelectConnection(conn);
+        }
 
         //public void MouseDown(MouseButtonEventArgs e)
         //{
-            
+
         //    var shape = TargetShape(e);
         //    var connection = TargetConnection(e);
-        //    if (shape != null || connection != null) action = action | Action.Selecting;
+        //    if (shape != null || connection != null) _action = _action | Action.Selecting;
 
         //    // The mouse position relative to the target of the mouse event.
         //    var mousePosition = RelativeMousePosition(e);
@@ -610,12 +653,12 @@ namespace Area51.SoftwareModeler.ViewModels
 
         //    if((ButtonDown & ButtonCommand.Connection) > 0) { 
         //        AddConnectionInit(shape, mousePosition);
-        //        action = action | Action.AddingConnection;
+        //        _action = _action | Action.AddingConnection;
         //    }
         //    else if ((ButtonDown & ButtonCommand.Shape) > 0)
         //    {
         //        // no class initialization needed
-        //        action = action | Action.AddingClass;
+        //        _action = _action | Action.AddingClass;
         //    }
         //    else
         //    {
@@ -623,44 +666,48 @@ namespace Area51.SoftwareModeler.ViewModels
         //        // therefore resize and move is not set at the same time 
         //        if (ResizeShapeInit(shape, e))
         //        {
-        //            action = action | Action.Resizing;
+        //            _action = _action | Action.Resizing;
         //        }
         //        else
         //        {
-        //            action = action | Action.Moving; // can only move class at the moment
+        //            _action = _action | Action.Moving; // can only move class at the moment
         //        }
         //    }
         //    e.MouseDevice.Target.CaptureMouse();
         //}
+        #endregion
 
+
+        #region mouse move
         public void MouseMoveClass(MouseEventArgs e)
         {
+            
             if (Mouse.Captured == null) return;
-
+            
             var classObj = TargetShape(e);
             var mousePosition = RelativeMousePosition(e);
 
             // draw connection 
-            if ((action & Action.AddingConnection) > 0)
+            if ((_action & Action.AddingConnection) > 0)
             {
                 NewConnectionData.updatePoints(mousePosition);
+                _action = _action | Action.NoSelecting;
             }
             // resize or move ClassView
-            else if ((action & Action.Resizing) > 0)
+            else if ((_action & Action.Resizing) > 0)
             {   // resizing
                 ResizeShape(classObj, mousePosition);
+                _action = _action | Action.NoSelecting;
             }
-            else if ((action & Action.MovingClass) > 0)
+            else if ((_action & Action.MovingClass) > 0) // if moving class
             {
                 // move ClassView if class in focus is selected, otherwise it is expected that a selection is about to be made
-                if (SelectedClasses.Contains(classObj))
+                if (!_selectedClasses.Contains(classObj))
                 {
-                    MoveShape(mousePosition);
-                    action = action | Action.NoSelecting;
+                    SelectShape(classObj);
                 }
-                else action = action | Action.Selecting;
+                MoveShape(mousePosition);
             }
-            else action = action | Action.Selecting;
         }
 
         public void MouseMoveComment(MouseEventArgs e)
@@ -671,64 +718,65 @@ namespace Area51.SoftwareModeler.ViewModels
             var mousePosition = RelativeMousePosition(e);
 
             // draw connection 
-            if ((action & Action.AddingConnection) > 0)
+            if ((_action & Action.AddingConnection) > 0)
             {
                 NewConnectionData.updatePoints(mousePosition);
             }
             // resize or move ClassView
-            else if ((action & Action.Resizing) > 0)
+            else if ((_action & Action.Resizing) > 0)
             {   // resizing
                 ResizeShape(comment, mousePosition);
             }
-            else if ((action & Action.MovingComment) > 0)
+            else if ((_action & Action.MovingComment) > 0)
             {
                 // move ClassView if class in focus is selected, otherwise it is expected that a selection is about to be made
-                if (SelectedComments.Contains(comment))
+                if (!_selectedComments.Contains(comment))
                 {
-                    MoveShape(mousePosition);
-                    action = action | Action.NoSelecting;
+                    SelectComment(comment);
                 }
-                else action = action | Action.Selecting;
+                MoveShape(mousePosition);
             }
-            else action = action | Action.Selecting;
+            else _action = _action | Action.Selecting;
         }
         public void MouseMoveConnection(MouseEventArgs e) { }
 
-  //      public void MouseMove(MouseEventArgs e)
-		//{
-		//	if (Mouse.Captured == null) return;
-			
+        //      public void MouseMove(MouseEventArgs e)
+        //{
+        //	if (Mouse.Captured == null) return;
 
-		//	// The ClassView is gotten from the mouse event.
-		//	var shape = TargetShape(e);
-  //          var comment = TargetComment(e);
-				
-		//	// The mouse position relative to the target of the mouse event.
-		//	var mousePosition = RelativeMousePosition(e);
-            
-  //          // draw connection 
-		//	if ((action & Action.AddingConnection) > 0)
-		//	{
-		//		NewConnectionData.updatePoints(mousePosition);
-		//	}
-  //          // resize or move ClassView
-		//	else if ((action & Action.Resizing) > 0)
-		//	{   // resizing
-		//		ResizeShape(shape, mousePosition);
-		//	}
-		//	else if ((action & Action.MovingClass) > 0)
-		//	{
-		//	    // move ClassView if class in focus is selected, otherwise it is expected that a selection is about to be made
-		//	    if (SelectedClasses.Contains(shape) || SelectedComments.Contains(comment))
-		//	    {
-		//	        MoveShape(mousePosition);
-		//	        action = action | Action.NoSelecting;
-		//	    }
-		//	    else action = action | Action.Selecting;
-		//	}
-		//	else action = action | Action.Selecting;
-		//}
 
+        //	// The ClassView is gotten from the mouse event.
+        //	var shape = TargetShape(e);
+        //          var comment = TargetComment(e);
+
+        //	// The mouse position relative to the target of the mouse event.
+        //	var mousePosition = RelativeMousePosition(e);
+
+        //          // draw connection 
+        //	if ((_action & Action.AddingConnection) > 0)
+        //	{
+        //		NewConnectionData.updatePoints(mousePosition);
+        //	}
+        //          // resize or move ClassView
+        //	else if ((_action & Action.Resizing) > 0)
+        //	{   // resizing
+        //		ResizeShape(shape, mousePosition);
+        //	}
+        //	else if ((_action & Action.MovingClass) > 0)
+        //	{
+        //	    // move ClassView if class in focus is selected, otherwise it is expected that a selection is about to be made
+        //	    if (_selectedClasses.Contains(shape) || _selectedComments.Contains(comment))
+        //	    {
+        //	        MoveShape(mousePosition);
+        //	        _action = _action | Action.NoSelecting;
+        //	    }
+        //	    else _action = _action | Action.Selecting;
+        //	}
+        //	else _action = _action | Action.Selecting;
+        //}
+        #endregion
+
+        #region mouse up
         public void MouseUpClass(MouseButtonEventArgs e)
         {
             if (e == null) return;
@@ -740,14 +788,21 @@ namespace Area51.SoftwareModeler.ViewModels
             // The mouse is released, as the move operation is done, so it can be used by other controls.
   
 
-            if ((ButtonDown & ButtonCommand.Connection) > 0 && (action & Action.AddingConnection) > 0)
+            if ((ButtonDown & ButtonCommand.Connection) > 0 && (_action & Action.AddingConnection) > 0)
             {
                 AddConnection(classObj);
             }
-            //else if((ButtonDown & ButtonCommand.Shape) > 0 && (action & Action.AddingClass) > 0) // adding shape is made in MouseClick
-            else if ((action & Action.Resizing) > 0) ResizeShapeDone(classObj, mousePosition);
-            else if ((action & Action.MovingClass) > 0 && SelectedClasses.Contains(classObj)) MoveShapeDone(mousePosition);
-            if ((action & Action.Selecting) > 0 && (action & Action.NoSelecting) == 0)
+            //else if((ButtonDown & ButtonCommand.Shape) > 0 && (_action & Action.AddingClass) > 0) // adding shape is made in MouseClick
+            else if ((_action & Action.Resizing) > 0)
+            {
+                ResizeShapeDone(classObj, mousePosition);
+            }
+            else if ((_action & Action.MovingClass) > 0 && _selectedClasses.Contains(classObj))
+            {
+                MoveShapeDone(mousePosition);
+            }
+
+            if ((_action & Action.Selecting) > 0 && (_action & Action.NoSelecting) == 0)
             {
                 SelectShape(classObj);
             }
@@ -758,7 +813,7 @@ namespace Area51.SoftwareModeler.ViewModels
             }
             _doubleClickTimer = DateTime.Now.Ticks;
 
-            action = Action.Nothing;
+            _action = Action.Nothing;
         }
 
         public void MouseUpComment(MouseButtonEventArgs e)
@@ -772,9 +827,9 @@ namespace Area51.SoftwareModeler.ViewModels
             e.MouseDevice.Target.ReleaseMouseCapture();
 
            
-            if ((action & Action.Resizing) > 0) ResizeShapeDone(comment, mousePosition);
-            else if ((action & Action.MovingClass) > 0 && SelectedComments.Contains(comment)) MoveShapeDone(mousePosition);
-            if ((action & Action.Selecting) > 0 && (action & Action.NoSelecting) == 0)
+            if ((_action & Action.Resizing) > 0) ResizeShapeDone(comment, mousePosition);
+            else if ((_action & Action.MovingClass) > 0 && _selectedComments.Contains(comment)) MoveShapeDone(mousePosition);
+            if ((_action & Action.Selecting) > 0 && (_action & Action.NoSelecting) == 0)
             {
                 SelectComment(comment);
             }
@@ -785,51 +840,53 @@ namespace Area51.SoftwareModeler.ViewModels
             }
             _doubleClickTimer = DateTime.Now.Ticks;
 
-            action = Action.Nothing;
+            _action = Action.Nothing;
         }
         public void MouseUpConnection(MouseButtonEventArgs e) { }
-	   
-  //      public void MouseUp(MouseButtonEventArgs e)
-		//{
-		//	// The ClassView is gotten from the mouse event.
-  //          e.MouseDevice.Target.ReleaseMouseCapture();
-		//	var classData = TargetShape(e);
-  //          var comment = TargetComment(e);
-  //          var connection = TargetConnection(e); 
 
-  //          // The mouse position relative to the target of the mouse event.
-  //          var mousePosition = RelativeMousePosition(e);
-  //          // The mouse is released, as the move operation is done, so it can be used by other controls.
-  //          e.MouseDevice.Target.ReleaseMouseCapture();
+        //      public void MouseUp(MouseButtonEventArgs e)
+        //{
+        //	// The ClassView is gotten from the mouse event.
+        //          e.MouseDevice.Target.ReleaseMouseCapture();
+        //	var classData = TargetShape(e);
+        //          var comment = TargetComment(e);
+        //          var connection = TargetConnection(e); 
 
-  //          if((ButtonDown & ButtonCommand.Connection) > 0 && (action & Action.AddingConnection) > 0)
-  //          //if (!ButtonDown.Equals(ButtonCommand.None) && NewConnectionData != null)
-		//	{
-  //              AddConnection(classData);
-		//	}
-		//	//else if((ButtonDown & ButtonCommand.Shape) > 0 && (action & Action.AddingClass) > 0) // adding shape is made in MouseClick
-  //          else if((action & Action.Resizing) > 0) ResizeShapeDone((ClassView)classData==null? (ClassView) comment : classData, mousePosition);
-  //          else if((action & Action.MovingClass) > 0 && SelectedClasses.Contains(classData)) MoveShapeDone(mousePosition);
-  //          if ((action & Action.Selecting) > 0  && (action & Action.NoSelecting) == 0)
-  //          //else
-  //          {
+        //          // The mouse position relative to the target of the mouse event.
+        //          var mousePosition = RelativeMousePosition(e);
+        //          // The mouse is released, as the move operation is done, so it can be used by other controls.
+        //          e.MouseDevice.Target.ReleaseMouseCapture();
 
-  //              SelectShape(classData);
-  //              SelectComment(comment);
-  //              SelectConnection(connection);
-  //          }
+        //          if((ButtonDown & ButtonCommand.Connection) > 0 && (_action & Action.AddingConnection) > 0)
+        //          //if (!ButtonDown.Equals(ButtonCommand.None) && NewConnectionData != null)
+        //	{
+        //              AddConnection(classData);
+        //	}
+        //	//else if((ButtonDown & ButtonCommand.Shape) > 0 && (_action & Action.AddingClass) > 0) // adding shape is made in MouseClick
+        //          else if((_action & Action.Resizing) > 0) ResizeShapeDone((ClassView)classData==null? (ClassView) comment : classData, mousePosition);
+        //          else if((_action & Action.MovingClass) > 0 && _selectedClasses.Contains(classData)) MoveShapeDone(mousePosition);
+        //          if ((_action & Action.Selecting) > 0  && (_action & Action.NoSelecting) == 0)
+        //          //else
+        //          {
+
+        //              SelectShape(classData);
+        //              SelectComment(comment);
+        //              SelectConnection(connection);
+        //          }
 
 
-  //          if (DateTime.Now.Ticks - _doubleClickTimer < doubleClickTimeout)
-  //          {
-  //              if(classData != null)EditClassContent(classData);
-  //          }
-  //          _doubleClickTimer = DateTime.Now.Ticks;
+        //          if (DateTime.Now.Ticks - _doubleClickTimer < doubleClickTimeout)
+        //          {
+        //              if(classData != null)EditClassContent(classData);
+        //          }
+        //          _doubleClickTimer = DateTime.Now.Ticks;
 
-  //          action = Action.Nothing;
-		//}
+        //          _action = Action.Nothing;
+        //}
+#endregion
 
-	    public void MouseMoveShape(MouseEventArgs e)
+
+        public void MouseMoveShape(MouseEventArgs e)
 	    {
             if (ButtonDown != ButtonCommand.None) return;
         }
@@ -844,6 +901,20 @@ namespace Area51.SoftwareModeler.ViewModels
 			var cmd = TargetCommand(e);
 			CommandController.SetActiveCommand(cmd);
 		}
+
+        public void CollapseNode(MouseEventArgs e)
+        {
+            var cmd = TargetCommand(e).Children.ElementAtOrDefault(0);
+            if (cmd == null) return;
+            if (!cmd.IsCollapsed)
+            {
+                cmd.Collapse();
+            }
+            else
+            {
+                cmd.Expand();
+            }
+        }
 		
 		public void MouseClicked(MouseEventArgs e)
 		{
@@ -853,7 +924,7 @@ namespace Area51.SoftwareModeler.ViewModels
 		        if (e == null) return;
 		        var mousePosition = RelativeMousePosition(e);
 
-		        Point anchorpoint = new Point(mousePosition.X - minShapeWidth/2, mousePosition.Y - minShapeHeight/2);
+		        Point anchorpoint = new Point(mousePosition.X - MinShapeWidth/2, mousePosition.Y - MinShapeHeight/2);
 
 		        // default is normal class/comment --- comment should perhaps have some modifications
 		        string stereoType = "";
@@ -870,14 +941,14 @@ namespace Area51.SoftwareModeler.ViewModels
 		            case ButtonCommand.Class:
 		                break;
 		            case ButtonCommand.Comment:
-                        execCommand(new AddCommentCommand(mousePosition));
+                        ExecCommand(new AddCommentCommand(mousePosition));
 		                return;
 		            default:
 		                return;
 		        }
 
 
-		        execCommand(new AddClassCommand(null, stereoType, isAbstract, anchorpoint));
+		        ExecCommand(new AddClassCommand(null, stereoType, isAbstract, anchorpoint));
 		        // if shift is down, you can add several classes
 		        if (!_multiAdd) ButtonDown = ButtonCommand.None;
 
@@ -897,7 +968,7 @@ namespace Area51.SoftwareModeler.ViewModels
 				MessageBoxResult res = MessageBox.Show("You have already a diagram in progress. Do you want to save first?", "Save current diagram", MessageBoxButton.YesNoCancel);
 				if (res == MessageBoxResult.Yes)
 				{
-					clear = saveFile();
+					clear = SaveFile();
 				}
 				else if (res == MessageBoxResult.Cancel)
 				{
@@ -920,12 +991,12 @@ namespace Area51.SoftwareModeler.ViewModels
 			}
 		}
 
-		private void StartTeamProject()
+		private static void StartTeamProject()
 		{
 			MessageBox.Show("This feature is not implemented yet");
 		}
 
-		private void loadFile()
+		private void LoadFile()
 		{
 			System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
 			ofd.Filter = "XML files (*.xml)|*.xml";
@@ -943,12 +1014,12 @@ namespace Area51.SoftwareModeler.ViewModels
 			}
 		}
 		
-		private void saveFileCmd()
+		private void SaveFileCmd()
 		{
-			saveFile();
+			SaveFile();
 		}
 
-	    private void generateCode()
+	    private void GenerateCode()
 	    {
            
             FolderBrowserDialog fbd = new FolderBrowserDialog();
@@ -958,42 +1029,40 @@ namespace Area51.SoftwareModeler.ViewModels
             CodeGen.GenerateJavaCode(fbd.SelectedPath);
         }
 
-		private bool saveFile()
+		private bool SaveFile()
 		{
-            bool saved = false;
             SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = "XML files (*.xml)|*.xml";
 			sfd.Title = "Save diagram as xml";
 			sfd.ShowDialog();
 
 			// If the file name is not an empty string open it for saving.
-			if (sfd.FileName == "") return saved;
-			System.IO.FileStream filestream = (System.IO.FileStream)sfd.OpenFile();
+			if (sfd.FileName == "") return false;
+			FileStream filestream = (FileStream)sfd.OpenFile();
 			   
 			CommandTree.AsyncSave(CommandController, filestream);
-			saved = true;
-			return saved;
+		
+			return true;
 		}
 
-        private void Help()
+        private static void Help()
         {
-
-            string msg =      "CTRL+S : save file\n"
-                            + "CTRL+O : load file\n"
-                            + "CTRL+Z : Undo\n"
-                            + "CTRL+Y : Redo\n"
-                            + "CTRL+Right click : select multiple classes\n"
-                            + "CTRL+C : copy selected objects. Connections not included\n"
-                            + "CTRL+V : paste the copied objects\n"
-                            + "LSHIFT/RSHIFT : allows to add multiple classes/connections without selecting inbetween in the toolbox\n"
-                            + "ESC : clear selections\n"
-                            + "DEL : delete selected objects. Connections can only be deleted by deleting one of the classes connected to it\n"
-                            + "Double click : edit content of class\n"
-                            + "Click on number in command tree to browse history";
+            const string msg = "CTRL+S : save file\n"
+                               + "CTRL+O : load file\n"
+                               + "CTRL+Z : Undo\n"
+                               + "CTRL+Y : Redo\n"
+                               + "CTRL+Right click : select multiple classes\n"
+                               + "CTRL+C : copy selected objects. Connections not included\n"
+                               + "CTRL+V : paste the copied objects\n"
+                               + "LSHIFT/RSHIFT : allows to add multiple classes/connections without selecting inbetween in the toolbox\n"
+                               + "ESC : clear selections\n"
+                               + "DEL : delete selected objects. Connections can only be deleted by deleting one of the classes connected to it\n"
+                               + "Double click : edit content of class\n"
+                               + "Click on number in command tree to browse history";
             MessageBox.Show(msg, "available shortcuts");
         }
 
-		private void AddComposition()
+        private void AddComposition()
 		{
 			ButtonDown = (ButtonDown.Equals(ButtonCommand.Composition) ? ButtonCommand.None : ButtonCommand.Composition);
 		}
@@ -1042,14 +1111,22 @@ namespace Area51.SoftwareModeler.ViewModels
 			return shapeVisualElement.DataContext as BaseCommand;
 		}
 
-	    private ConnectionData TargetConnection(MouseEventArgs e)
-	    {
+	    //private ConnectionData TargetConnection(MouseEventArgs e)
+	    //{
+     //       // Here the visual element that the mouse is captured by is retrieved.
+     //       var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+	    //    // From the shapes visual element, the ClassData object which is the DataContext is retrieved.
+     //       return shapeVisualElement?.DataContext as ConnectionData;
+     //   }
+
+        private ConnectionData TargetConnection(MouseEventArgs e)
+        {
             // Here the visual element that the mouse is captured by is retrieved.
             var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-	        // From the shapes visual element, the ClassData object which is the DataContext is retrieved.
+
+            // From the shapes visual element, the ClassData object which is the DataContext is retrieved.
             return shapeVisualElement?.DataContext as ConnectionData;
         }
-
 		private ClassData TargetShape(MouseEventArgs e)
 		{
 			// Here the visual element that the mouse is captured by is retrieved.
@@ -1079,27 +1156,24 @@ namespace Area51.SoftwareModeler.ViewModels
 				return Mouse.GetPosition(shapeVisualElement);
 
 			}
-            else if (shapeVisualElement is Grid)
+            if (shapeVisualElement is Grid)
             {
                 return Mouse.GetPosition(shapeVisualElement);
             }
-			else
-			{
-				var canvas = FindParentOfType<Canvas>(shapeVisualElement);
-				return Mouse.GetPosition(canvas);
-			}
-			// The mouse position relative to the canvas is gotten here.
+            var canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            return Mouse.GetPosition(canvas);
+            // The mouse position relative to the canvas is gotten here.
 
 		}
 		private static T FindParentOfType<T>(DependencyObject o)
 		{
 			
-			dynamic parent = (o == null ? null : VisualTreeHelper.GetParent(o));
+			dynamic parent = o == null ? null : VisualTreeHelper.GetParent(o);
 			if (parent == null) return parent;
 			return parent.GetType().IsAssignableFrom(typeof(T)) ? parent : FindParentOfType<T>(parent);
 		}
 
-		public void execCommand(BaseCommand command)
+		public void ExecCommand(BaseCommand command)
 		{
 			CommandController.AddAndExecute(command);
 			

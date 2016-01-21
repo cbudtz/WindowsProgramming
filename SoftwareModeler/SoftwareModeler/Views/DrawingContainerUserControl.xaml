@@ -8,16 +8,21 @@
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-    <Grid Name="MainGrid" ZIndex="2" IsHitTestVisible="True" Background="yellow" >
-        <ItemsControl ItemsSource="{Binding Connections}"/>
-        <ItemsControl ItemsSource="{Binding Comments}"/>
-        <ItemsControl ItemsSource="{Binding Classes}"/>
-        <i:Interaction.Triggers>
-            <i:EventTrigger EventName="MouseUp">
-                <cmd:EventToCommand Command="{Binding Path=MouseClickCommand}" PassEventArgsToCommand="True"/>
-            </i:EventTrigger>
-        </i:Interaction.Triggers>
-    </Grid>
+    <ScrollViewer Name="MainViewScroll" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+
+        <Canvas Name="MainCanvas" IsHitTestVisible="True" Background="Transparent">
+            <!--<Grid Background="Transparent" Name="MainGrid">-->
+            <ItemsControl ItemsSource="{Binding Connections}"/>
+            <ItemsControl ItemsSource="{Binding Comments}"/>
+            <ItemsControl Name="ItemsClass" ItemsSource="{Binding Classes}"/>
+        
+            <!--</Grid>--><!--</Grid>-->
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseUp">
+                    <cmd:EventToCommand Command="{Binding Path=MouseClickCommand}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Canvas>
+       
     </ScrollViewer>
 </UserControl>

@@ -9,7 +9,7 @@
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:ViewModel="clr-namespace:Area51.SoftwareModeler.ViewModels"
         xmlns:Views="clr-namespace:Area51.SoftwareModeler.Views"
-        Title="MainWindow" Height="800" Width="1600"
+        Title="MainWindow" Height="400" Width="800"
         >
     <Window.DataContext>
         <ViewModel:MainViewModel />
@@ -17,7 +17,7 @@
 
     <DockPanel >
         <Views:ToolboxUserControl DockPanel.Dock="Left"/>
-        <Views:CommandTreeView DockPanel.Dock="Right" Width="300" HorizontalAlignment="Right"/>    
+        <Views:CommandTreeView DockPanel.Dock="Right" Width="100" HorizontalAlignment="Right"/>    
         <Views:DrawingContainerUserControl HorizontalAlignment="Stretch"/>
     </DockPanel>
     <i:Interaction.Triggers>

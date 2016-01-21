@@ -37,7 +37,7 @@ namespace Area51.SoftwareModeler.Models
         //    NotifyPropertyChanged("CanvasCenterX");
         //  }
         //public Thickness Position => new Thickness(X,Y,-X,-Y);
-        public Thickness Position => new Thickness(X, Y, 0, 0);
+        public Thickness Position => new Thickness(X, Y, Width, Height);
 
         //public Point PositionPoint { get
 
