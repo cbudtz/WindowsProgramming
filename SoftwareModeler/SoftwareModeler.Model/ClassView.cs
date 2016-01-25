@@ -20,22 +20,7 @@ namespace Area51.SoftwareModeler.Models
         public Point InitialPosition { get; set; }
 
         private double x = 200;
-        // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
-        //  it uses the compiler to get the name of the calling property, 
-        //  which in this case is the name of the property that has changed.
-        // A lambda expression can be given, because the 'NotifyPropertyChanged' method can get the property name from it.
-        // Java:
-        //  private double x;
-        // 
-        //  public double getX(){
-        //    return x;
-        //  }
-        //
-        //  public void setX(double value){
-        //    x = value;
-        //    NotifyPropertyChanged();
-        //    NotifyPropertyChanged("CanvasCenterX");
-        //  }
+  
         //public Thickness Position => new Thickness(X,Y,-X,-Y);
         public Thickness Position => new Thickness(X, Y, Width, Height);
 
@@ -44,73 +29,16 @@ namespace Area51.SoftwareModeler.Models
         public double X { get { return x; } set { x = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => CanvasCenterX); NotifyPropertyChanged(() => Position); } }
 
         private double y = 200;
-        // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
-        //  it uses the compiler to get the name of the calling property, 
-        //  which in this case is the name of the property that has changed.
-        // A lambda expression can be given, because the 'NotifyPropertyChanged' method can get the property name from it.
-        // Java:
-        //  private double y;
-        // 
-        //  public double getY(){
-        //    return y;
-        //  }
-        //
-        //  public void setY(double value){
-        //    y = value;
-        //    NotifyPropertyChanged();
-        //    NotifyPropertyChanged("CanvasCenterY");
-        //  }
+       
         public double Y { get { return y; } set { y = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => CanvasCenterY); NotifyPropertyChanged(() => Position);} }
 
         private double width = 150;
-        // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
-        //  it uses the compiler to get the name of the calling property, 
-        //  which in this case is the name of the property that has changed.
-        // A lambda expression can be given, because the 'NotifyPropertyChanged' method can get the property name from it.
-        // Java:
-        //  private double width;
-        // 
-        //  public double getWidth(){
-        //    return width;
-        //  }
-        //
-        //  public void setWidth(double value){
-        //    width = value;
-        //    NotifyPropertyChanged();
-        //    NotifyPropertyChanged("CanvasCenterX");
-        //    NotifyPropertyChanged("CenterX");
-        //  }
+      
         public double Width { get { return width; } set { width = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => CanvasCenterX); NotifyPropertyChanged(() => CenterX); } }
 
         private double height = 100;
-        // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
-        //  it uses the compiler to get the name of the calling property, 
-        //  which in this case is the name of the property that has changed.
-        // A lambda expression can be given, because the 'NotifyPropertyChanged' method can get the property name from it.
-        // Java:
-        //  private double height;
-        // 
-        //  public double getHeight(){
-        //    return height;
-        //  }
-        //
-        //  public void setHeight(double value){
-        //    height = value;
-        //    NotifyPropertyChanged();
-        //    NotifyPropertyChanged("CanvasCenterY");
-        //    NotifyPropertyChanged("CenterY");
-        //  }
+       
         public double Height { get { return height; } set { height = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => CanvasCenterY); NotifyPropertyChanged(() => CenterY); } }
-
-        // Derived properties.
-        // Corresponds to making a Getter method in Java (for instance 'public int GetCenterX()'), 
-        //  that does not have its own private field, but is calculated from other fields and properties. } }
-        // The CanvasCenterX and CanvasCenterY derived properties are used by the Line class, 
-        //  so it can be drawn from the center of one ClassView to the center of another ClassView.
-        // NOTE: In the 02350SuperSimpleDemo these derived properties are called CenterX and CenterY, 
-        //        but in this demo we need both these and derived properties for the coordinates of the ClassView, 
-        //        relative to the upper left corner of the ClassView. This is an example of a breaking change, 
-        //        that is changed during the lifetime of an application, because the requirements change.
 
         // A lambda expression can be given, because the 'NotifyPropertyChanged' method can get the property name from it.
         public double CanvasCenterX { get { return X + Width / 2; } set { X = value - Width / 2; NotifyPropertyChanged(() => X); } }
@@ -118,38 +46,15 @@ namespace Area51.SoftwareModeler.Models
         // A lambda expression can be given, because the 'NotifyPropertyChanged' method can get the property name from it.
         public double CanvasCenterY { get { return Y + Height / 2; } set { Y = value - Height / 2; NotifyPropertyChanged(() => Y); } }
 
-        // The CenterX and CenterY properties are used by the ClassView animation to define the point of rotation.
-        // NOTE: These derived properties are diffent from the ClassView properties with the same names, 
-        //        from the 02350SuperSimpleDemo, see above for an explanation.
-        // This method uses an expression-bodied member (http://www.informit.com/articles/article.aspx?p=2414582) to simplify a method that only returns a value;
-        // Java:
-        //  public double getCenterX(){
-        //    return X + Width / 2;
-        //  }
+        
         public double CenterX => Width / 2;
 
-        // Java:
-        // This method uses an expression-bodied member (http://www.informit.com/articles/article.aspx?p=2414582) to simplify a method that only returns a value;
-        //  public double getCenterY(){
-        //    return Y + Height / 2;
-        //  }
+       
         public double CenterY => Height / 2;
 
-        // ViewModel properties.
-        // These properties should be in the ViewModel layer, but it is easier for the demo to put them here, 
-        //  to avoid unnecessary complexity.
-        // NOTE: This breaks the seperation of layers of the MVVM architecture pattern.
-        //       To avoid this a ShapeViewModel class should be created that wraps all ClassView objects, 
-        //        but it adds to the complexity of the ViewModel layer and this demo and a simpler solution was chosen for the demo.
-        //        (this also adds a reference to the PresentationCore class library which is part of .NET, 
-        //         but should not be used in the Model layer, creating an unnecessary dependency for the Model layer class library).
-        //       To learn how to avoid this and create an application with a more pure MVVM architecture pattern, 
-        //        please ask the Teaching Assistants.
+       
         private bool isSelected;
-        // The reason no string is given to the 'NotifyPropertyChanged' method is because, 
-        //  it uses the compiler to get the name of the calling property, 
-        //  which in this case is the name of the property that has changed.
-        // A lambda expression can be given, because the 'NotifyPropertyChanged' method can get the property name from it.
+
         public bool IsSelected { get { return isSelected; } set { isSelected = value; NotifyPropertyChanged(); NotifyPropertyChanged(() => SelectedColor); } }
         // This method uses an expression-bodied member (http://www.informit.com/articles/article.aspx?p=2414582) to simplify a method that only returns a value;
         public Brush SelectedColor => IsSelected ? Brushes.Red : Brushes.Yellow;

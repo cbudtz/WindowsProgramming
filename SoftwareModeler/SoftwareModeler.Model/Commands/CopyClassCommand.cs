@@ -48,5 +48,10 @@ namespace Area51.SoftwareModeler.Models.Commands
             toCopy.Attributes.ForEach(x => copy.AddAttribute(x.Type, x.Name));
             copyId = copy.id;
         }
+
+        public override string UpdateInfo()
+        {
+            return "\tCopied Class\n";
+        }
     }
 }

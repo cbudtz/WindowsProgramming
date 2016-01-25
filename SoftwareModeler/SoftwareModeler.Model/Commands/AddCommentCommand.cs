@@ -31,5 +31,10 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             
         }
+
+        public override string UpdateInfo()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -25,13 +25,24 @@ namespace Area51.SoftwareModeler.Models.Commands
     {
         //Static
         public static int nextid = 0;
+        public static int nextBranchLayer = 1;
 
+        public int Id { get; set; }
         public int BranchLayer { get; set; }
 
-        public int numCollapsed { get; set; } = 0;
+        //private string _info;
+        public string Info { get { return UpdateInfo(); } set { NotifyPropertyChanged(); } }
 
-        private bool isCollapsed = false;
-        public bool IsCollapsed { get {return isCollapsed; } set { isCollapsed = value; NotifyPropertyChanged();
+
+        #region collapse properties
+        private static List<CollapseBounds> bounds = new List<CollapseBounds>();  
+        private bool _isCollapseRoot;
+        public bool IsCollapseRoot { get { return _isCollapseRoot; } set { _isCollapseRoot = value; NotifyPropertyChanged(); } }
+        private bool _isRootCollapsed;
+        public bool IsRootCollapsed { get {return _isRootCollapsed;} set { _isRootCollapsed = value; NotifyPropertyChanged(); } }
+
+        private bool _isCollapsed;
+        public bool IsCollapsed { get {return _isCollapsed; } set { _isCollapsed = value; NotifyPropertyChanged();
             if (value)
             {
                 ShapeCollector.GetI().treeArrows.Remove(LineToParent);
@@ -41,105 +52,334 @@ namespace Area51.SoftwareModeler.Models.Commands
                ShapeCollector.GetI().treeArrows.Add(LineToParent);
                 }
         } }
+
+        private bool _isActive;
+        public bool IsActive { get { return _isActive; } set { _isActive = value; NotifyPropertyChanged(); } }
+        private bool _isCollapseable;
+        public bool IsCollapseable { get { return _isCollapseable; } set { _isCollapseable = value; NotifyPropertyChanged(); } }
+
         
-        private bool collapseable = false;
-        public bool Collapseable { get { return collapseable; } set { collapseable = value; NotifyPropertyChanged(); } }
+        public int X { get { return BranchLayer; } set { BranchLayer = value; NotifyPropertyChanged(); } }
+        private int _y;
+        public int Y { get { return _y; } set { _y = value; NotifyPropertyChanged(); } }
 
-        private bool hasCollapseableChild = false;
-        public bool HasCollapseableChild { get { return hasCollapseableChild; } set { hasCollapseableChild = value; NotifyPropertyChanged(); } }
-        private int y;
-        public int prevY;
-        public int Y { get { return y; } set { y = value; NotifyPropertyChanged(); } }
+        
 
+        #endregion
+
+        [XmlIgnore] private LineCommandTree _lineToParent;
         [XmlIgnore]
-        public LineCommandTree LineToParent { get; set; }
-        [XmlIgnore]
-        //private Color color = Colors.Azure;
-        private SolidColorBrush color = new SolidColorBrush(Colors.Azure);
-        [XmlIgnore]
-        public SolidColorBrush Color { get { return color; } set { color = value; NotifyPropertyChanged(); } }
+        public LineCommandTree LineToParent { get { return _lineToParent; } set { _lineToParent = value; NotifyPropertyChanged(); } }
+  
         //Fields
-        protected string parentstr = "hey";
-        protected BaseCommand parent = null;
+        
         protected List<BaseCommand> children = new List<BaseCommand>();
-        public int Id { get; set; }
+        
 
         //Getters and setters
+        private BaseCommand _parent = null;
         [XmlIgnore]
-        public BaseCommand Parent { get { return parent; } set { parent = value; Y = Id*30 - numCollapsed*30;
-            if (children.Count == 0 && value != null) Collapseable = true;
-        } }
+        public BaseCommand Parent { get { return _parent; } set { _parent = value; CreateLineToParent();}}
         public List<BaseCommand> Children { get { return children; } }
 
         //Abstract - Command pattern
         public abstract void execute();
         public abstract void unExecute();
 
-        public int CalculateCollapseHeight()
-        {
-            if (children.Count == 0) return 1;
-            if (!Collapseable) return 0;
-            return children.ElementAt(0).CalculateCollapseHeight() + 1;
-            
-        }
-        public void Collapse()
-        {
-
-            if (parent != null)
-            {
-                prevY = y;
-                Y = parent.Y;
-            }
-            if (collapseable && children.Count <= 1)
-            {
-                IsCollapsed = true;
-                Children.ForEach(x=> x.Collapse());
-            }    
-        }
-
-        private void CollapseNodes()
-        {
-            
-        }
-        public void Expand()
-        {
-            if (parent != null)
-            {
-                Y = prevY;
-            }
-            
-            IsCollapsed = false;
-            children.ForEach(x=> x.Expand());
-            
-        }
-        //Inherited methods
-        public  int addChild(BaseCommand child, int currentBranchLayer)
-        {
-            
-            if (children.Count == 0)
-            {
-                child.BranchLayer = this.BranchLayer;
-            }
-            else
-            {
-                child.BranchLayer = ++currentBranchLayer;
-            }
-            Console.WriteLine(currentBranchLayer + "CurrentBranchLayer");
-            children.Add(child);
-            if (children.Count > 1 && parent != null) Collapseable = false;
-            else Collapseable = true;
-            return currentBranchLayer;
-        }
         public BaseCommand()
         {
-            this.Id = BaseCommand.getNextId();
-            
+            this.Id = BaseCommand.GetNextId();
+            Y = Id;
+            bounds.Where(x=> x.UpperBoundId < Id).ToList().ForEach(x=> Y-= x.CollapseHeight);
+
         }
 
-        public static int getNextId()
+        private static int GetNextId()
         {
             return nextid++;
         }
+
+        private static int GetNextBranchLayer()
+        {
+            return nextBranchLayer++;
+        }
+
+        protected void Collapse(BaseCommand collapseRoot, int lowerBound, int upperBound)
+        {
+            BaseCommand child = children.ElementAtOrDefault(0);
+            if (IsCollapseable)
+            {
+                IsCollapsed = true;
+                if (Id - _parent.Id > 1)
+                {
+                    Console.WriteLine("added extra bound: " + lowerBound + "->" + upperBound + "==" + _parent.Id +
+                                      ";" + Id + "->" + Id);
+                    if (lowerBound <= _parent.Id) bounds.Add(new CollapseBounds(collapseRoot.Id, lowerBound, _parent.Id));
+                    lowerBound = Id;
+                }
+                if (child != null)
+                {
+                    //Console.WriteLine("parentId-Id: " + (_parent.Id - Id));
+                    
+                    child.Collapse(collapseRoot, lowerBound, Id);
+                    return;
+                }
+                
+                    upperBound = Id;
+                    Console.WriteLine("CHILD IS NULL");
+            }
+            
+                bounds.Add(new CollapseBounds(collapseRoot.Id, lowerBound, IsCollapseable ? upperBound : Id));
+            Console.WriteLine("##########################");
+            bounds.ForEach(x => Console.WriteLine("bound: " + x.CollapseRoot + ": " + x.LowerBoundId + "-->" + x.UpperBoundId + " ; " + x.CollapseHeight));
+            Console.WriteLine("##########################");
+            //Console.WriteLine("collapse height: " + ShapeCollector.GetI().Commands.ElementAtOrDefault(0).Id);
+            ShapeCollector.GetI().Commands.ElementAtOrDefault(0)?.CollapseHeight(collapseRoot);
+            
+        }
+
+        public void CollapseNodes()
+        {
+            BaseCommand child = children.ElementAtOrDefault(0);
+            if (child != null && child.IsCollapseable)
+            {
+                if (child.IsCollapsed)
+                {
+                    IsRootCollapsed = false;
+                    int num = bounds.RemoveAll(x => x.CollapseRoot == Id);
+                    child.Expand(this);
+                    
+                    
+                    Console.WriteLine("removed bounds: " + num);
+                }
+                else{
+                    IsRootCollapsed = true;
+                    child.Collapse(this, child.Id, child.Id);
+                }
+            }
+        }
+
+        public void Expand(BaseCommand root)
+        {
+            if (_isCollapseable)
+            {
+                IsCollapsed = false;
+                BaseCommand child = children.ElementAtOrDefault(0);
+                if (child != null)
+                {
+                    child.Expand(root);
+                    return;
+                }
+            }
+            Console.WriteLine("##########################");
+            bounds.ForEach(x => Console.WriteLine("bound: " + x.CollapseRoot + ": " + x.LowerBoundId + "-->" + x.UpperBoundId + " ; " + x.CollapseHeight));
+            Console.WriteLine("##########################");
+            ShapeCollector.GetI().Commands.ElementAtOrDefault(0)?.CollapseHeight(root);
+        }
+
+        /*
+        can be used both when collapsing and when expanding
+        */
+        protected void CollapseHeight(BaseCommand collapseRoot)
+        {
+            
+            int height = Id;
+            foreach (var b in bounds)
+            {
+                Console.WriteLine("check: " + b.CollapseRoot + "==" + collapseRoot.Id);
+                if (b.CollapseRoot == collapseRoot.Id)
+                {
+                    Console.WriteLine("root: " + b.LowerBoundId + "->" + b.UpperBoundId);
+                    if(b.UpperBoundId <= Id) Console.WriteLine("upper bound: " + Id);
+                }
+            }
+
+            //bounds.Where(x=> x.CollapseRoot == collapseRoot.Id && x.UpperBoundId <= Id).ToList().ForEach(x=> Y+= collapseRoot.IsRootCollapsed ? -x.CollapseHeight : x.CollapseHeight);
+            bounds.Where(x=> x.UpperBoundId <= Id).ToList().ForEach(x => height-= x.CollapseHeight);
+            Y = height;
+            Console.WriteLine("height set: " + Id + ";" + height + ";" + Y);
+
+            LineToParent?.UpdateLine();
+            children.ForEach(x=> x.CollapseHeight(collapseRoot));
+
+            UpdateLineToParent();
+        }
+
+        private void CreateLineToParent()
+        {
+            if(LineToParent != null) UpdateLineToParent();
+
+            BranchLayer = Parent.children.Count == 0 ? Parent.BranchLayer : GetNextBranchLayer();
+            
+            LineToParent = new LineCommandTree(_parent, this);
+            LineToParent.IsActive = true;
+            ShapeCollector.GetI().treeArrows.Add(LineToParent);
+        }
+
+        private void UpdateLineToParent()
+        {
+            LineToParent?.UpdateLine();
+        }
+
+        //Inherited methods
+        public  void addChild(BaseCommand child)
+        {
+            child.Parent = this;
+            children.Add(child);
+            //Console.WriteLine("1#########################" +
+            //                  "\nchildcount: " + children.Count +
+            //                  "\nIsRoot: " + (_parent == null ? "null" : "" + _parent.IsCollapseRoot) + "-" + IsCollapseRoot + "-" + Children.ElementAt(0).IsCollapseRoot + ";" + child.IsCollapseRoot +
+            //                  "\nisCollaps: " + (_parent == null ? "null" : "" + _parent.IsCollapseable) + "-" + IsCollapseable + "-" + Children.ElementAt(0).IsCollapseable + ";" + child.IsCollapseable +
+            //                  "\n#########################");
+            //child.IsCollapseRoot = IsCommandCollapseRoot(child); // doesn't matter. should never be the case
+
+            if (children.Count > 1 && IsCollapsed)
+            {
+                int rootId = bounds.First(x => x.LowerBoundId <= Id && x.UpperBoundId >= Id).CollapseRoot;
+                ShapeCollector.GetI().Commands.First(x=> x.Id == rootId).CollapseNodes();
+            }
+
+            if (_parent != null)
+            {
+                #region _parent IsCollapsedRoot and IsCollapeable properties set
+
+                if (_parent.children.Count == 1)
+                {
+                    if (children.Count == 1)
+                    {
+                        //_parent.IsCollapseRoot = true;
+                    }
+                    else
+                    {
+                        _parent.IsCollapseRoot = false;
+                        if (_parent._parent != null && (_parent._parent.IsCollapseRoot || _parent._parent.IsCollapseable))
+                        {
+                            _parent.IsCollapseable = true;
+                        }
+                    }
+                }
+                else
+                {
+                    if (_parent.IsCollapseRoot && children.Count > 1)
+                    {
+                        _parent.IsCollapseRoot = false;
+                    }
+                }
+                #endregion
+            }
+
+            #region this collapse properties
+            if (_parent == null && children.Count == 1) IsCollapseRoot = true;
+            else if (_parent != null)
+            {
+                if (_parent.IsCollapseRoot)
+                {
+                    if (_parent.BranchLayer != BranchLayer)
+                    {
+                        if (children.Count == 1 || children.ElementAt(0).IsCollapseable)
+                        {
+                            IsCollapseRoot = true;
+                            IsCollapseable = false;
+                        }
+                    }
+                    else if (children.Count == 1)
+                    {
+                        IsCollapseRoot = false;
+                        IsCollapseable = true;
+                    }
+                    else
+                    {
+                        if (children.ElementAt(0).IsCollapseable)
+                        {
+                            IsCollapseRoot = true;
+                            IsCollapseable = false;
+                        }
+                    }
+
+
+                }
+                else if (_parent.IsCollapseable)
+                {
+                    if (children.Count == 1)
+                    {
+                        IsCollapseRoot = false;
+                        IsCollapseable = true;
+                    }
+                    else if(children.ElementAt(0).IsCollapseable)
+                    {
+                        IsCollapseRoot = true;
+                        IsCollapseable = false;
+                    }
+                }
+                else
+                {
+                    if (_parent.BranchLayer != BranchLayer)
+                    {
+                        IsCollapseRoot = true;
+                        IsCollapseable = false;
+                    }
+                    if (children.Count > 1 && children.ElementAt(0).IsCollapseable)
+                    {
+                        IsCollapseRoot = true;
+                        IsCollapseable = false;
+                    }
+                }
+            }
+            #endregion
+
+            if (IsCollapseRoot || IsCollapseable)
+            {
+                if (children.Count == 1)
+                {
+                    child.IsCollapseable = true;
+                }
+            }
+
+
+            if (IsCollapsed && children.Count == 1)
+            {
+                Console.WriteLine("test here: " + Id + ";" + child.Id);
+                bounds.ForEach(x => Console.WriteLine("bound: " + x.CollapseRoot + ";" + x.LowerBoundId + ";" + x.UpperBoundId));
+                CollapseBounds bound = bounds.FirstOrDefault(x => x.UpperBoundId == Id);
+                if (bound != null)
+                {
+                    if (child.Id - Id > 1)
+                    {
+                        bounds.Add(new CollapseBounds(bound.CollapseRoot, child.Id, child.Id));
+                    }
+                    else
+                    {
+                        Console.WriteLine("removed bound: " + bounds.Remove(bound));
+                        bounds.Add(new CollapseBounds(bound.CollapseRoot, bound.LowerBoundId, child.Id));
+
+                    }
+                }
+                if (bound == null) Console.WriteLine("BOUND IS NULL");
+                child.IsCollapseable = true;
+                child.IsCollapsed = true;
+            }
+
+        }
+
+        public abstract string UpdateInfo();
+
         public String CommandType { get { return this.GetType().Name.Substring(0, 1); } }
+    }
+
+    class CollapseBounds
+    {
+        public int CollapseRoot { get; }
+        public int UpperBoundId { get; }
+        public int LowerBoundId { get; }
+        public int CollapseHeight { get; }
+
+        public CollapseBounds(int collapseRootId, int lowerId, int upperId)
+        {
+            CollapseRoot = collapseRootId;
+            UpperBoundId = upperId;
+            LowerBoundId = lowerId;
+            CollapseHeight = upperId - lowerId+1;
+            Console.WriteLine("bounds: " + lowerId + ";" + upperId + ";" + CollapseHeight);
+        }
     }
 }

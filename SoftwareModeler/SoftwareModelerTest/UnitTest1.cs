@@ -135,7 +135,7 @@ namespace SoftwareModelerTest
 
         public void AddConnection(int id1, int id2)
         {
-            ct.AddAndExecute(new AddConnectionCommand(id1, "", id2, "", ConnectionType.Association));
+            //ct.AddAndExecute(new AddConnectionCommand(id1, "", id2, "", ConnectionType.Association));
         }
 
         public static List<Area51.SoftwareModeler.Models.Attribute> GetAttributes()

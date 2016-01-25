@@ -30,7 +30,7 @@ namespace TestApp
 
 
 
-            cTree.Name = "Fancy Name";
+            //cTree.Name = "Fancy Name";
            // command.
             CommandTree.Save(cTree);
             Console.WriteLine("ClassView.NextId: " + ClassData.nextId);
@@ -43,8 +43,8 @@ namespace TestApp
             Console.WriteLine("root id: " + commandTreeCopy.Root.Id);
             Console.WriteLine("root child id: " + commandTreeCopy.Root.Children.ElementAt(0).Id);
             Console.WriteLine("root child child id: " + commandTreeCopy.Root.Children.ElementAt(0).Children.ElementAt(0).Id);
-            Console.WriteLine("active parent id: " + commandTreeCopy.Active.Parent.Id);
-            Console.WriteLine("active parent parent id: " + commandTreeCopy.Active.Parent.Parent.Id);
+            Console.WriteLine("active _parent id: " + commandTreeCopy.Active.Parent.Id);
+            Console.WriteLine("active _parent _parent id: " + commandTreeCopy.Active.Parent.Parent.Id);
             Console.WriteLine("nextShapeID: " + ClassData.nextId);
             Console.WriteLine("Shapes In shapeCollector: " + ShapeCollector.GetI().ObsShapes.Count);
 

@@ -46,5 +46,12 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             ShapeCollector.GetI().ObsConnections.Remove(ShapeCollector.GetI().GetConnectionById(Conn.ConnectionId));
         }
+
+        public override string UpdateInfo()
+        {
+            return "\t Added Connection\n" +
+                   "From: " + ShapeCollector.GetI().GetShapeById(FromId).Name + "\n" +
+                   "To: " + ShapeCollector.GetI().GetShapeById(ToId).Name;
+        }
     }
 }

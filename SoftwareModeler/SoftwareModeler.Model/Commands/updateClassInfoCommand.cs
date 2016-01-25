@@ -63,6 +63,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public override void execute()
         {
             ClassData classDataToUpdate = ShapeCollector.GetI().GetShapeById(classID) as ClassData;
+            Console.WriteLine("new name: " + ClassName);
             if (classDataToUpdate != null && ClassName != null) classDataToUpdate.Name = ClassName;
             if (classDataToUpdate != null && StereoType != null) classDataToUpdate.StereoType = StereoType;
             if (classDataToUpdate != null) classDataToUpdate.IsAbstract = IsAbstract.Value;
@@ -84,5 +85,10 @@ namespace Area51.SoftwareModeler.Models.Commands
             }
 
     }
+
+        public override string UpdateInfo()
+        {
+            return "\tUpdate Class\t";
+        }
     }
 }

@@ -1,13 +1,19 @@
 ﻿<Window x:Class="Area51.SoftwareModeler.Views.EditClassPopupWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        
-        xmlns:ViewModel="clr-namespace:Area51.SoftwareModeler.ViewModels"
-  
-        Title="Edit ClassData" Height="430" Width="450">
-
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
+             xmlns:models="clr-namespace:Area51.SoftwareModeler.Models;assembly=SoftwareModeler.Model"
+             xmlns:helpers="clr-namespace:Area51.SoftwareModeler.Helpers;assembly=SoftwareModeler.Model"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+            Title="Edit Class"
+        >
     <Window.Resources>
-        <ViewModel:MainViewModel x:Key="viewModel"></ViewModel:MainViewModel>
+        <!--<ViewModel:MainViewModel x:Key="viewModel"></ViewModel:MainViewModel>-->
 
         <Style TargetType="{x:Type DataGridRow}">
             <Style.Triggers>
@@ -65,13 +71,13 @@
             
         </Grid>-->
         <TextBox Grid.Row="4" Grid.Column="0" IsEnabled="False" Text="methods:" />
-       
-            <DataGrid Grid.Row="4" Grid.Column="1" Name="Methods" Height="150"
+
+        <DataGrid Grid.Row="4" Grid.Column="1" Name="Methods" Height="150"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" HeadersVisibility="Column"
                   AutoGenerateColumns="True" CanUserSortColumns="False">
 
-            </DataGrid>
-      
+        </DataGrid>
+
         <Grid Grid.Row="5" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

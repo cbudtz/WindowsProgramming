@@ -5,49 +5,50 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
              xmlns:ViewModel="clr-namespace:Area51.SoftwareModeler.ViewModels"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             Width="300"
+             MinWidth="100"
+             MaxWidth="500"
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.DataContext>
         <ViewModel:MainViewModel />
     </UserControl.DataContext>
     <UserControl.Resources>
-        <Style x:Key="ResizeStyle" TargetType="Border">
-            <Setter Property="Background" Value="LightGray"/>
-            <Style.Triggers>
-                <Trigger Property="Border.IsMouseDirectlyOver" Value="True">
-                    <Setter Property="Cursor" Value="SizeWE"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
+        <ResourceDictionary Source="Styles/CommandTreeStyle.xaml"/>
     </UserControl.Resources>
-    <!--scrollpanel-->
     
-    <Border Padding="2,0,0,0" Style="{StaticResource ResizeStyle}">
-    
+    <Border Style="{StaticResource ResizeStyle}">
+
         <ScrollViewer Name="CommandScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True" >
+
             <!--backround color of the scrollpannel-->
             <ScrollViewer.Background>
                 <LinearGradientBrush StartPoint="0.5,0">
                     <GradientStop Color="White" Offset="0.9"/>
-                    <GradientStop Color="LightGray" Offset="0.07"/>
+                    <GradientStop Color="LightBlue" Offset="0.07"/>
                 </LinearGradientBrush>
             </ScrollViewer.Background>
-        <!--A canvas surrounding the collection of commands, this is here to make sure the scrollviewer updates to the correct size.
+            <!--A canvas surrounding the collection of commands, this is here to make sure the scrollviewer updates to the correct size.
         It takes the max number of "command" objects as height, and the max debth of the tree as width.
         The valueconverter is used to match the width of the "command" object-->
-        
-        <Canvas  Name="CommandCanvas" VerticalAlignment="Top" HorizontalAlignment="Left" 
+
+            <Canvas  Name="CommandCanvas" VerticalAlignment="Top" HorizontalAlignment="Left" 
                  Height="{Binding Commands.Count, Converter={StaticResource nodeCoordinateConverter}}" 
                  Width="{Binding  MaxBranchLayer.Count, Converter={StaticResource nodeCoordinateConverter}}">
-            
 
-            <!--The itemcontrol that contains the CommandNodeView-usercontroll-->
-            <ItemsControl Name="CommandsItems" ItemsSource="{Binding Commands}" Margin= "{Binding Commands, Converter={StaticResource nodeCoordinateConverter}}"/>
-            <!--The itemcontroll that contains the lines, linking command-nodes in the tree. Drawn as simplified connections.-->
-            <ItemsControl ItemsSource="{Binding TreeArrows}"/>
-        </Canvas>
-    </ScrollViewer>
+                
+                <!--The itemcontrol that contains the CommandNodeView-usercontroll-->
+                <ItemsControl Name="CommandsItems" ItemsSource="{Binding Commands}" Margin= "{Binding Commands, Converter={StaticResource nodeCoordinateConverter}}"/>
+                <!--The itemcontroll that contains the lines, linking command-nodes in the tree. Drawn as simplified connections.-->
+                <ItemsControl ItemsSource="{Binding TreeArrows}"/>
+                <Thumb VerticalAlignment="Center" Height="1000" Cursor="SizeWE" Width="2" Margin="0,0,1,1" Background="Transparent" BorderBrush="Transparent" Padding="0"
+                       DragStarted="OnResizeThumbDragStarted"
+                       DragDelta="OnResizeThumbDragDelta"
+                       DragCompleted="OnResizeThumbDragCompleted"/>
+            </Canvas>
+            
+        </ScrollViewer>
+        
     </Border>
 </UserControl>

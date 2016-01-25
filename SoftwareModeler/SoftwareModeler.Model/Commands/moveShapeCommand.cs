@@ -61,6 +61,12 @@ namespace Area51.SoftwareModeler.Models.Commands
             }
         }
 
+        public override string UpdateInfo()
+        {
+            return  "\tMoved Shape\n" +
+                    "Offset X: " + XOffset + "\n" +
+                    "Offset Y: " + YOffset + "\n";
+        }
     }
 }
 

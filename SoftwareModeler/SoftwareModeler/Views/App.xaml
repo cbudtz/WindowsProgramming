@@ -5,40 +5,49 @@
              xmlns:CommandModel="clr-namespace:Area51.SoftwareModeler.Models.Commands;assembly=SoftwareModeler.Model"
              xmlns:View="clr-namespace:Area51.SoftwareModeler.Views"
              StartupUri="MainWindow.xaml" 
-             ShutdownMode="OnMainWindowClose" 
+             ShutdownMode="OnMainWindowClose"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" 
-             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
-  <Application.Resources>
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:system="clr-namespace:System;assembly=mscorlib" 
+             xmlns:vm="clr-namespace:Area51.SoftwareModeler.ViewModels" 
+             
+             >
+    <Application.Resources>
 
-      <View:NodeCoordinateConverter x:Key="nodeCoordinateConverter"/>
-      <View:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+        <View:NodeCoordinateConverter x:Key="nodeCoordinateConverter"/>
+        <View:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+        <View:CommandInfoConverter x:Key="CommandInfoConverter"/>
+        <View:CommandTreeView x:Key="CommandTree"/>
         <DataTemplate DataType="{x:Type Model:ConnectionData}">
             <Canvas>
                 <View:ConnectionUserControl/>
             </Canvas>
         </DataTemplate>
-      <DataTemplate DataType="{x:Type Model:LineCommandTree}">
-          <Canvas>
-              <View:LineCommandTreeUserControl/>
-          </Canvas>
-      </DataTemplate>
+        <DataTemplate DataType="{x:Type Model:LineCommandTree}">
+            <Canvas>
+                <View:LineCommandTreeUserControl/>
+            </Canvas>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type Model:ClassData}">
             <View:ClassUserControl/>
         </DataTemplate>
-      <DataTemplate DataType="{x:Type Model:Comment}">
-          <Canvas>
-              <View:CommentUserControl/>
-          </Canvas>
-      </DataTemplate>
-      <DataTemplate DataType="{x:Type CommandModel:BaseCommand}">
-          <Canvas>
-              <View:CommandNodeView/>
-          </Canvas>
-      </DataTemplate>
-        
+        <DataTemplate DataType="{x:Type Model:ClassEditor}">
+            <View:EditClassPopupWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type Model:Comment}">
+            <Canvas>
+                <View:CommentUserControl/>
+            </Canvas>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type CommandModel:BaseCommand}">
+            <Canvas>
+                <View:CommandNodeView/>
+            </Canvas>
+        </DataTemplate>
 
-        <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:Area51.SoftwareModeler.ViewModels" />
-        
+
+        <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+
         <Style x:Key="highlightToggleButton" TargetType="{x:Type ToggleButton}">
             <Setter Property="Background" Value="AntiqueWhite"/>
             <Style.Triggers>
@@ -47,5 +56,18 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollViewer}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+
+        </Style>
+        <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
+        <system:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">8</system:Double>
+
+        <system:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}">0</system:Double>
+        <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarButtonHeightKey}">0</system:Double>
+
     </Application.Resources>
 </Application>

@@ -17,7 +17,7 @@
 
     <DockPanel >
         <Views:ToolboxUserControl DockPanel.Dock="Left"/>
-        <Views:CommandTreeView DockPanel.Dock="Right" Width="100" HorizontalAlignment="Right"/>    
+        <Views:CommandTreeView DockPanel.Dock="Right" HorizontalAlignment="Right"/>    
         <Views:DrawingContainerUserControl HorizontalAlignment="Stretch"/>
     </DockPanel>
     <i:Interaction.Triggers>

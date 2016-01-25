@@ -102,6 +102,7 @@
     <Compile Include="Views\ClassUserControl.xaml.cs">
       <DependentUpon>ClassUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CommandInfoConverter.cs" />
     <Compile Include="Views\CommandNodeView.xaml.cs">
       <DependentUpon>CommandNodeView.xaml</DependentUpon>
     </Compile>
@@ -172,6 +173,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MenuUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Styles\CommandTreeStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Styles\CustomScrollbarStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

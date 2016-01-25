@@ -10,6 +10,7 @@ namespace Area51.SoftwareModeler.Models
     {
         private string _stereotype;
         private bool _isAbstract;
+        private string _package;
         private List<Attribute> _attributes;
         private List<Method> _methods;
 
@@ -50,7 +51,7 @@ namespace Area51.SoftwareModeler.Models
         }
 
         //Getters and setters
-        public string Name { get { return name;} set { name = value; NotifyPropertyChanged(); } }
+        public string Name { get { return name;} set { name = value; NotifyPropertyChanged(); NotifyPropertyChanged("GetInfo");} }
         public string StereoType { get { return ( _stereotype==null || _stereotype.Equals("") ? "" : "<<"+_stereotype+">>"); } set { _stereotype = value; NotifyPropertyChanged();} }
         public bool IsAbstract { get { return _isAbstract; } set { _isAbstract = value; NotifyPropertyChanged();} }
         public List<Attribute> Attributes { get { return _attributes; } set { _attributes = value; NotifyPropertyChanged();} }

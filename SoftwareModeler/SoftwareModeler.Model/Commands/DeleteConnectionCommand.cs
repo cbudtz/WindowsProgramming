@@ -50,5 +50,10 @@ namespace Area51.SoftwareModeler.Models.Commands
             
             ShapeCollector.GetI().ObsConnections.Add(ConnectionDataToDelete);
         }
+
+        public override string UpdateInfo()
+        {
+            return "\tDeleted Connection\n";
+        }
     }
 }

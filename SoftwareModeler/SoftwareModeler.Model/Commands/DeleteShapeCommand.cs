@@ -73,5 +73,10 @@ namespace Area51.SoftwareModeler.Models.Commands
             ShapeCollector.GetI().ObsShapes.Add(shapeToAdd);
             _connectionsToDelete.ForEach(x => ShapeCollector.GetI().ObsConnections.Add(x));
         }
+
+        public override string UpdateInfo()
+        {
+            return "\tDeleted Class\n";
+        }
     }
 }

@@ -8,8 +8,24 @@
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <ScrollViewer Name="MainViewScroll" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+    <!--<UserControl.Resources>
+        <Style TargetType="ScrollViewer">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollViewer">
+                        <Border CornerRadius="0">
+                            <Grid>
+                                <ScrollBar x:Name="VerticalScrollBar" Width="5"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>-->
 
+    <ScrollViewer Name="MainViewScroll" Style="{StaticResource ScrollBarStyle}">
+        
         <Canvas Name="MainCanvas" IsHitTestVisible="True" Background="Transparent">
             <!--<Grid Background="Transparent" Name="MainGrid">-->
             <ItemsControl ItemsSource="{Binding Connections}"/>
@@ -23,6 +39,6 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Canvas>
-       
+        
     </ScrollViewer>
 </UserControl>

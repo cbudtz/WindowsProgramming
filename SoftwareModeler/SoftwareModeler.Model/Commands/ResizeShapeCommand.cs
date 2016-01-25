@@ -49,6 +49,10 @@ namespace Area51.SoftwareModeler.Models.Commands
             classView.Height -= YResize;
         }
 
+        public override string UpdateInfo()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

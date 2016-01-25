@@ -22,7 +22,7 @@
             </Path.Style>
             <Path.Data>
                 <PathGeometry>
-                    <PathFigure StartPoint="{Binding StartPoint }">
+                    <PathFigure StartPoint="{Binding ParentPoint }">
                         <PolyLineSegment Points="{Binding Points}"/>
                     </PathFigure>
                 </PathGeometry>

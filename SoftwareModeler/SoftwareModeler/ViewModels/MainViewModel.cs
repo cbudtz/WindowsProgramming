@@ -287,10 +287,10 @@ namespace Area51.SoftwareModeler.ViewModels
 
 		public void EditClassContent(ClassView classView)
 		{
-          
-		    EditClassWindow?.Close();
 
-		    EditClassWindow = new EditClassPopupWindow();
+            EditClassWindow?.Close();
+
+            EditClassWindow = new EditClassPopupWindow();
             _classDataToEdit = (ClassData)classView;
             EditClassWindow.ClassName.Text = _classDataToEdit.name;
             string stereoType = _classDataToEdit.StereoType;
@@ -315,8 +315,8 @@ namespace Area51.SoftwareModeler.ViewModels
 			
 			_classDataToEdit = null;
 			ClearSelectedShapes();
-			EditClassWindow.Hide();
-		}
+            EditClassWindow.Hide();
+        }
 
         public void EditClassCancel()
         {
@@ -431,9 +431,9 @@ namespace Area51.SoftwareModeler.ViewModels
         }
         #endregion
 
+#region move shape
         public void MoveShape(Point mousePosition)
 		{
-
 		    double xOffset = (mousePosition.X - _initialMousePosition.X);
 		    double yOffset = (mousePosition.Y - _initialMousePosition.Y);
             if(xOffset + yOffset > 0) _action = Action.Moving;
@@ -449,7 +449,6 @@ namespace Area51.SoftwareModeler.ViewModels
 
             for (int i = 0; i < _selectedComments.Count; i++)
             {
-
                 _selectedComments.ElementAt(i).X = _selectedComments.ElementAt(i).InitialPosition.X + xOffset;
                 _selectedComments.ElementAt(i).Y = _selectedComments.ElementAt(i).InitialPosition.Y + yOffset;
 
@@ -459,13 +458,12 @@ namespace Area51.SoftwareModeler.ViewModels
             }
         }
 
-        public void MoveShapeDone(Point mousePosition)
+        public bool MoveShapeDone(Point mousePosition)
         {
-      
             double xOffset = mousePosition.X - _initialMousePosition.X;
             double yOffset = mousePosition.Y - _initialMousePosition.Y;
 
-            if (Math.Abs(xOffset) < 10 && Math.Abs(yOffset) < 10) return;
+            if (Math.Abs(xOffset) < 10 && Math.Abs(yOffset) < 10) return false;
 
             for (int i = 0; i < _selectedClasses.Count; i++) {
                 // The ClassView is moved back to its original position, so the offset given to the move command works.
@@ -478,8 +476,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
                 ExecCommand(new MoveShapeCommand(_selectedClasses.ElementAt(i), xOffset, yOffset));
             }
-
-            if (Math.Abs(xOffset) < 10 && Math.Abs(yOffset) < 10) return;
+            
 
             for (int i = 0; i < _selectedComments.Count; i++)
             {
@@ -493,8 +490,10 @@ namespace Area51.SoftwareModeler.ViewModels
 
                 ExecCommand(new MoveShapeCommand(_selectedComments.ElementAt(i), xOffset, yOffset));
             }
-
+            return true;
         }
+#endregion
+
         #region resizing
         public bool ResizeShapeInit(ClassView @class, MouseButtonEventArgs e)
         {
@@ -606,7 +605,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 }
                 else
                 {
-                    _action = Action.MovingClass | Action.Selecting; // can only move class at the moment
+                    _action = Action.MovingClass | Action.Selecting;
                 }
             }
     
@@ -786,7 +785,7 @@ namespace Area51.SoftwareModeler.ViewModels
             // The mouse position relative to the target of the mouse event.
             var mousePosition = RelativeMousePosition(e);
             // The mouse is released, as the move operation is done, so it can be used by other controls.
-  
+            bool movedShape = false;
 
             if ((ButtonDown & ButtonCommand.Connection) > 0 && (_action & Action.AddingConnection) > 0)
             {
@@ -799,12 +798,12 @@ namespace Area51.SoftwareModeler.ViewModels
             }
             else if ((_action & Action.MovingClass) > 0 && _selectedClasses.Contains(classObj))
             {
-                MoveShapeDone(mousePosition);
+                movedShape = MoveShapeDone(mousePosition);
             }
-
+            
             if ((_action & Action.Selecting) > 0 && (_action & Action.NoSelecting) == 0)
             {
-                SelectShape(classObj);
+                 if(!movedShape) SelectShape(classObj);
             }
 
             if (DateTime.Now.Ticks - _doubleClickTimer < doubleClickTimeout)
@@ -904,16 +903,11 @@ namespace Area51.SoftwareModeler.ViewModels
 
         public void CollapseNode(MouseEventArgs e)
         {
-            var cmd = TargetCommand(e).Children.ElementAtOrDefault(0);
+            var cmd = TargetCommand(e);
             if (cmd == null) return;
-            if (!cmd.IsCollapsed)
-            {
-                cmd.Collapse();
-            }
-            else
-            {
-                cmd.Expand();
-            }
+
+            Console.WriteLine("collapsing node");
+            cmd.CollapseNodes();
         }
 		
 		public void MouseClicked(MouseEventArgs e)

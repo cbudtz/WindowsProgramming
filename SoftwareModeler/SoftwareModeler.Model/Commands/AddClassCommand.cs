@@ -50,8 +50,25 @@ namespace Area51.SoftwareModeler.Models.Commands
                 ClassDataRep = new ClassData(ShapeId, ClassName, StereoType, IsAbstract, AnchorPoint);
             }
             ShapeCollector.GetI().ObsShapes.Add(ClassDataRep);
+
+
+             
+            foreach (var b in ShapeCollector.GetI().Commands)
+            {
+                b.Info = b.Info;
+            }
+            
         }
 
+
+
+        public override string UpdateInfo()
+        {
+            ClassData c = ShapeCollector.GetI().GetShapeById(ShapeId);
+            return "\t  Added Class\t     \n" +
+                   "Name: " + c.Name;
+
+        }
 
         public override void unExecute()
         {

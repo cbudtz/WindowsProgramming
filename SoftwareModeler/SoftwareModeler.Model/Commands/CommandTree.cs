@@ -42,23 +42,21 @@ namespace Area51.SoftwareModeler.Models.Commands
             else
             {
                 //Add child to tree
-                command.Parent = Active;
-                var newLayer = Active.addChild(command, CurrentBranchLayer);
-                if (newLayer > CurrentBranchLayer) CurrentBranchLayer = newLayer;
+                Active.addChild(command);
                 SetActive(command);
             }
             //if a parentnode exist, and the current branchlayer is greater than the parents.
             if (Active.Parent != null)
             {
                 //Update scroll area size.
-                ShapeCollector.GetI().MaxBranchLayer.Add(CurrentBranchLayer);
-                NotifyPropertyChanged(() => ShapeCollector.GetI().MaxBranchLayer);
+                //ShapeCollector.GetI().MaxBranchLayer.Add(CurrentBranchLayer);
+                //NotifyPropertyChanged(() => ShapeCollector.GetI().MaxBranchLayer);
 
-                //Draw new arrow, from parent to child.
-                LineCommandTree line = new LineCommandTree(Active.Parent, Active);
-                line.IsActive = true;
-                command.LineToParent = line;
-                ShapeCollector.GetI().treeArrows.Add(line);
+                //Draw new arrow, from _parent to child.
+                //LineCommandTree line = new LineCommandTree(Active.Parent, Active);
+                //line.IsActive = true;
+                //command.LineToParent = line;
+                //ShapeCollector.GetI().treeArrows.Add(line);
             }
                 
 
@@ -72,18 +70,15 @@ namespace Area51.SoftwareModeler.Models.Commands
         }
 
         private void SetActive(BaseCommand node)
-        {
-            
+        {   
             if (Active != null)
             {
-
-                Active.Color = new SolidColorBrush(Colors.Azure);
+                Active.IsActive = false;
             }
             Active = node;
             if (Active != null)
             {
-
-                Active.Color = new SolidColorBrush(Colors.DarkBlue);
+                Active.IsActive = true;
             }
         }
 
@@ -124,7 +119,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                     //ShapeCollector.GetI().MaxBranchLayer.Add(b.BranchLayer);
                     //NotifyPropertyChanged(() => ShapeCollector.GetI().MaxBranchLayer);
 
-                    ////Draw new arrow, from parent to child.
+                    ////Draw new arrow, from _parent to child.
                     //LineCommandTree line = new LineCommandTree(b.Parent, b);
                     //line.IsActive = true;
                     //ShapeCollector.GetI().treeArrows.Add(line);
@@ -149,7 +144,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
                 foreach (BaseCommand child in node.Children)
                 {
-                    child.Parent = node;
+                    if(child.Parent == null) child.Parent = node;
                     BaseCommand recNode = CommandTree.ReParseTree(child, id);
                     if (recNode != null) activeNode = recNode;
 

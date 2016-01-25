@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -21,9 +22,32 @@ namespace Area51.SoftwareModeler.Views
     /// </summary>
     public partial class CommandTreeView : UserControl
     {
+        private Cursor _cursor;
         public CommandTreeView()
         {
             InitializeComponent();
+        }
+
+        private void OnResizeThumbDragStarted(object sender, DragStartedEventArgs e)
+        {
+            _cursor = Cursor;
+            Cursor = Cursors.SizeNWSE;
+        }
+
+        private void OnResizeThumbDragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            Cursor = _cursor;
+        }
+
+        private void OnResizeThumbDragDelta(object sender, DragDeltaEventArgs e)
+        {
+            //double yAdjust = sizableContent.Height + e.VerticalChange;
+            double xAdjust = Width - e.HorizontalChange;
+
+            //make sure not to resize to negative width or heigth            
+            xAdjust = (ActualWidth + xAdjust) > MinWidth ? xAdjust : MinWidth;
+
+            Width = xAdjust > MaxWidth ? MaxWidth : xAdjust;
         }
 
         protected override void OnMouseEnter(MouseEventArgs e)

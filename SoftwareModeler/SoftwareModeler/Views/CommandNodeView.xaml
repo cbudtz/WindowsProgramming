@@ -6,77 +6,41 @@
              xmlns:local="clr-namespace:Area51.SoftwareModeler.Views"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
-             xmlns:model="clr-namespace:Area51.SoftwareModeler.Models.Commands"
+             Canvas.Left="{Binding X, Converter={StaticResource nodeCoordinateConverter}}" 
+             Canvas.Top="{Binding Y, Converter={StaticResource nodeCoordinateConverter}}"
              mc:Ignorable="d" 
              d:DesignHeight="25"
-             Canvas.Left="{Binding BranchLayer, Converter={StaticResource nodeCoordinateConverter}}" 
-             Canvas.Top="{Binding Y}"
+             d:DataContext="{d:DesignData }"
              >
     <UserControl.Resources>
-        <Style x:Key="ExpandStyle" TargetType="TextBlock">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
-                    <Setter Property="Text" Value="-"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsCollapsed}" Value="False">
-                    <Setter Property="Text" Value="+"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="BorderStyle" TargetType="Border">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsCollapsed}" Value="False">
-                    <Setter Property="BorderBrush" Value="{Binding Color}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="EllipseStyle" TargetType="Ellipse">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
-                    <Setter Property="Stroke" Value="Transparent"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsCollapsed}" Value="False">
-                    <Setter Property="Stroke" Value="{Binding Color}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="CollapseableStyle" TargetType="Grid">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsCollapsed}" Value="True">
-                    <Setter Property="Width" Value="0"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsCollapsed}" Value="False">
-                    <Setter Property="Width" Value="NaN"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary Source="Styles/CommandTreeStyle.xaml"/>
     </UserControl.Resources>
-    <Grid Background="Transparent" Style="{ StaticResource CollapseableStyle}">
+    <Border BorderThickness="2,2,4,4" Style="{StaticResource CmdNodeOuterBorderStyle}" >
+    <Grid Background="Transparent" Style="{ StaticResource CollapseableStyleCmdNode}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="30"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid Width="20" Height="20">
-        <Ellipse Grid.Row="0" Grid.Column="0" Width="20" Height="20" Style="{StaticResource EllipseStyle}" StrokeThickness="3"/>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource ExpandStyle}"/>
-            <i:Interaction.Triggers>
+               
+                <!--<Ellipse Grid.Row="0" Grid.Column="0" Style="{StaticResource EllipseStyleCmdNode}"/>-->
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CmdNodeCollapseBorder}">
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource ExpandStyle}"/>
+                    <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseUp" >
                     <cmd:EventToCommand Command="{Binding DataContext.CollapseNodeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </Grid>
-        <Border Grid.Column="1" BorderThickness="2,2,4,4" Style="{StaticResource BorderStyle}" CornerRadius="4" >
-            <TextBlock Background="LightGray"  Padding="2" Height="20" HorizontalAlignment="Left" Text="{Binding Path=CommandType}"></TextBlock>
+                </Border>
+            </Grid>
+            <Grid Grid.Column="1" Style="{StaticResource CmdNodeToolTip}">
+            <TextBlock Style="{StaticResource CmdNodeName}" Text="{Binding Path=CommandType}"/>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseUp" >
                     <cmd:EventToCommand Command="{Binding DataContext.CherryPickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </Border>
-        
-    </Grid>
-    
+            </Grid>
+        </Grid>
+    </Border>
 </UserControl>
