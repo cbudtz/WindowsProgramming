@@ -25,8 +25,6 @@ namespace Area51.SoftwareModeler.Models
         [XmlIgnore]
         public ObservableCollection<BaseCommand> Commands { get; set; }
         [XmlIgnore]
-        public ObservableCollection<int> MaxBranchLayer { get; set; }
-        [XmlIgnore]
         public ObservableCollection<LineCommandTree> treeArrows { get; set; }
 
 
@@ -39,12 +37,6 @@ namespace Area51.SoftwareModeler.Models
 
             //contains the "connections" used to draw lines in the command-tree.
             treeArrows = new ObservableCollection<LineCommandTree>();
-
-            //adding a few extra buffers to the size of the scroll-area. (yes it's an ugly fix)
-            MaxBranchLayer = new ObservableCollection<int>();
-            MaxBranchLayer.Add(1);
-            MaxBranchLayer.Add(2);
-            MaxBranchLayer.Add(3);
         }
         ///<summary>Get instance</summary>
         public static ShapeCollector GetI()

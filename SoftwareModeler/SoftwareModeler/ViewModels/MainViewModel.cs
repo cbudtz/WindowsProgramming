@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,29 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
+
+using System.ComponentModel;
+using System.Data;
+using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Text;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Media;
+using System.IO.Packaging;
+using System.IO;
+using System.Windows.Xps.Packaging;
+using System.Printing;
+using System.Windows.Xps;
+using System.Windows.Xps.Packaging;
+using System.Printing;
+using System.Windows.Xps;
+
 using Area51.SoftwareModeler.Views;
 using Visibility = System.Windows.Visibility;
 using Area51.SoftwareModeler.Model.CodeGen;
@@ -153,9 +177,6 @@ namespace Area51.SoftwareModeler.ViewModels
 		private long _doubleClickTimer;
 		private long doubleClickTimeout = 500*10000; // nanosec. is 500msec
         
-
-        //maxbranchlayer added as an observablecollection for now, not a nice fix, but it works (for scroll area).
-		public ObservableCollection<int> MaxBranchLayer => ShapeCollector.GetI().MaxBranchLayer;
         //new collection for the lines in the command-tree.
         public ObservableCollection<LineCommandTree> TreeArrows => ShapeCollector.GetI().treeArrows;
         //private ClassData _classDataToEdit = null;
@@ -292,7 +313,7 @@ namespace Area51.SoftwareModeler.ViewModels
 
             EditClassWindow = new EditClassPopupWindow();
             _classDataToEdit = (ClassData)classView;
-            EditClassWindow.ClassName.Text = _classDataToEdit.name;
+            EditClassWindow.ClassName.Text = _classDataToEdit.Name;
             string stereoType = _classDataToEdit.StereoType;
             stereoType = stereoType == null || stereoType.Length < 4? "" : stereoType.Remove(0, 2);
             stereoType = stereoType.Length < 2? "" : stereoType.Remove(stereoType.Length - 2, 2);
@@ -912,7 +933,7 @@ namespace Area51.SoftwareModeler.ViewModels
 		
 		public void MouseClicked(MouseEventArgs e)
 		{
-
+            
 		    if (!ButtonDown.Equals(ButtonCommand.None))
 		    {
 		        if (e == null) return;
@@ -981,7 +1002,6 @@ namespace Area51.SoftwareModeler.ViewModels
 				ShapeCollector.GetI().ObsShapes.Clear();
 				ShapeCollector.GetI().Commands.Clear();
                 ShapeCollector.GetI().treeArrows.Clear();
-                ShapeCollector.GetI().MaxBranchLayer.Clear();
 			}
 		}
 
@@ -1011,7 +1031,8 @@ namespace Area51.SoftwareModeler.ViewModels
 		private void SaveFileCmd()
 		{
 			SaveFile();
-		}
+		    
+        }
 
 	    private void GenerateCode()
 	    {
@@ -1035,9 +1056,69 @@ namespace Area51.SoftwareModeler.ViewModels
 			FileStream filestream = (FileStream)sfd.OpenFile();
 			   
 			CommandTree.AsyncSave(CommandController, filestream);
-		
-			return true;
+
+            if (canvas == null)
+            {
+                Console.WriteLine("canvas is null");
+                return true;
+            }
+            RenderTargetBitmap rtb = new RenderTargetBitmap((int)canvas.ActualWidth,
+    (int)canvas.ActualHeight, 96d, 96d, System.Windows.Media.PixelFormats.Default);
+            rtb.Render(canvas);
+
+            var crop = new CroppedBitmap(rtb, new Int32Rect(0, 0, (int) canvas.ActualWidth, (int) canvas.ActualHeight));
+
+            BitmapEncoder pngEncoder = new PngBitmapEncoder();
+            pngEncoder.Frames.Add(BitmapFrame.Create(crop));
+
+            using (var fs = System.IO.File.OpenWrite("C:/Users/Runi/Desktop/logo.png"))
+            {
+                pngEncoder.Save(fs);
+            }
+
+            try
+            {
+                //System.Windows.Controls.
+                System.Windows.Controls.PrintDialog dialog = new System.Windows.Controls.PrintDialog();
+
+                if (dialog.ShowDialog() != true)
+                    return true;
+                dialog.PrintVisual(canvas, "IFMS Print Screen");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Print Screen", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+
+            
+                // create XPS file based on a WPF Visual, and store it in a memorystream
+                //MemoryStream lMemoryStream = new MemoryStream();
+                //Package package = Package.Open(lMemoryStream, FileMode.Create);
+                //XpsDocument doc = new XpsDocument(package);
+                //XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(doc);
+                //writer.Write(canvas);
+                //doc.Close();
+                //package.Close();
+
+            
+        
+            return true;
 		}
+
+        static Visual CreateVisual()
+        {
+            const double Inch = 96;
+            DrawingVisual visual = new DrawingVisual();
+            DrawingContext dc = visual.RenderOpen();
+            Pen bluePen = new Pen(Brushes.Blue, 1);
+            dc.DrawRectangle(Brushes.Yellow, bluePen, new Rect(Inch / 2, Inch / 2, Inch * 1.5, Inch * 1.5));
+            Brush pinkBrush = new SolidColorBrush(Color.FromArgb(128, 255, 0, 255));
+            Pen blackPen = new Pen(Brushes.Black, 1);
+            dc.DrawEllipse(pinkBrush, blackPen, new Point(Inch * 2.25, Inch * 2), Inch * 1.25, Inch);
+            dc.Close();
+            return visual;
+        }
 
         private static void Help()
         {
@@ -1139,6 +1220,7 @@ namespace Area51.SoftwareModeler.ViewModels
             return shapeVisualElement?.DataContext as Comment;
         }
 
+        private Canvas canvas;
         // Gets the mouse position relative to the canvas.
         private Point RelativeMousePosition(MouseEventArgs e)
 		{
@@ -1147,7 +1229,8 @@ namespace Area51.SoftwareModeler.ViewModels
 			// The canvas holding the shapes visual element, is found by searching up the tree of visual elements.
 			if (shapeVisualElement is Canvas)
 			{
-				return Mouse.GetPosition(shapeVisualElement);
+                this.canvas = shapeVisualElement as Canvas;
+                return Mouse.GetPosition(shapeVisualElement);
 
 			}
             if (shapeVisualElement is Grid)
@@ -1155,6 +1238,7 @@ namespace Area51.SoftwareModeler.ViewModels
                 return Mouse.GetPosition(shapeVisualElement);
             }
             var canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            this.canvas = canvas;
             return Mouse.GetPosition(canvas);
             // The mouse position relative to the canvas is gotten here.
 
@@ -1164,7 +1248,15 @@ namespace Area51.SoftwareModeler.ViewModels
 			
 			dynamic parent = o == null ? null : VisualTreeHelper.GetParent(o);
 			if (parent == null) return parent;
-			return parent.GetType().IsAssignableFrom(typeof(T)) ? parent : FindParentOfType<T>(parent);
+		    try
+		    {
+		        return parent.GetType().IsAssignableFrom(typeof (T)) ? parent : FindParentOfType<T>(parent);
+		    }
+		    catch (Exception e)
+		    {
+                Console.WriteLine(o.DependencyObjectType + ";" + parent);
+		        return default(T);
+		    }
 		}
 
 		public void ExecCommand(BaseCommand command)

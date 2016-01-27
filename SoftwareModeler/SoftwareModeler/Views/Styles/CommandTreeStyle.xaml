@@ -1,18 +1,21 @@
 ﻿<ResourceDictionary x:Class="Area51.SoftwareModeler.Views.Styles.CommandTreeStyle.xaml"
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Area51.SoftwareModeler.Views.Styles"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    xmlns:local="clr-namespace:Area51.SoftwareModeler.Views.Styles" 
+                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+                    xmlns:ed="htp://schemas.microsoft.com/expression/2010/drawing" 
+                    xmlns:ef="clr-namespace:Microsoft.Expression.Controls;assembly=Microsoft.Expression.Drawing">
     
     <!--thumb on commandtree for resizing-->
     <Style x:Key="ResizeStyle" TargetType="Border">
         <Setter Property="Padding" Value="0,5,0,0"/>
         <Setter Property="Background" Value="LightGray"/>
-        <Style.Triggers>
+        <!--<Style.Triggers>
             <Trigger Property="Border.IsMouseDirectlyOver" Value="True">
-                <!--<Setter Property="Cursor" Value="SizeWE"/>-->
+                --><!--<Setter Property="Cursor" Value="SizeWE"/>--><!--
             </Trigger>
-        </Style.Triggers>
+        </Style.Triggers>-->
     </Style>
 
     <Style x:Key="ExpandStyle" TargetType="TextBlock">
@@ -46,18 +49,39 @@
     </Style>
 
     <Style x:Key="CmdNodeToolTip" TargetType="Grid">
-        
         <Setter Property="ToolTipService.ToolTip" Value="{Binding Info}"/>
+        <Setter Property="ToolTipService.ShowDuration" Value="5000"></Setter>
         <Setter Property="ToolTipService.InitialShowDelay" Value="0"/>
         <Setter Property="ToolTipService.HasDropShadow" Value="True"/>
-        <Setter Property="ToolTipService.Placement" Value="Top"/>
+        <Setter Property="ToolTipService.Placement" Value="Left"/>
     </Style>
 
-    
-    <!--<Style x:Key="{x:Type ToolTip}" BasedOn="ToolTip">
-        <Setter Property="ToolTipService.InitialShowDelay" Value="1"/>
-    </Style>-->
 
+    <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="HasDropShadow" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Border Name="Border"
+                            Background="WhiteSmoke"
+                            Opacity="0.8"
+                            BorderThickness="1"
+                            BorderBrush="Black"
+                            CornerRadius="0"
+                            MinHeight="50"
+                            MinWidth="150">
+                        <StackPanel>
+                            <TextBlock TextAlignment="Center" FontWeight="Bold" Text="{Binding CommandName}"/>
+                            <TextBlock Margin="4,0,4,4" TextAlignment="Left" Text="{Binding Info}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+ 
     <Style x:Key="CmdNodeOuterBorderStyle" TargetType="Border">
         <Setter Property="CornerRadius" Value="6"/>
         <Setter Property="Background">

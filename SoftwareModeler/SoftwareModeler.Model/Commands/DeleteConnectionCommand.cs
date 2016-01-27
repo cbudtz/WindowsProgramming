@@ -12,14 +12,8 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     public class DeleteConnectionCommand : BaseCommand
     {
-        [XmlIgnore]
-        public ConnectionData ConnectionDataToDelete;
+        [XmlIgnore] public ConnectionData ConnectionDataToDelete;
         public int ConnId;
-        //public int? EndId;
-        //public int? StartId;
-        //public ConnectionType ConnType;
-        //public string StartMult;
-        //public string EndMult;
 
         public DeleteConnectionCommand()
         {
@@ -30,11 +24,6 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             ConnectionDataToDelete = connToDel;     
             ConnId = connToDel.ConnectionId;
-            //EndId = connToDel.EndShapeId;
-            //StartId = connToDel.StartShapeId;
-            //ConnType = connToDel.Type;
-            //StartMult = connToDel.StartMultiplicity;
-            //EndMult = connToDel.EndMultiplicity;
         }
         public override void execute()
         {
@@ -51,9 +40,21 @@ namespace Area51.SoftwareModeler.Models.Commands
             ShapeCollector.GetI().ObsConnections.Add(ConnectionDataToDelete);
         }
 
-        public override string UpdateInfo()
+        public override string CommandName => "Delete Connection";
+
+        public override string Info
         {
-            return "\tDeleted Connection\n";
+
+            get {
+                ConnectionData c = ShapeCollector.GetI().GetConnectionById(ConnId)?? ConnectionDataToDelete;
+                string type = c.Type.ToString();
+                string fromName = ShapeCollector.GetI().GetShapeById(ConnectionDataToDelete.StartShapeId)?.Name;
+                string toName = ShapeCollector.GetI().GetShapeById(ConnectionDataToDelete.EndShapeId)?.Name;
+                
+                return InfoBackup = "Connection Type: " + type +
+                                    "\nFrom: " + fromName +
+                                    "\nTo: " + toName;
+            }
         }
     }
 }

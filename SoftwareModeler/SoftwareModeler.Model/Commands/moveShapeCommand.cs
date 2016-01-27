@@ -61,11 +61,18 @@ namespace Area51.SoftwareModeler.Models.Commands
             }
         }
 
-        public override string UpdateInfo()
+        public override string CommandName => "Move Class";
+
+        public override string Info
         {
-            return  "\tMoved Shape\n" +
-                    "Offset X: " + XOffset + "\n" +
-                    "Offset Y: " + YOffset + "\n";
+            get
+            {
+                ClassData c = ShapeCollector.GetI().GetShapeById(ShapeId);
+                if (c == null) return InfoBackup;
+                return InfoBackup = "Class: " + c.Name +
+                                    "\nOffset X: " + XOffset +
+                                    "\nOffset Y: " + YOffset;
+            }
         }
     }
 }

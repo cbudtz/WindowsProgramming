@@ -43,15 +43,28 @@ namespace Area51.SoftwareModeler.Models.Commands
             if (toCopy == null) return;
             toCopyId = toCopy.id;
             //ClassData shapeToCopy = ShapeCollector.GetI().GetShapeById(copyId);
-            copy = new ClassData(toCopy.name, toCopy.StereoType, toCopy.IsAbstract, new Point(toCopy.X + 30, toCopy.Y + 30));
+            copy = new ClassData(toCopy.Name, toCopy.StereoType, toCopy.IsAbstract, new Point(toCopy.X + 30, toCopy.Y + 30));
             toCopy.Methods.ForEach(x => copy.AddMethod(x.Visibility, x.Name, x.Parameters));
             toCopy.Attributes.ForEach(x => copy.AddAttribute(x.Type, x.Name));
             copyId = copy.id;
         }
 
-        public override string UpdateInfo()
+        private string _toCopyNameBackup;
+        private string _copyNameBackup;
+
+        public override string CommandName => "Copy Class";
+
+        public override string Info
         {
-            return "\tCopied Class\n";
+            get
+            {
+                ClassData c1 = ShapeCollector.GetI().GetShapeById(toCopyId);
+                ClassData c2 = ShapeCollector.GetI().GetShapeById(copyId);
+                if (c1 != null) _toCopyNameBackup = c1.Name;
+                if (c2 != null) _copyNameBackup = c2.Name;
+                return "Class copied: " + _toCopyNameBackup + (c1 == null ? " (Deleted)" : "") +
+                       "\n new class: " + _copyNameBackup + (c2 == null ? " (Deleted)" : "");
+            }
         }
     }
 }

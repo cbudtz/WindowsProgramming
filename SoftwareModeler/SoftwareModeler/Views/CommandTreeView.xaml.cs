@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Area51.SoftwareModeler.Models;
 using Area51.SoftwareModeler.Models.Commands;
 
 namespace Area51.SoftwareModeler.Views
@@ -23,6 +24,7 @@ namespace Area51.SoftwareModeler.Views
     public partial class CommandTreeView : UserControl
     {
         private Cursor _cursor;
+
         public CommandTreeView()
         {
             InitializeComponent();
@@ -50,23 +52,41 @@ namespace Area51.SoftwareModeler.Views
             Width = xAdjust > MaxWidth ? MaxWidth : xAdjust;
         }
 
+        public void AutoScrollAS()
+        {
+            Console.WriteLine("testing auto scrols");
+        }
+
         protected override void OnMouseEnter(MouseEventArgs e)
         {
-            IEnumerator<BaseCommand> commands = CommandsItems.ItemsSource?.OfType<BaseCommand>().GetEnumerator();
-            double curWidth = CommandScroll.ActualWidth;
-            double curHeight = CommandScroll.ActualHeight;
-            if (commands == null) return;
-            while (commands.MoveNext())
-            {
-                BaseCommand cur = commands.Current;
-                if (cur.BranchLayer*30+50 > curWidth) curWidth = cur.BranchLayer*30+50;
-                if (cur.Id*35 > curHeight) curHeight = cur.Id*35;
-            }
+            //IEnumerator<BaseCommand> commands = CommandsItems.ItemsSource?.OfType<BaseCommand>().GetEnumerator();
+            //double curWidth = CommandScroll.ActualWidth;
+            //double curHeight = CommandScroll.ActualHeight;
+            //if (commands == null) return;
+            //while (commands.MoveNext())
+            //{
+            //    BaseCommand cur = commands.Current;
+            //    if (cur.BranchLayer*30+50 > curWidth) curWidth = cur.BranchLayer*30+50;
+            //    if (cur.Id*35 > curHeight) curHeight = cur.Id*35;
+            //}
 
-            if (curWidth >= CommandScroll.ActualWidth) CommandCanvas.Width = curWidth;
-            if (curHeight >= CommandScroll.ActualHeight) CommandCanvas.Height = curHeight;
+            //if (curWidth >= CommandScroll.ActualWidth) CommandCanvas.Width = curWidth;
+            //if (curHeight >= CommandScroll.ActualHeight) CommandCanvas.Height = curHeight;
 
-            base.OnMouseEnter(e);
+            //base.OnMouseEnter(e);
+        }
+
+        private void CommandCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            CommandScroll.ScrollToBottom();
+            CommandScroll.ScrollToRightEnd();
+            BaseCommand active = ShapeCollector.GetI().Commands.First(x => x.IsActive);
+            double width = active.BranchLayer*30;
+            Console.WriteLine("test: " + width + ";" + CommandScroll.ExtentWidth);
+            CommandScroll.ScrollToLeftEnd();
+            
+            //CommandScroll.
+            CommandScroll.ScrollToHorizontalOffset(width - CommandScroll.ActualWidth / 2);
         }
     }
 }

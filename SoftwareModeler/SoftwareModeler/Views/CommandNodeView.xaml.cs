@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Area51.SoftwareModeler.Models.Commands;
 
 namespace Area51.SoftwareModeler.Views
 {
@@ -24,5 +25,6 @@ namespace Area51.SoftwareModeler.Views
         {
             InitializeComponent();
         }
+
     }
 }

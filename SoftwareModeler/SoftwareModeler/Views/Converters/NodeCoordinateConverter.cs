@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Area51.SoftwareModeler.Views
+namespace Area51.SoftwareModeler.Views.Converters
 {
     class NodeCoordinateConverter : IValueConverter
     {

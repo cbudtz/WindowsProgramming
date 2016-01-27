@@ -13,34 +13,37 @@ namespace Area51.SoftwareModeler.Models
         private string _package;
         private List<Attribute> _attributes;
         private List<Method> _methods;
+        private string _name;
 
-        public string name { get; set; }
+#region Properties
+        /// <summary>
+        /// Get or set Name of Class representation
+        /// </summary>
+        public string Name { get { return _name; } set { _name = value; NotifyPropertyChanged(); } }
         
+        /// <summary>
+        ///  Get or set stereotype, fx interface. '<< >>' tag is automatically added 
+        /// </summary>
+        public string StereoType { get { return (_stereotype == null || _stereotype.Equals("") ? "" : "<<" + _stereotype + ">>"); } set { _stereotype = value; NotifyPropertyChanged(); } }
+        public bool IsAbstract { get { return _isAbstract; } set { _isAbstract = value; NotifyPropertyChanged(); } }
+        public List<Attribute> Attributes { get { return _attributes; } set { _attributes = value; NotifyPropertyChanged(); } }
+        public List<Method> Methods { get { return _methods; } set { _methods = value; NotifyPropertyChanged(); } }
+#endregion
 
-        public ClassData() : base()
+        public ClassData()
         {
-           
-
-            name = "ClassView " + ++nextId;
-            id = nextId;
-       
-            name = "ClassView " + id;
-            this.id = id;
-            if (id > nextId) nextId = (int)id++;
-        
-    }
+            nextId++;
+        }
 
         public ClassData(string name, string stereotype, bool isAbstract, Point anchorPoint) 
             : this(null, name, stereotype, isAbstract, anchorPoint)
-        {
-
-        }
+        {}
 
         public ClassData(int? id, string name, string stereotype, bool isAbstract, Point anchorPoint)
         {
             this.id = id ?? nextId;
             nextId = (id ?? nextId) + 1;
-            this.name = name ?? "class" + id;
+            _name = name ?? "class" + id;
             _stereotype = stereotype;
             _isAbstract = isAbstract;
             X = anchorPoint.X;
@@ -50,13 +53,7 @@ namespace Area51.SoftwareModeler.Models
 
         }
 
-        //Getters and setters
-        public string Name { get { return name;} set { name = value; NotifyPropertyChanged(); NotifyPropertyChanged("GetInfo");} }
-        public string StereoType { get { return ( _stereotype==null || _stereotype.Equals("") ? "" : "<<"+_stereotype+">>"); } set { _stereotype = value; NotifyPropertyChanged();} }
-        public bool IsAbstract { get { return _isAbstract; } set { _isAbstract = value; NotifyPropertyChanged();} }
-        public List<Attribute> Attributes { get { return _attributes; } set { _attributes = value; NotifyPropertyChanged();} }
-        public List<Method> Methods { get { return _methods; } set { _methods = value; NotifyPropertyChanged();} }
-
+        
 
 
         public void AddAttribute(string type, string name)
@@ -71,20 +68,13 @@ namespace Area51.SoftwareModeler.Models
 
         public void AddMethod(Visibility visibility, string name, string parameters)
         {
-            Method m = new Method(visibility, name, parameters);
-            //string param = "";
-            //for (int i = 0; i < parameters.Length; i++)
-            //    param += parameters + ", ";
-            ////m.addParameter(parameters[i]);
-            //param = param.Substring(0, param.Length - 1);
-            //m.Parameters = param;
-            _methods.Add(m);
+            _methods.Add(new Method(visibility, name, parameters));
         }
 
        
         public override string ToString()
         {
-            return name;
+            return _name;
         }
     }
 }

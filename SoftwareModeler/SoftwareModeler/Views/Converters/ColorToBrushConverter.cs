@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Area51.SoftwareModeler.Views
+namespace Area51.SoftwareModeler.Views.Converters
 {
 
     public class ColorToBrushConverter : IValueConverter
@@ -19,8 +19,7 @@ namespace Area51.SoftwareModeler.Views
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Console.WriteLine("convert color back");
-            throw new Exception("The method or operation is not implemented.");
+            return null;
         }
     }
 }

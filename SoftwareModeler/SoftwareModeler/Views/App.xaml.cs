@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Area51.SoftwareModeler.Models.Commands;
 
 namespace Area51.SoftwareModeler
 {
@@ -13,5 +14,7 @@ namespace Area51.SoftwareModeler
     /// </summary>
     public partial class App : Application
     {
+        
+
     }
 }

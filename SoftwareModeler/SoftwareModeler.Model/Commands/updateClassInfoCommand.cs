@@ -46,7 +46,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             //ClassInstance
             this.classID = classDataToUpdate.id;
-            this.OldclassName = classDataToUpdate.name;
+            this.OldclassName = classDataToUpdate.Name;
             this.OldStereoType = classDataToUpdate.StereoType;
             this.OldAbstract = classDataToUpdate.IsAbstract;
             this.OldAttributes = classDataToUpdate.Attributes;
@@ -57,6 +57,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             this.IsAbstract = isAbstract;
             this.Attributes = attributes;
             this.Methods = methods;
+            UpdateInfo();
 
         }
 
@@ -77,7 +78,7 @@ namespace Area51.SoftwareModeler.Models.Commands
             if (classDataToUpdate != null)
             {
             
-                classDataToUpdate.name = OldclassName;
+                classDataToUpdate.Name = OldclassName;
                 classDataToUpdate.StereoType = OldStereoType;
                 classDataToUpdate.IsAbstract = OldAbstract;
                 classDataToUpdate.Methods = OldMethods;
@@ -86,9 +87,16 @@ namespace Area51.SoftwareModeler.Models.Commands
 
     }
 
-        public override string UpdateInfo()
+        public override string CommandName => "Update Class";
+
+        public override string Info
         {
-            return "\tUpdate Class\t";
+            get
+            {
+                ClassData c = ShapeCollector.GetI().GetShapeById(classID);
+                if (c == null) return InfoBackup;
+                return InfoBackup = "Class: " + c.Name;
+            }
         }
     }
 }

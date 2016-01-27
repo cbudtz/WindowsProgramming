@@ -33,7 +33,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public DeleteShapeCommand(ClassData shapeToDelete)
         {
             ShapeId = shapeToDelete.id;
-            ShapeName = shapeToDelete.name;
+            ShapeName = shapeToDelete.Name;
             ShapeX = shapeToDelete.X;
             ShapeY = shapeToDelete.Y;
             Shapewidth = shapeToDelete.Width;
@@ -45,8 +45,6 @@ namespace Area51.SoftwareModeler.Models.Commands
             // if x,y of either of connection endpoint shapes, remove connection // TODO alternatively use id
 
         }
-
-
 
         public override void execute()
         {
@@ -74,9 +72,17 @@ namespace Area51.SoftwareModeler.Models.Commands
             _connectionsToDelete.ForEach(x => ShapeCollector.GetI().ObsConnections.Add(x));
         }
 
-        public override string UpdateInfo()
+        public override string CommandName => "Delete Shape";
+
+        public override string Info
         {
-            return "\tDeleted Class\n";
+            get
+            {
+                ClassData c = ShapeCollector.GetI().GetShapeById(ShapeId);
+                string className = c?.Name;
+                if (c == null) className = ShapeName;
+                return InfoBackup = "Class Name: " + className;
+            }
         }
     }
 }

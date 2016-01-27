@@ -62,13 +62,16 @@
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -102,7 +105,7 @@
     <Compile Include="Views\ClassUserControl.xaml.cs">
       <DependentUpon>ClassUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CommandInfoConverter.cs" />
+    <Compile Include="Views\Converters\CommandInfoConverter.cs" />
     <Compile Include="Views\CommandNodeView.xaml.cs">
       <DependentUpon>CommandNodeView.xaml</DependentUpon>
     </Compile>
@@ -115,6 +118,8 @@
     <Compile Include="Views\ConnectionUserControl.xaml.cs">
       <DependentUpon>ConnectionUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Converters\CommandTreeHeightConverter.cs" />
+    <Compile Include="Views\Converters\CommandTreeWidthConverter.cs" />
     <Compile Include="Views\DrawingContainerUserControl.xaml.cs">
       <DependentUpon>DrawingContainerUserControl.xaml</DependentUpon>
     </Compile>
@@ -127,8 +132,8 @@
     <Compile Include="Views\MenuUserControl.xaml.cs">
       <DependentUpon>MenuUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ColorToBrushConverter.cs" />
-    <Compile Include="Views\NodeCoordinateConverter.cs" />
+    <Compile Include="Views\Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Views\Converters\NodeCoordinateConverter.cs" />
     <Compile Include="Views\ToolboxUserControl.xaml.cs">
       <DependentUpon>ToolboxUserControl.xaml</DependentUpon>
     </Compile>

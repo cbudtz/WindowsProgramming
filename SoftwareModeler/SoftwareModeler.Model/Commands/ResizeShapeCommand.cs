@@ -13,7 +13,7 @@ namespace Area51.SoftwareModeler.Models.Commands
     public class ResizeShapeCommand : BaseCommand
     {
         public int? ShapeId { get; set; }
-        public double xResize;
+        public double XResize;
         public double YResize;
 
         public ResizeShapeCommand()
@@ -21,12 +21,12 @@ namespace Area51.SoftwareModeler.Models.Commands
             //Deserialization constructor...
         }
 
-        public ResizeShapeCommand(ClassView _shape, double _xResize, double _yResize)
+        public ResizeShapeCommand(ClassView shape, double xResize, double yResize)
         {
             //When first constructed
-            ShapeId = _shape.id;
-            xResize = _xResize;
-            YResize = _yResize;
+            ShapeId = shape.id;
+            XResize = xResize;
+            YResize = yResize;
         }
 
 
@@ -37,7 +37,7 @@ namespace Area51.SoftwareModeler.Models.Commands
 
             Console.WriteLine("Executing ResizeShapeCommand");
             Console.WriteLine("ClassView =" + classView);
-            classView.Width += xResize;
+            classView.Width += XResize;
             classView.Height += YResize;
         }
 
@@ -45,13 +45,22 @@ namespace Area51.SoftwareModeler.Models.Commands
         {
             ClassView classView = ShapeCollector.GetI().GetShapeById(ShapeId);
             if (classView == null) classView = ShapeCollector.GetI().GetCommentById(ShapeId);
-            classView.Width -= xResize;
+            classView.Width -= XResize;
             classView.Height -= YResize;
         }
 
-        public override string UpdateInfo()
+        public override string CommandName => "Resize Class";
+
+        public override string Info
         {
-            throw new NotImplementedException();
+            get
+            {
+                ClassData c = ShapeCollector.GetI().GetShapeById(ShapeId);
+                if (c == null) return InfoBackup;
+                return InfoBackup = "Class: " + c.Name +
+                                    "\nOffset X: " + XResize +
+                                    "\nOffset Y: " + YResize;
+            }
         }
     }
 }

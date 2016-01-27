@@ -3,20 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
              xmlns:Model="clr-namespace:Area51.SoftwareModeler.Models;assembly=SoftwareModeler.Model" 
              xmlns:CommandModel="clr-namespace:Area51.SoftwareModeler.Models.Commands;assembly=SoftwareModeler.Model"
-             xmlns:View="clr-namespace:Area51.SoftwareModeler.Views"
+             xmlns:View="clr-namespace:Area51.SoftwareModeler.Views" 
+             xmlns:converters="clr-namespace:Area51.SoftwareModeler.Views.Converters" 
              StartupUri="MainWindow.xaml" 
              ShutdownMode="OnMainWindowClose"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:system="clr-namespace:System;assembly=mscorlib" 
-             xmlns:vm="clr-namespace:Area51.SoftwareModeler.ViewModels" 
-             
-             >
+             xmlns:vm="clr-namespace:Area51.SoftwareModeler.ViewModels">
     <Application.Resources>
 
-        <View:NodeCoordinateConverter x:Key="nodeCoordinateConverter"/>
-        <View:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
-        <View:CommandInfoConverter x:Key="CommandInfoConverter"/>
+        <converters:CommandTreeHeightConverter x:Key="CommandTreeWidthConverter"/>
+        <converters:CommandTreeHeightConverter x:Key="CommandTreeHeightConverter"/>
+        <converters:NodeCoordinateConverter x:Key="nodeCoordinateConverter"/>
+        <converters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+        
         <View:CommandTreeView x:Key="CommandTree"/>
         <DataTemplate DataType="{x:Type Model:ConnectionData}">
             <Canvas>

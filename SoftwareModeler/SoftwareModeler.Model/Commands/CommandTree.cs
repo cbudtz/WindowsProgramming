@@ -15,7 +15,6 @@ namespace Area51.SoftwareModeler.Models.Commands
 {
     public class CommandTree : NotifyBase
     {
-        public int CurrentBranchLayer;
         public BaseCommand Root { get; set; }
         public BaseCommand Active { get; set; }
         public List<BaseCommand> Undone { get; set; } = new List<BaseCommand>();
@@ -23,8 +22,6 @@ namespace Area51.SoftwareModeler.Models.Commands
         public int NextCommandId { get; set; }
         [XmlIgnore]
         public ObservableCollection<BaseCommand> Commands { get; set; }
-
-        //public ObservableCollection<LineCommandTree> CommandConnections { get; set; } = ShapeCollector.GetI().treeArrows;
 
         public CommandTree()
         {
@@ -44,21 +41,7 @@ namespace Area51.SoftwareModeler.Models.Commands
                 //Add child to tree
                 Active.addChild(command);
                 SetActive(command);
-            }
-            //if a parentnode exist, and the current branchlayer is greater than the parents.
-            if (Active.Parent != null)
-            {
-                //Update scroll area size.
-                //ShapeCollector.GetI().MaxBranchLayer.Add(CurrentBranchLayer);
-                //NotifyPropertyChanged(() => ShapeCollector.GetI().MaxBranchLayer);
-
-                //Draw new arrow, from _parent to child.
-                //LineCommandTree line = new LineCommandTree(Active.Parent, Active);
-                //line.IsActive = true;
-                //command.LineToParent = line;
-                //ShapeCollector.GetI().treeArrows.Add(line);
-            }
-                
+            }              
 
             ShapeCollector.GetI().Commands.Add(command);
             NotifyPropertyChanged(() => ShapeCollector.GetI().Commands);
@@ -66,6 +49,10 @@ namespace Area51.SoftwareModeler.Models.Commands
        
             //ececute new command
             Active.execute();
+            foreach (var c in ShapeCollector.GetI().Commands)
+            {
+                c.UpdateInfo();
+            }
 
         }
 
@@ -89,6 +76,10 @@ namespace Area51.SoftwareModeler.Models.Commands
             Undone.Clear();
             SetActive(newActiveNode);
             ReExecute();
+            foreach (var c in ShapeCollector.GetI().Commands)
+            {
+                c.UpdateInfo();
+            }
         }
 
         public void ReExecute()
@@ -115,14 +106,6 @@ namespace Area51.SoftwareModeler.Models.Commands
                 if (b.Parent != null && b.LineToParent != null)
                 {
                     b.LineToParent.IsActive = true;
-                    ////Update scroll area size.
-                    //ShapeCollector.GetI().MaxBranchLayer.Add(b.BranchLayer);
-                    //NotifyPropertyChanged(() => ShapeCollector.GetI().MaxBranchLayer);
-
-                    ////Draw new arrow, from _parent to child.
-                    //LineCommandTree line = new LineCommandTree(b.Parent, b);
-                    //line.IsActive = true;
-                    //ShapeCollector.GetI().treeArrows.Add(line);
                 }
 
                 b.execute();
@@ -206,7 +189,6 @@ namespace Area51.SoftwareModeler.Models.Commands
             ShapeCollector.GetI().Reset();
             ShapeCollector.GetI().Commands.Clear();
             ShapeCollector.GetI().treeArrows.Clear();
-            ShapeCollector.GetI().MaxBranchLayer.Clear();
             //restore Tree
             XmlSerializer serializer = new XmlSerializer(typeof(CommandTree), new XmlRootAttribute("Commandtree"));
             CommandTree restoredTree;

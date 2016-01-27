@@ -35,9 +35,11 @@ namespace Area51.SoftwareModeler.Models.Commands
             Console.WriteLine("Undoing DummyCommand");
         }
 
-        public override string UpdateInfo()
+        public override string CommandName => "Dummy Command";
+
+        public override string Info
         {
-            return "\tDummy Command\n";
+            get { return "Dummy Command\n"; }
         }
     }
 }

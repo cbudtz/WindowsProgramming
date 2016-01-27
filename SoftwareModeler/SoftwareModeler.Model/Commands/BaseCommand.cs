@@ -13,6 +13,7 @@ using Area51.SoftwareModeler.Models;
 namespace Area51.SoftwareModeler.Models.Commands
 {
     [XmlInclude(typeof(AddClassCommand))]
+    [XmlInclude(typeof(AddCommentCommand))]
     [XmlInclude(typeof(DummyCommand))]
     [XmlInclude(typeof(MoveShapeCommand))]
     [XmlInclude(typeof(ResizeShapeCommand))]
@@ -30,9 +31,18 @@ namespace Area51.SoftwareModeler.Models.Commands
         public int Id { get; set; }
         public int BranchLayer { get; set; }
 
-        //private string _info;
-        public string Info { get { return UpdateInfo(); } set { NotifyPropertyChanged(); } }
+        public String CommandType { get { return GetType().Name.Substring(0, 1); } }
+        public abstract string CommandName { get; }
+        public abstract string Info { get; }
+        /// <summary>
+        /// In case some content is not accessible for Info InfoBackup will be used instead
+        /// </summary>
+        public string InfoBackup { get; set; }
 
+        public void UpdateInfo()
+        {
+            NotifyPropertyChanged(()=>Info);
+        }
 
         #region collapse properties
         private static List<CollapseBounds> bounds = new List<CollapseBounds>();  
@@ -239,87 +249,63 @@ namespace Area51.SoftwareModeler.Models.Commands
                 ShapeCollector.GetI().Commands.First(x=> x.Id == rootId).CollapseNodes();
             }
 
-            if (_parent != null)
-            {
-                #region _parent IsCollapsedRoot and IsCollapeable properties set
+#region _parent IsCollapsedRoot and IsCollapeable properties set
+            if (_parent != null){
 
-                if (_parent.children.Count == 1)
-                {
-                    if (children.Count == 1)
-                    {
+                if (_parent.children.Count == 1){
+                    if (children.Count == 1){
                         //_parent.IsCollapseRoot = true;
-                    }
-                    else
-                    {
+                    }else{
                         _parent.IsCollapseRoot = false;
-                        if (_parent._parent != null && (_parent._parent.IsCollapseRoot || _parent._parent.IsCollapseable))
-                        {
+                        if (_parent._parent != null && (_parent._parent.IsCollapseRoot || _parent._parent.IsCollapseable)){
                             _parent.IsCollapseable = true;
                         }
                     }
-                }
-                else
-                {
-                    if (_parent.IsCollapseRoot && children.Count > 1)
-                    {
+                }else{
+                    if (_parent.IsCollapseRoot && children.Count > 1){
                         _parent.IsCollapseRoot = false;
                     }
                 }
-                #endregion
             }
+#endregion
 
-            #region this collapse properties
-            if (_parent == null && children.Count == 1) IsCollapseRoot = true;
-            else if (_parent != null)
+#region this collapse properties
+
+            if (_parent == null && children.Count == 1)
             {
-                if (_parent.IsCollapseRoot)
-                {
-                    if (_parent.BranchLayer != BranchLayer)
-                    {
-                        if (children.Count == 1 || children.ElementAt(0).IsCollapseable)
-                        {
+                IsCollapseRoot = true;
+                child.IsCollapsed = true;
+            }
+            else if (_parent != null){
+                if (_parent.IsCollapseRoot){
+                    if (_parent.BranchLayer != BranchLayer){
+                        if (children.Count == 1 || children.ElementAt(0).IsCollapseable){
+                            IsCollapseRoot = true;
+                            IsCollapseable = false;
+                        }
+                    }else if (children.Count == 1){
+                        IsCollapseRoot = false;
+                        IsCollapseable = true;
+                    }else{
+                        if (children.ElementAt(0).IsCollapseable){
                             IsCollapseRoot = true;
                             IsCollapseable = false;
                         }
                     }
-                    else if (children.Count == 1)
-                    {
+                }else if (_parent.IsCollapseable){
+                    if (children.Count == 1){
                         IsCollapseRoot = false;
                         IsCollapseable = true;
-                    }
-                    else
-                    {
-                        if (children.ElementAt(0).IsCollapseable)
-                        {
-                            IsCollapseRoot = true;
-                            IsCollapseable = false;
-                        }
-                    }
-
-
-                }
-                else if (_parent.IsCollapseable)
-                {
-                    if (children.Count == 1)
-                    {
-                        IsCollapseRoot = false;
-                        IsCollapseable = true;
-                    }
-                    else if(children.ElementAt(0).IsCollapseable)
-                    {
+                    }else if(children.ElementAt(0).IsCollapseable){
                         IsCollapseRoot = true;
                         IsCollapseable = false;
                     }
-                }
-                else
-                {
-                    if (_parent.BranchLayer != BranchLayer)
-                    {
+                }else{
+                    if (_parent.BranchLayer != BranchLayer){
                         IsCollapseRoot = true;
                         IsCollapseable = false;
                     }
-                    if (children.Count > 1 && children.ElementAt(0).IsCollapseable)
-                    {
+                    if (children.Count > 1 && children.ElementAt(0).IsCollapseable){
                         IsCollapseRoot = true;
                         IsCollapseable = false;
                     }
@@ -327,43 +313,31 @@ namespace Area51.SoftwareModeler.Models.Commands
             }
             #endregion
 
-            if (IsCollapseRoot || IsCollapseable)
-            {
-                if (children.Count == 1)
-                {
+#region setting child collapse properties
+            if (IsCollapseRoot || IsCollapseable){
+                if (children.Count == 1){
                     child.IsCollapseable = true;
                 }
             }
-
-
-            if (IsCollapsed && children.Count == 1)
-            {
-                Console.WriteLine("test here: " + Id + ";" + child.Id);
-                bounds.ForEach(x => Console.WriteLine("bound: " + x.CollapseRoot + ";" + x.LowerBoundId + ";" + x.UpperBoundId));
+            if (IsCollapsed && children.Count == 1){
                 CollapseBounds bound = bounds.FirstOrDefault(x => x.UpperBoundId == Id);
-                if (bound != null)
-                {
-                    if (child.Id - Id > 1)
-                    {
+                if (bound != null){
+                    if (child.Id - Id > 1){
                         bounds.Add(new CollapseBounds(bound.CollapseRoot, child.Id, child.Id));
-                    }
-                    else
-                    {
-                        Console.WriteLine("removed bound: " + bounds.Remove(bound));
+                    }else{
+                        bounds.Remove(bound);
                         bounds.Add(new CollapseBounds(bound.CollapseRoot, bound.LowerBoundId, child.Id));
-
                     }
                 }
-                if (bound == null) Console.WriteLine("BOUND IS NULL");
                 child.IsCollapseable = true;
                 child.IsCollapsed = true;
             }
-
+#endregion
         }
 
-        public abstract string UpdateInfo();
+        
 
-        public String CommandType { get { return this.GetType().Name.Substring(0, 1); } }
+        
     }
 
     class CollapseBounds
@@ -379,7 +353,6 @@ namespace Area51.SoftwareModeler.Models.Commands
             UpperBoundId = upperId;
             LowerBoundId = lowerId;
             CollapseHeight = upperId - lowerId+1;
-            Console.WriteLine("bounds: " + lowerId + ";" + upperId + ";" + CollapseHeight);
         }
     }
 }

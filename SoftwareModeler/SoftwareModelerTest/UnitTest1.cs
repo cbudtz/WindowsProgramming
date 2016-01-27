@@ -73,7 +73,7 @@ namespace SoftwareModelerTest
             ClassData s = sc.ObsShapes.ElementAt(r.Next(0, sc.ObsShapes.Count-1));
             Assert.IsNotNull(s.id, "shape id should never be null");
             int sId = s.id.Value;
-            string oldName = s.name;
+            string oldName = s.Name;
             string oldStereoType = s.StereoType;
             bool oldIsAbstract = s.IsAbstract;
             List<Area51.SoftwareModeler.Models.Attribute> oldAttributes = s.Attributes;
@@ -82,7 +82,7 @@ namespace SoftwareModelerTest
             EditClassCmd(sId, oldName+"name", oldStereoType+"stereo", !oldIsAbstract, GetAttributes(), getMethods());
 
             ClassData newClassData = sc.ObsShapes.First(x => x.id == sId);
-            Assert.IsTrue(newClassData.name.Contains("name"), "checking name");
+            Assert.IsTrue(newClassData.Name.Contains("name"), "checking name");
             Assert.IsTrue(newClassData.StereoType.Contains("stereo"), "checking stereotype");
             Assert.IsFalse(newClassData.IsAbstract & oldIsAbstract, "checking isAbstract");
             Assert.IsTrue(oldAttributes.Count < newClassData.Attributes.Count, "checking number of attributes");

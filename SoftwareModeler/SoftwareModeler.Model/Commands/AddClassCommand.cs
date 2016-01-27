@@ -24,6 +24,7 @@ namespace Area51.SoftwareModeler.Models.Commands
         public string StereoType { get; set; }
         public bool IsAbstract { get; set; }
         public Point AnchorPoint { get; set; }
+        //public string CommandInfo { get; set; }
 
         public AddClassCommand()
         {
@@ -50,31 +51,25 @@ namespace Area51.SoftwareModeler.Models.Commands
                 ClassDataRep = new ClassData(ShapeId, ClassName, StereoType, IsAbstract, AnchorPoint);
             }
             ShapeCollector.GetI().ObsShapes.Add(ClassDataRep);
-
-
-             
-            foreach (var b in ShapeCollector.GetI().Commands)
-            {
-                b.Info = b.Info;
-            }
-            
         }
 
-
-
-        public override string UpdateInfo()
+        public override string Info
         {
-            ClassData c = ShapeCollector.GetI().GetShapeById(ShapeId);
-            return "\t  Added Class\t     \n" +
-                   "Name: " + c.Name;
-
+            get
+            {
+                ClassData c = ShapeCollector.GetI().GetShapeById(ShapeId);
+                if (c == null) return InfoBackup;
+                return InfoBackup = "Name: " + c.Name;
+            }
         }
+        public override string CommandName => "Add Class";
 
         public override void unExecute()
         {
             //ClassView is removed and garbage collected - a new shape with the same ID 
             //will be instantiated if the command is excecuted again
             ShapeCollector.GetI().ObsShapes.Remove(ClassDataRep);
+            ClassDataRep = null;
             ClassDataRep = null;
         }
 
